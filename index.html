@@ -67,6 +67,16 @@ body[data-turn="com"] .cap.foe svg.pt{filter:drop-shadow(0 0 calc(var(--u)*3) rg
 .mini svg{width:100%;height:100%}
 .mini span{position:absolute;inset:0;display:grid;place-items:center;color:#6B4310;font:400 calc(var(--u)*6)/1 var(--display)}
 .mini.used{filter:grayscale(1) brightness(.65)}
+.stars{position:absolute;left:50%;top:calc(var(--u)*-6.8);translate:-50% 0;display:flex;gap:calc(var(--u)*.5);filter:drop-shadow(0 calc(var(--u)*.5) 0 #3A2206) drop-shadow(0 0 calc(var(--u)*1.2) rgba(0,0,0,.6))}
+.stars i{width:calc(var(--u)*5.8);height:calc(var(--u)*5.8);background:linear-gradient(#FFF3C2,#F2C24A 55%,#B9801E);clip-path:polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)}
+.stars i.off{background:#3B3346}
+.stars i:nth-child(1){translate:0 calc(var(--u)*2.6);rotate:-18deg}
+.stars i:nth-child(2){translate:0 calc(var(--u)*.7);rotate:-9deg}
+.stars i:nth-child(4){translate:0 calc(var(--u)*.7);rotate:9deg}
+.stars i:nth-child(5){translate:0 calc(var(--u)*2.6);rotate:18deg}
+body[data-short] .stars{top:calc(var(--u)*-4.6)}
+body[data-short] .stars i{width:calc(var(--u)*4.4);height:calc(var(--u)*4.4)}
+.vs-line{margin:calc(var(--u)*-2) 0 var(--u);text-align:center;font-size:.9em;color:var(--ink-soft)}
 .vs{position:absolute;left:50%;top:calc(var(--u)*4);width:calc(var(--u)*48);height:calc(var(--u)*37);translate:-50% 0}
 .vs svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible;filter:drop-shadow(0 calc(var(--u)*1.2) calc(var(--u)*1.6) rgba(0,0,0,.6))}
 #swL,#swR{transform-origin:60px 46px}
@@ -97,7 +107,7 @@ body[data-short] h1{font-size:calc(var(--u)*10)}
 .npc[data-face="grin"] .m-open,.npc[data-face="laugh"] .m-open,.npc[data-face="shock"] .m-shock,.npc[data-face="cry"] .m-cry{display:inline}
 .npc[data-face="think"] .pupil{transform:translateX(2.2px)}
 .npc[data-face="cry"] .tears{animation:n-tear .7s ease-in infinite}
-.bubble{position:absolute;z-index:7;right:calc(var(--u)*43);top:calc(var(--u)*7);max-width:calc(var(--u)*64);padding:calc(var(--u)*2.4) calc(var(--u)*4);border-radius:calc(var(--u)*4);background:#F8EED6;color:var(--ink);font:400 max(13px,calc(var(--u)*6.4))/1.2 var(--display);white-space:nowrap;box-shadow:0 0 0 calc(var(--u)*.7) var(--gold-deep),0 calc(var(--u)*1.5) calc(var(--u)*3) rgba(0,0,0,.5);transform-origin:100% 50%;scale:0}
+.bubble{position:absolute;z-index:7;right:calc(var(--u)*43);top:calc(var(--u)*7);width:max-content;max-width:calc(var(--u)*72);padding:calc(var(--u)*2.4) calc(var(--u)*4);border-radius:calc(var(--u)*4);background:#F8EED6;color:var(--ink);font:400 max(13px,calc(var(--u)*6.4))/1.2 var(--display);text-wrap:balance;box-shadow:0 0 0 calc(var(--u)*.7) var(--gold-deep),0 calc(var(--u)*1.5) calc(var(--u)*3) rgba(0,0,0,.5);transform-origin:100% 50%;scale:0}
 .bubble::after{content:"";position:absolute;right:calc(var(--u)*-3);top:50%;width:calc(var(--u)*5);height:calc(var(--u)*5);translate:0 -50%;rotate:45deg;background:#F8EED6;box-shadow:calc(var(--u)*.7) calc(var(--u)*-.7) 0 0 var(--gold-deep);clip-path:polygon(0 0,100% 0,100% 100%)}
 .bubble.pop{scale:1;animation:pop .3s cubic-bezier(.3,1.6,.5,1)}
 
@@ -166,22 +176,11 @@ body[data-turn="me"] .pick:not(.on):not(.off):not(.old){box-shadow:0 0 calc(var(
 body[data-turn="com"] .pick:not(.old){box-shadow:0 0 calc(var(--u)*9) calc(var(--u)*2) rgba(235,80,55,.55),0 calc(var(--u)*2.8) 0 #4A3210,0 calc(var(--u)*5) calc(var(--u)*7) rgba(30,15,3,.6)}
 .pick.on{box-shadow:0 0 0 calc(var(--u)*1.2) #FFF3C8,0 0 calc(var(--u)*9) calc(var(--u)*3) rgba(255,205,100,.9),0 calc(var(--u)*2.8) 0 #4A3210}
 .pick.off{opacity:.55}
-.tray{--c:calc(var(--u)*27);position:relative;display:block;width:var(--c);height:var(--c);pointer-events:none;perspective:calc(var(--u)*130)}
-.pick.old .tray{--c:calc(var(--u)*20)}
-.shade{position:absolute;left:6%;right:-14%;bottom:-20%;height:44%;border-radius:50%;background:rgba(0,0,0,.6);filter:blur(calc(var(--u)*1.8))}
-.hop,.cube{position:absolute;inset:0;display:block;transform-style:preserve-3d}
-.f,.core{position:absolute;inset:0;display:block}
-.core{inset:5%;background:#C9B48A}
-.c2{transform:rotateX(90deg)}.c3{transform:rotateY(90deg)}
-.f{background:center/100% 100% no-repeat;-webkit-backface-visibility:hidden;backface-visibility:hidden}
-.f::after{content:"";position:absolute;inset:0;border-radius:16%;background:#2A1608;opacity:var(--s,0);transition:opacity .12s}
-.cube[data-spin] .f::after{opacity:.12}
-.f1{transform:translateZ(calc(var(--c)/2))}
-.f6{transform:rotateY(180deg) translateZ(calc(var(--c)/2))}
-.f3{transform:rotateY(90deg) translateZ(calc(var(--c)/2))}
-.f4{transform:rotateY(-90deg) translateZ(calc(var(--c)/2))}
-.f2{transform:rotateX(90deg) translateZ(calc(var(--c)/2))}
-.f5{transform:rotateX(-90deg) translateZ(calc(var(--c)/2))}
+.tray{--c:calc(var(--u)*31);position:relative;display:block;width:var(--c);height:var(--c);pointer-events:none}
+.pick.old .tray{--c:calc(var(--u)*23)}
+.shade{position:absolute;inset:10% -5% -9% 7%;border-radius:24%;background:rgba(0,0,0,.62);filter:blur(calc(var(--u)*1.6))}
+.hop{position:absolute;inset:0;display:block}
+.cube{display:block;width:100%;height:100%}
 .reroll{grid-column:3;justify-self:start;display:grid;justify-items:center;gap:calc(var(--u)*2);cursor:pointer}
 .reroll:disabled{cursor:not-allowed}
 .reroll:disabled .bean{filter:grayscale(.85) brightness(.82) drop-shadow(0 calc(var(--u)*1.6) 0 #6B4A14)}
@@ -308,7 +307,7 @@ body[data-tip="place"] .gain{animation:tile-pulse .8s ease-in-out infinite}
           <div class="cap me" id="capMe"><svg class="pt" viewBox="0 0 100 100" aria-hidden="true"><defs><linearGradient id="rima" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFF3C2"/><stop offset=".4" stop-color="#A8741A"/><stop offset=".65" stop-color="#F5CF63"/><stop offset="1" stop-color="#6B4A14"/></linearGradient><radialGradient id="skya" cx=".5" cy="1" r="1.05"><stop offset="0" stop-color="#F4A25E"/><stop offset=".55" stop-color="#3D5C96"/><stop offset="1" stop-color="#101F45"/></radialGradient><linearGradient id="coata" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2C4D86"/><stop offset="1" stop-color="#101F45"/></linearGradient><linearGradient id="skina" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#F2C9A0"/><stop offset="1" stop-color="#B9805A"/></linearGradient><linearGradient id="hata" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#34394F"/><stop offset="1" stop-color="#0C0E1A"/></linearGradient><clipPath id="pica"><circle cx="50" cy="50" r="41"/></clipPath></defs><circle cx="50" cy="50" r="49" fill="url(#rima)" stroke="#3A2A12" stroke-width="1.2"/><circle cx="95.0" cy="50.0" r="1.3" fill="#FFF3C2" stroke="#6B4A14" stroke-width=".5"/><circle cx="89.0" cy="72.5" r="1.3" fill="#FFF3C2" stroke="#6B4A14" stroke-width=".5"/><circle cx="72.5" cy="89.0" r="1.3" fill="#FFF3C2" stroke="#6B4A14" stroke-width=".5"/><circle cx="50.0" cy="95.0" r="1.3" fill="#FFF3C2" stroke="#6B4A14" stroke-width=".5"/><circle cx="27.5" cy="89.0" r="1.3" fill="#FFF3C2" stroke="#6B4A14" stroke-width=".5"/><circle cx="11.0" cy="72.5" r="1.3" fill="#FFF3C2" stroke="#6B4A14" stroke-width=".5"/><circle cx="5.0" cy="50.0" r="1.3" fill="#FFF3C2" stroke="#6B4A14" stroke-width=".5"/><circle cx="11.0" cy="27.5" r="1.3" fill="#FFF3C2" stroke="#6B4A14" stroke-width=".5"/><circle cx="27.5" cy="11.0" r="1.3" fill="#FFF3C2" stroke="#6B4A14" stroke-width=".5"/><circle cx="50.0" cy="5.0" r="1.3" fill="#FFF3C2" stroke="#6B4A14" stroke-width=".5"/><circle cx="72.5" cy="11.0" r="1.3" fill="#FFF3C2" stroke="#6B4A14" stroke-width=".5"/><circle cx="89.0" cy="27.5" r="1.3" fill="#FFF3C2" stroke="#6B4A14" stroke-width=".5"/><circle cx="50" cy="50" r="41.5" fill="url(#skya)" stroke="#3A2A12" stroke-width="1.6"/><g clip-path="url(#pica)"><g class="nb"><path d="M12 104C14 82 30 77 41 73l9 9 9-9c11 4 27 9 29 31z" fill="url(#coata)"/><path d="M41 73l9 9 9-9-3-3H44z" fill="#E8DEC6"/><path d="M41 73l9 9M59 73l-9 9" stroke="#F5CF63" stroke-width="1.6"/><ellipse cx="25" cy="84" rx="11" ry="5" transform="rotate(-20 25 84)" fill="#F5CF63" stroke="#7A5210"/><ellipse cx="75" cy="84" rx="11" ry="5" transform="rotate(20 75 84)" fill="#F5CF63" stroke="#7A5210"/><path d="M43 62h14v13l-7 6-7-6z" fill="#B9805A"/><path d="M35.5 44C35.5 33 64.5 33 64.5 44C65.5 57 60.5 69 50 71C39.5 69 34.5 57 35.5 44Z" fill="url(#skina)"/><path d="M35.5 42h29v4.5C58 44 42 44 35.5 46.5z" fill="rgba(30,15,5,.42)"/><path d="M50.5 49.5l-2.2 7.5q2.6 1.6 5 .2" fill="none" stroke="rgba(90,45,25,.7)" stroke-width="1.3" stroke-linecap="round"/><path d="M35 40c-3 8-3 17 1 24 1-8 1-15 2-22zM65 40c3 8 3 17-1 24-1-8-1-15-2-22z" fill="#2A1A10"/><path d="M37.5 57C40 67 46 70 50 70.6C54 70 60 67 62.5 57C58 63 54 60.5 50 60.5C46 60.5 42 63 37.5 57Z" fill="rgba(45,28,16,.42)"/><path d="M44 59.5c2-1.6 4-1.6 6 0 2-1.6 4-1.6 6 0-2 .9-4 .9-6 .2-2 .7-4 .7-6-.2z" fill="#2A1A10"/><path d="M45 64c3 1.6 7 1.4 11-1.2" fill="none" stroke="#5C2A1E" stroke-width="1.5" stroke-linecap="round"/><path d="M40 50.2c2-2.2 6-2.2 8 0-2 1.5-6 1.5-8 0zM52 50.2c2-2.2 6-2.2 8 0-2 1.5-6 1.5-8 0z" fill="#F6EFE0"/><circle cx="44.8" cy="50" r="1.8" fill="#24406E"/><circle cx="56.8" cy="50" r="1.8" fill="#24406E"/><path d="M39 46.8l9 1.6M61 46.8l-9 1.6" stroke="#1C120A" stroke-width="2.4" stroke-linecap="round"/><path d="M12 40C22 35 26 18 50 18S78 35 88 40C69 45 31 45 12 40Z" fill="url(#hata)" stroke="#F5CF63" stroke-width="1.8"/><path d="M20 40c19 3.5 41 3.5 60 0" fill="none" stroke="#F5CF63" stroke-width="1"/><path d="M32 28c5-5 12-7 18-7" fill="none" stroke="rgba(255,255,255,.25)" stroke-width="2" stroke-linecap="round"/><g transform="translate(50 29) rotate(45)"><rect x="-6.5" y="-6.5" width="13" height="13" rx="2.6" fill="#F8EED6" stroke="#7A5210" stroke-width="1"/><circle cx="-3.4" cy="-3.4" r="1.2" fill="#2A1A10"/><circle cx="3.4" cy="-3.4" r="1.2" fill="#2A1A10"/><circle cx="0" cy="0" r="1.2" fill="#2A1A10"/><circle cx="-3.4" cy="3.4" r="1.2" fill="#2A1A10"/><circle cx="3.4" cy="3.4" r="1.2" fill="#2A1A10"/></g></g></g><path d="M70 32C76 14 90 6 99 6C97 18 88 32 74 36Z" fill="#F4EEE0" stroke="#8E8268" stroke-width=".9"/><path d="M72 35C80 24 88 15 97 8" fill="none" stroke="#8E8268" stroke-width="1"/><path d="M79 24l-3-5M84 18l-3-5M81 26l6 1M87 19l6 1" stroke="#B8AE98" stroke-width=".8"/></svg><span class="name" id="nameMe"></span><span class="dots" id="dotsMe" role="img"><i></i><i></i><i></i></span></div>
           <div class="clash" id="clash"></div>
           <div class="vs"><svg viewBox="0 0 120 92" aria-hidden="true"><g id="swL"><path d="M95 81l12 14" stroke="#3A2414" stroke-width="6" stroke-linecap="round"/><circle cx="108" cy="97" r="4.5" fill="#F5CF63" stroke="#4A2A08" stroke-width="1.2"/><path d="M12 4c34 18 62 44 86 76l-8 6C62 56 36 30 6 10z" fill="url(#steel)" stroke="#1E2A34" stroke-width="1.5"/><rect x="82" y="72" width="26" height="7" rx="3" transform="rotate(-48 95 75.5)" fill="#F5CF63" stroke="#4A2A08" stroke-width="1.5"/></g><g id="swR"><path d="M25 81l-12 14" stroke="#3A2414" stroke-width="6" stroke-linecap="round"/><circle cx="12" cy="97" r="4.5" fill="#F5CF63" stroke="#4A2A08" stroke-width="1.2"/><path d="M108 4C74 22 46 48 22 80l8 6C58 56 84 30 114 10z" fill="url(#steel)" stroke="#1E2A34" stroke-width="1.5"/><rect x="12" y="72" width="26" height="7" rx="3" transform="rotate(48 25 75.5)" fill="#F5CF63" stroke="#4A2A08" stroke-width="1.5"/></g></svg><b id="vsText">VS</b></div>
-          <div class="cap foe" id="capFoe"><svg class="pt npc" id="npc" data-face="idle" viewBox="0 0 100 100" aria-hidden="true"><defs><linearGradient id="rimb" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFF3C2"/><stop offset=".4" stop-color="#A8741A"/><stop offset=".65" stop-color="#F5CF63"/><stop offset="1" stop-color="#6B4A14"/></linearGradient><radialGradient id="skyb" cx=".5" cy="1" r="1.05"><stop offset="0" stop-color="#F08A4A"/><stop offset=".55" stop-color="#8E2A22"/><stop offset="1" stop-color="#2E0A08"/></radialGradient><linearGradient id="coatb" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5A1712"/><stop offset="1" stop-color="#1C0807"/></linearGradient><linearGradient id="skinb" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#8A5638"/><stop offset="1" stop-color="#D9A47C"/></linearGradient><linearGradient id="hatb" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#34394F"/><stop offset="1" stop-color="#0C0E1A"/></linearGradient><clipPath id="picb"><circle cx="50" cy="50" r="41"/></clipPath></defs><circle cx="50" cy="50" r="49" fill="url(#rimb)" stroke="#3A2A12" stroke-width="1.2"/><circle cx="95.0" cy="50.0" r="1.3" fill="#FFF3C2" stroke="#6B4A14" stroke-width=".5"/><circle cx="89.0" cy="72.5" r="1.3" fill="#FFF3C2" stroke="#6B4A14" stroke-width=".5"/><circle cx="72.5" cy="89.0" r="1.3" fill="#FFF3C2" stroke="#6B4A14" stroke-width=".5"/><circle cx="50.0" cy="95.0" r="1.3" fill="#FFF3C2" stroke="#6B4A14" stroke-width=".5"/><circle cx="27.5" cy="89.0" r="1.3" fill="#FFF3C2" stroke="#6B4A14" stroke-width=".5"/><circle cx="11.0" cy="72.5" r="1.3" fill="#FFF3C2" stroke="#6B4A14" stroke-width=".5"/><circle cx="5.0" cy="50.0" r="1.3" fill="#FFF3C2" stroke="#6B4A14" stroke-width=".5"/><circle cx="11.0" cy="27.5" r="1.3" fill="#FFF3C2" stroke="#6B4A14" stroke-width=".5"/><circle cx="27.5" cy="11.0" r="1.3" fill="#FFF3C2" stroke="#6B4A14" stroke-width=".5"/><circle cx="50.0" cy="5.0" r="1.3" fill="#FFF3C2" stroke="#6B4A14" stroke-width=".5"/><circle cx="72.5" cy="11.0" r="1.3" fill="#FFF3C2" stroke="#6B4A14" stroke-width=".5"/><circle cx="89.0" cy="27.5" r="1.3" fill="#FFF3C2" stroke="#6B4A14" stroke-width=".5"/><circle cx="50" cy="50" r="41.5" fill="url(#skyb)" stroke="#3A2A12" stroke-width="1.6"/><g clip-path="url(#picb)"><g class="nb"><path d="M12 104C14 82 30 77 41 73l9 9 9-9c11 4 27 9 29 31z" fill="url(#coatb)"/><path d="M41 73l9 9 9-9-3-3H44z" fill="#2A1410"/><path d="M41 73l9 9M59 73l-9 9" stroke="#F5CF63" stroke-width="1.6"/><ellipse cx="25" cy="84" rx="11" ry="5" transform="rotate(-20 25 84)" fill="#F5CF63" stroke="#7A5210"/><ellipse cx="75" cy="84" rx="11" ry="5" transform="rotate(20 75 84)" fill="#F5CF63" stroke="#7A5210"/><path d="M43 62h14v13l-7 6-7-6z" fill="#6E4228"/><path d="M35.5 44C35.5 33 64.5 33 64.5 44C65.5 57 60.5 69 50 71C39.5 69 34.5 57 35.5 44Z" fill="url(#skinb)"/><path d="M35.5 42h29v4.5C58 44 42 44 35.5 46.5z" fill="rgba(30,15,5,.42)"/><path d="M50.5 49.5l-2.2 7.5q2.6 1.6 5 .2" fill="none" stroke="rgba(90,45,25,.7)" stroke-width="1.3" stroke-linecap="round"/><path d="M35.5 52C33 68 39 88 50 94C61 88 67 68 64.5 52C60 60 56 59.5 50 59.5C44 59.5 40 60 35.5 52Z" fill="#14100E"/><path d="M42 64c0 9 2 15 4 21M50 63v26M58 64c0 9-2 15-4 21M46 63c0 8 1 16 2 24M54 63c0 8-1 16-2 24" fill="none" stroke="rgba(255,255,255,.14)" stroke-width="1"/><rect x="46.5" y="84" width="7" height="5" rx="2" fill="#F5CF63" stroke="#6B4A14" stroke-width=".7"/><path d="M40 58c5-3.5 8-3.5 10-1 2-2.5 5-2.5 10 1-4 1-7 .8-10 .2-3 .6-6 .8-10-.2z" fill="#0B0A0C"/><g class="m-closed"><path d="M44 62.5c4 2.5 9 2.5 13-.5-1 4-4 5.500-7 5.500-3 0-5-2-6-5z" fill="#3A0F0A"/><path d="M45.5 63.2h10l-.6 1.6h-8.700z" fill="#EFE6CF"/><rect x="52" y="63.3" width="2.6" height="1.7" fill="#F5CF63"/></g><g class="m-open"><path d="M42 61c5 2 11 2 16 0-1 7-5 10-8 10-3 0-7-3-8-10z" fill="#3A0F0A"/><path d="M43.5 62c4 1.200 9 1.200 13 0l-.5 2c-4 1-8 1-12 0z" fill="#EFE6CF"/><rect x="52.5" y="62.4" width="2.800" height="2" fill="#F5CF63"/></g><ellipse class="m-shock" cx="50" cy="65.500" rx="3.4" ry="4.4" fill="#3A0F0A"/><path class="m-cry" d="M44 67.500c3-3.200 9-3.200 12 0" fill="none" stroke="#3A0F0A" stroke-width="2.2" stroke-linecap="round"/><g class="e-idle"><path d="M52 50.2c2-2.2 6-2.2 8 0-2 1.5-6 1.5-8 0z" fill="#F6E7C0"/><circle class="pupil" cx="55" cy="50" r="1.8" fill="#7A1C10"/></g><path class="e-happy" d="M52 51c2-3 6-3 8 0" fill="none" stroke="#0B0A0C" stroke-width="1.8" stroke-linecap="round"/><g class="e-shock"><circle cx="56" cy="50" r="4.2" fill="#F6E7C0"/><circle cx="56" cy="50" r="1.5" fill="#7A1C10"/></g><path class="e-cry" d="M52 49c2 2.600 6 2.600 8 0" fill="none" stroke="#0B0A0C" stroke-width="1.8" stroke-linecap="round"/><path class="tears" d="M56 53c-1.5 3-2 4.500 0 5 2-.5 1.500-2 0-5z" fill="#8FD3F0"/><path d="M38.8 48.500L35.6 46M49.5 48l15-4.500" stroke="#0B0A0C" stroke-width="1.8"/><path d="M38.500 47.500c3-1.500 9-1.500 11 .5.5 4-1.500 7-5.500 7.500-3.500-.5-6-4-5.500-8z" fill="#0B0A0C" stroke="rgba(255,255,255,.14)" stroke-width=".7"/><path d="M59.5 43l-3.500 14" stroke="#E8A090" stroke-width="1.3" stroke-linecap="round"/><path class="b-idle" d="M51.5 48.5l10-3" stroke="#0B0A0C" stroke-width="3" stroke-linecap="round"/><path class="b-scowl" d="M50.5 49.800l11-1.300" stroke="#0B0A0C" stroke-width="3.800" stroke-linecap="round"/><path d="M12 40C22 35 26 18 50 18S78 35 88 40C69 45 31 45 12 40Z" fill="url(#hatb)" stroke="#F5CF63" stroke-width="1.8"/><path d="M20 40c19 3.5 41 3.5 60 0" fill="none" stroke="#A8231A" stroke-width="2.2"/><path d="M32 28c5-5 12-7 18-7" fill="none" stroke="rgba(255,255,255,.25)" stroke-width="2" stroke-linecap="round"/><g transform="translate(50 29) rotate(45)"><rect x="-6.5" y="-6.5" width="13" height="13" rx="2.6" fill="#A8231A" stroke="#7A5210" stroke-width="1"/><circle cx="-3.4" cy="-3.4" r="1.2" fill="#F8EED6"/><circle cx="3.4" cy="-3.4" r="1.2" fill="#F8EED6"/><circle cx="0" cy="0" r="1.2" fill="#F8EED6"/><circle cx="-3.4" cy="3.4" r="1.2" fill="#F8EED6"/><circle cx="3.4" cy="3.4" r="1.2" fill="#F8EED6"/></g></g></g></svg><span class="mini" id="comReroll" title="검은수염에게 남은 한 번 더"></span><span class="name" id="nameCom"></span><span class="dots" id="dotsCom" role="img"><i></i><i></i><i></i></span></div>
+          <div class="cap foe" id="capFoe"><svg class="pt npc" id="npc" data-face="idle" viewBox="0 0 100 100" aria-hidden="true"></svg><span class="stars" id="foeStars" role="img"></span><span class="mini" id="comReroll" title="상대에게 남은 한 번 더"></span><span class="name" id="nameCom"></span><span class="dots" id="dotsCom" role="img"><i></i><i></i><i></i></span></div>
           <div class="bubble" id="bubble" aria-hidden="true"></div>
         </div>
       </div>
@@ -328,7 +327,7 @@ body[data-tip="place"] .gain{animation:tile-pulse .8s ease-in-out infinite}
             <div class="pot" id="pot"><svg id="potArt" viewBox="0 0 76 58" aria-hidden="true"></svg><small id="potCap"></small></div>
             <button class="pick old" id="pickOld" type="button" hidden></button>
             <button class="pick" id="pickNew" type="button" disabled aria-label="새로 굴린 눈 고르기">
-              <span class="tray" id="tray"><span class="shade" id="shade"></span><span class="hop" id="hop"><span class="cube" id="cube"></span></span></span>
+              <span class="tray" id="tray"><span class="shade" id="shade"></span><span class="hop" id="hop"><img class="cube" id="cube" alt=""></span></span>
             </button>
             <button class="reroll" id="rerollBtn" type="button" disabled aria-label="한 번 더, 주사위 다시 굴리기">
               <span class="bean" id="rerollArt"></span>
@@ -491,32 +490,56 @@ const Game = (() => {
     return v + (s.rerolls[p] - s.rerolls[other(p)]) * 0.015;
   }
 
-  // 다음에 둘 사람이 어떤 눈이 나오든 최선으로 둔다고 보고 평균을 낸다.
-  function expected(s, p) {
-    const mover = s.turn, pick = mover === p ? Math.max : Math.min;
+  // 난이도 : 별이 많을수록 멀리 보고 실수가 적다.
+  // look -1 = 눈앞 점수만, 0 = 지금 판세, 1 = 상대의 다음 수까지, 2 = 그다음 내 수까지.
+  const LEVELS = {
+    1: { bad: .5, miss: .5, look: -1, reroll: false },
+    2: { miss: .55, look: 0, reroll: false },
+    3: { miss: .3, look: 0, reroll: true },
+    4: { miss: .1, look: 1, reroll: true },
+    5: { miss: 0, look: 2, reroll: true },
+  };
+
+  function lookAhead(s, p, n) {
+    if (s.over || n <= 0) return value(s, p);
+    const pick = s.turn === p ? Math.max : Math.min;
     let sum = 0;
-    for (let v = 1; v <= 6; v++) sum += pick(...moves(s, v).map(m => value(place(s, v, m.side, m.row, m.knock).state, p)));
+    for (let v = 1; v <= 6; v++) sum += pick(...moves(s, v).map(m => lookAhead(place(s, v, m.side, m.row, m.knock).state, p, n - 1)));
     return sum / 6;
   }
 
-  function choose(s, v) {
-    const p = s.turn;
+  function bestMove(s, v, stars = 4) {
+    const { look } = LEVELS[stars], p = s.turn;
     let best = null;
     for (const m of moves(s, v)) {
       const r = place(s, v, m.side, m.row, m.knock);
-      const score = (r.state.over ? value(r.state, p) : expected(r.state, p)) + Math.random() * 1e-4;
+      const gain = rowScore(r.state.boards[m.side][m.row]) - rowScore(s.boards[m.side][m.row]);
+      const base = look < 0 ? (m.side === p ? gain : -gain) + r.removed.length * 3 : lookAhead(r.state, p, look);
+      const score = base + Math.random() * 1e-4;
       if (!best || score > best.score) best = { side: m.side, row: m.row, knock: m.knock, score };
     }
     return best;
   }
 
-  function wantsReroll(s, v) {
-    if (!s.rerolls[s.turn]) return false;
-    const now = choose(s, v).score;
+  function choose(s, v, stars = 4) {
+    // 실수 : 알까기 기회를 놓치고 내 판 아무 칸에나 놓는다. bad 는 점수가 가장 적게 오르는 칸을 고르는 서툰 수.
+    const L = LEVELS[stars], plain = moves(s, v).filter(m => m.side === s.turn && !m.knock);
+    if (plain.length && L.bad && Math.random() < L.bad) {
+      const gain = m => preview(s, v, m.side, m.row).gain + Math.random() * .01;
+      return { ...plain.reduce((a, b) => (gain(b) < gain(a) ? b : a)), score: 0 };
+    }
+    if (plain.length && Math.random() < L.miss) return { ...plain[Math.floor(Math.random() * plain.length)], score: 0 };
+    return bestMove(s, v, stars);
+  }
+
+  function wantsReroll(s, v, stars = 4) {
+    if (!s.rerolls[s.turn] || !LEVELS[stars].reroll) return false;
+    const now = bestMove(s, v, stars).score;
     let sum = 0;
-    for (let a = 1; a <= 6; a++) sum += Math.max(now, choose(s, a).score);
+    for (let a = 1; a <= 6; a++) sum += Math.max(now, bestMove(s, a, stars).score);
     return sum / 6 - now > 0.05;
   }
+
 
   // 홀드: 상대가 남은 칸을 아무리 잘 채워도 넘지 못하는 줄이 두 줄 이상이면, 지금 판 그대로 이긴 채 끝낼 수 있다.
   function bestRow(row) {
@@ -527,7 +550,7 @@ const Game = (() => {
   }
   const canHold = (s, p) => ROWS.filter(r => rowScore(s.boards[p][r]) > bestRow(s.boards[other(p)][r])).length >= 2;
 
-  return { create, place, moves, useReroll, preview, outcome, choose, wantsReroll, rowScore, other, canHold };
+  return { create, place, moves, useReroll, preview, outcome, choose, bestMove, wantsReroll, rowScore, other, canHold };
 })();
 // LOGIC-END
 
@@ -542,10 +565,10 @@ const Game = (() => {
   const PROMPT = {
     first: '첫 주사위는 실드예요. 내 판에 놓으세요.',
     normal: '놓을 줄을 고르세요.',
-    shield: '받은 주사위는 검은수염 판에도 놓을 수 있어요.',
+    shield: '받은 주사위는 상대 판에도 놓을 수 있어요.',
   };
   const RULES = [
-    '왼쪽이 내 판, 오른쪽이 검은수염 판이에요. 줄은 세 개이고 한 줄에 주사위를 세 개까지 놓아요.',
+    '왼쪽이 내 판, 오른쪽이 상대 선장 판이에요. 줄은 세 개이고 한 줄에 주사위를 세 개까지 놓아요.',
     '같은 줄에 같은 눈이 있으면 나란히 모여요. 두 개면 그 눈의 3배, 세 개면 5배예요. 5, 5는 15점이고 5, 5, 5는 25점이에요.',
     '일반 주사위는 내 판에만 놓아요. 맨 처음 주사위는 실드이고 굴린 사람 판에만 놓아요.',
     '굴린 일반 주사위와 같은 눈의 일반 주사위가 상대 줄에 있으면 알까기할 수 있어요. 화살표가 뜬 주사위를 누르면 내 주사위가 날아가서 같은 눈을 모두 튕겨 내고 함께 사라져요. 내 같은 줄에 빈칸이 있어야 해요.',
@@ -556,8 +579,9 @@ const Game = (() => {
     '줄마다 합이 높은 쪽이 그 줄을 가져가고, 두 줄 이상 가져가면 이겨요. 가져간 줄 수가 같으면 전체 합으로 가려요.',
     '이기면 금화 100닢을 얻고 지면 100닢을 잃어요.',
     '주사위가 10개 놓이면 3턴 동안 승리 예측을 할 수 있어요. 내 차례에 눌러야 하고, 예측하면 이 판에 걸린 금화가 150닢이 돼요.',
-    '홀드는 검은수염이 남은 칸을 아무리 잘 채워도 못 넘는 줄이 두 줄 이상일 때 켜져요. 누르면 지금 판 그대로 이기고 끝나요.',
+    '홀드는 상대가 남은 칸을 아무리 잘 채워도 못 넘는 줄이 두 줄 이상일 때 켜져요. 누르면 지금 판 그대로 이기고 끝나요.',
     '기권은 내 차례에 할 수 있어요. 걸린 금화의 절반만 잃고 패로 남아요.',
+    '상대 선장은 판마다 바뀌어요. 이름 위 별이 많을수록 강해요.',
     '키보드로는 1, 2, 3으로 내 줄, 4, 5, 6으로 상대 줄이나 알까기, R로 리롤, H로 홀드해요.',
   ];
 
@@ -586,52 +610,25 @@ const Game = (() => {
     const n = 20, px = n * dieS, c = document.createElement('canvas');
     c.width = c.height = px;
     const x = c.getContext('2d'), kind = KIND(same), pal = DIE_PAL[kind];
-    x.scale(px / 92, px / 92);
+    x.scale(px / 100, px / 100);
     const rr = (a, b, w, h, r) => { x.beginPath(); x.roundRect(a, b, w, h, r); };
-    rr(3, 8, 86, 82, 20); x.fillStyle = pal[3]; x.fill();
-    const f = x.createLinearGradient(8, 2, 84, 84);
-    f.addColorStop(0, pal[0]); f.addColorStop(.48, pal[1]); f.addColorStop(1, pal[2]);
-    rr(3, 3, 86, 80, 20); x.fillStyle = f; x.fill();
-    if (kind !== 'bone') { x.save(); rr(3, 3, 86, 80, 20); x.clip(); const sh = x.createLinearGradient(0, 0, 92, 60); sh.addColorStop(.28, 'rgba(255,255,255,0)'); sh.addColorStop(.42, 'rgba(255,255,255,.24)'); sh.addColorStop(.56, 'rgba(255,255,255,0)'); x.fillStyle = sh; x.fillRect(0, 0, 92, 92); x.restore(); }
-    rr(6, 6, 80, 74, 16); x.strokeStyle = kind === 'ruby' ? 'rgba(255,255,255,.3)' : 'rgba(255,255,255,.65)'; x.lineWidth = 1.6; x.stroke();
-    if (ward) { rr(6.5, 6.5, 79, 73, 16); x.strokeStyle = '#2F7FD8'; x.lineWidth = 6; x.stroke(); }
-    drawPips(x, v, kind, [26, 46, 66], v === 6 ? [23, 43, 63] : [24, 43, 62], v === 1 ? 15 : v === 6 ? 8 : 9);
+    /* 위에서 내려다본 주사위 : 아래로 살짝 보이는 옆면, 둥글게 깎인 모서리, 윗면 */
+    const side = x.createLinearGradient(0, 55, 0, 100);
+    side.addColorStop(0, pal[2]); side.addColorStop(1, pal[3]);
+    rr(3, 9, 94, 90, 22); x.fillStyle = side; x.fill();
+    const edge = x.createLinearGradient(8, 2, 92, 92);
+    edge.addColorStop(0, pal[0]); edge.addColorStop(.5, pal[1]); edge.addColorStop(1, pal[2]);
+    rr(3, 2, 94, 90, 22); x.fillStyle = edge; x.fill();
+    const top = x.createRadialGradient(36, 26, 4, 50, 46, 66);
+    top.addColorStop(0, pal[0]); top.addColorStop(1, pal[1]);
+    rr(11, 9, 78, 75, 17); x.fillStyle = top; x.fill();
+    x.strokeStyle = kind === 'ruby' ? 'rgba(255,255,255,.22)' : 'rgba(90,60,20,.24)'; x.lineWidth = 1.1; x.stroke();
+    if (kind !== 'bone') { x.save(); rr(11, 9, 78, 75, 17); x.clip(); const sh = x.createLinearGradient(0, 0, 100, 66); sh.addColorStop(.28, 'rgba(255,255,255,0)'); sh.addColorStop(.42, 'rgba(255,255,255,.24)'); sh.addColorStop(.56, 'rgba(255,255,255,0)'); x.fillStyle = sh; x.fillRect(0, 0, 100, 100); x.restore(); }
+    if (ward) { rr(7, 5.5, 86, 83, 20); x.strokeStyle = '#2F7FD8'; x.lineWidth = 6; x.stroke(); }
+    drawPips(x, v, kind, [30, 50, 70], v === 6 ? [25.5, 46.5, 67.5] : [26.5, 46.5, 66.5], v === 1 ? 14 : v === 6 ? 7.6 : 8.8);
     const out = { src: c.toDataURL(), w: n, h: n };
     dieCache.set(key, out);
     return out;
-  }
-
-  /* 접시 위 주사위 : 여섯 면이 있는 진짜 정육면체. 위에서 내려다본 각도로 멈추고, 가장 넓게 보이는 면이 나온 눈이다. */
-  function faceSprite(v, ward) {
-    const key = `f${v}-${ward}`;
-    if (dieCache.has(key)) return dieCache.get(key);
-    const px = 20 * dieS, c = document.createElement('canvas');
-    c.width = c.height = px;
-    const x = c.getContext('2d');
-    x.scale(px / 92, px / 92);
-    const f = x.createLinearGradient(6, 2, 86, 90);
-    f.addColorStop(0, '#FFFDF4'); f.addColorStop(.5, '#F6ECD2'); f.addColorStop(1, '#E4D4AE');
-    x.beginPath(); x.roundRect(0, 0, 92, 92, 15); x.fillStyle = f; x.fill();
-    x.beginPath(); x.roundRect(3.5, 3.5, 85, 85, 12); x.strokeStyle = 'rgba(255,255,255,.75)'; x.lineWidth = 2; x.stroke();
-    if (ward) { x.beginPath(); x.roundRect(6, 6, 80, 80, 11); x.strokeStyle = '#2F7FD8'; x.lineWidth = 6.5; x.stroke(); }
-    drawPips(x, v, 'bone', [24, 46, 68], [24, 46, 68], v === 1 ? 16 : v === 6 ? 8.5 : 10);
-    const out = { src: c.toDataURL(), w: 20, h: 20 };
-    dieCache.set(key, out);
-    return out;
-  }
-  const POSE = { 1: [0, 0], 6: [0, 180], 3: [0, -90], 4: [0, 90], 2: [-90, 0], 5: [90, 0] };
-  const NEAR = { 1: [3, 5], 6: [4, 5], 3: [6, 5], 4: [1, 5], 2: [3, 1], 5: [3, 6] };
-  const VIEW = 'rotateX(22deg) rotateY(-24deg)';
-  const poseOf = (v, a = 0, b = 0) => `${VIEW} rotateX(${POSE[v][0] + a}deg) rotateY(${POSE[v][1] + b}deg)`;
-  function dressCube(el, v, ward) {
-    if (!el.childElementCount) el.innerHTML = '<i class="core"></i><i class="core c2"></i><i class="core c3"></i>' + [1, 6, 3, 4, 2, 5].map(n => `<i class="f f${n}" data-v="${n}"></i>`).join('');
-    const [right, below] = NEAR[v];
-    el.style.transform = poseOf(v);
-    el.querySelectorAll('.f').forEach(f => {
-      const n = +f.dataset.v;
-      f.style.backgroundImage = `url(${faceSprite(n, ward).src})`;
-      f.style.setProperty('--s', n === right ? .26 : n === below ? .42 : 0);
-    });
   }
   const COIN = '<svg viewBox="0 0 60 60" aria-hidden="true"><circle cx="30" cy="30" r="28" fill="url(#coinFace)" stroke="#6B4A14" stroke-width="2"/><circle cx="30" cy="30" r="21.5" fill="none" stroke="#A8741A" stroke-width="2.4" stroke-dasharray="2.4 3"/><circle cx="30" cy="30" r="25" fill="none" stroke="#FFF3C8" stroke-width="1.4" opacity=".7"/></svg>';
   const coinStack = (x, base, n) => Array.from({ length: n }, (_, i) => { const y = base - i * 6.5; return `<path d="M${x - 13} ${y}v4a13 5.2 0 0 0 26 0v-4z" fill="#8A5E14"/><ellipse cx="${x}" cy="${y}" rx="13" ry="5.2" fill="url(#coinFace)" stroke="#6B4A14" stroke-width=".9"/>`; }).join('');
@@ -675,6 +672,79 @@ const Game = (() => {
   let state, session = 0, resolveHuman = null, inHand = null, bet = 'wait', betTurns = 0, forfeitTimer = 0, linkKeys = new Set(), layoutMode = '';
   const dice = new Map();
 
+  /*RIVALS-START*/
+  const GOLD = '#F5CF63';
+  const RIVALS = [
+    { name: '애송이 톰', stars: 1, sky: ['#F6B26B', '#4F8FB8', '#1C3D63'], coat: ['#F2EDE0', '#B9B2A2'], shirt: '#F2EDE0', stripes: '#2C4D86', skin: ['#F4CFA8', '#C58E66'], hat: 'bandana', hatC: ['#D9483B', '#8E1F16'], spots: true, hair: ['fringe', '#6B4326'], brows: 'soft', eyes: 'two', iris: '#2E5E4E', mouth: 'smile', freckles: true, hi: '살살 해 주세요!', win: '제가 이겼어요?!', lose: '역시 어렵네요…' },
+    { name: '술고래 피트', stars: 1, sky: ['#E8A765', '#3E7F7A', '#123B3D'], coat: ['#6B4A2A', '#2E1E10'], shirt: '#C9B48A', skin: ['#E8B48E', '#A86F4C'], hat: 'worn', hatC: ['#6B4F34', '#2E2014'], trim: '#A88B5A', hair: ['sides', '#4A3A2A'], beard: 'stubble', eyes: 'sleepy', iris: '#3A2A18', mouth: 'flat', rednose: true, brows: 'soft', hi: '한 잔… 아니, 한 판!', win: '딸꾹, 내가 이겼네?', lose: '술이 덜 깼나…' },
+    { name: '붉은 로즈', stars: 2, female: true, sky: ['#F5A17A', '#A33A5A', '#3A1030'], coat: ['#7A1C3A', '#2E0A18'], shirt: '#F2E6D0', skin: ['#F6D2B0', '#C9926C'], hat: 'tricorn', hatC: ['#5A1428', '#1E060E'], trim: GOLD, band: GOLD, hair: ['long', '#B8391C'], brows: 'arch', eyes: 'two', iris: '#2F6B3A', mouth: 'lips', earring: true, hi: '내 배에 잘 왔어.', win: '금화는 두고 가.', lose: '다음엔 안 져.' },
+    { name: '외눈 바토', stars: 2, sky: ['#E8B260', '#5C6E34', '#1C2610'], coat: ['#3E4A2A', '#161C0E'], shirt: '#2A2A1C', skin: ['#B98058', '#6E4428'], hat: 'bandana', hatC: ['#2A2E38', '#0C0E14'], beard: 'mustache', beardC: '#17120E', eyes: 'patch', iris: '#3A2410', brows: 'patch', mouth: 'flat', scar: 'M59.5 43l-3.5 14', hi: '한쪽 눈이면 충분해.', win: '봤지? 한쪽으로도 보여.', lose: '눈이 하나 모자랐군.' },
+    { name: '금니 마르코', stars: 3, sky: ['#F2A874', '#5C3F96', '#1E1240'], coat: ['#4A2F7A', '#1A0E34'], shirt: '#E8DEC6', skin: ['#EFC29A', '#B27C58'], hat: 'tricorn', hatC: ['#3A2460', '#120A24'], trim: GOLD, band: GOLD, plume: '#C9A2F0', hair: ['sides', '#20140E'], beard: 'curled', beardC: '#20140E', eyes: 'two', iris: '#3A2A18', mouth: 'gold', earring: true, hi: '내 금니가 보이나?', win: '금니 하나 더 해야겠군.', lose: '이가 시리군.' },
+    { name: '폭풍의 리라', stars: 3, female: true, sky: ['#E8A880', '#3E5F86', '#0E1C33'], coat: ['#22405E', '#0B1726'], shirt: '#D9E2EA', skin: ['#EFCBAE', '#B58766'], hat: 'bicorne', hatC: ['#1E2C40', '#0A1018'], trim: '#BFD0DF', band: '#BFD0DF', hair: ['long', '#16202E'], brows: 'arch', eyes: 'two', iris: '#3A78B8', mouth: 'lips', scar: 'M41 43l3 13', hi: '폭풍 전에 끝내자.', win: '바람은 내 편이야.', lose: '바람이 바뀌었네.' },
+    { name: '백발 제독', stars: 4, sky: ['#F0A86A', '#2C4A86', '#0B1738'], coat: ['#1C3668', '#0A1530'], shirt: '#F2EEE2', epaulet: true, skin: ['#EFC8A8', '#B08462'], hat: 'bicorne', hatC: ['#202A48', '#0A0E1E'], trim: GOLD, band: GOLD, cockade: true, hair: ['white', '#E8E4DA'], beard: 'white', beardC: '#EDE9DF', eyes: 'two', iris: '#3A5A80', brows: 'angry', browC: '#D8D4C8', mouth: 'flat', hi: '예의를 갖춰 상대하지.', win: '경험은 못 이기지.', lose: '훌륭한 솜씨였네.' },
+    { name: '여왕 이사벨', stars: 4, female: true, sky: ['#F7C26B', '#B2342A', '#3E0C10'], coat: ['#9E1F22', '#3A0A0C'], shirt: '#F5E8CC', epaulet: true, skin: ['#E9BC94', '#A87450'], hat: 'crown', hair: ['long', '#1A1210'], brows: 'arch', eyes: 'two', iris: '#4A2A12', mouth: 'lips', earring: true, hi: '내 앞에 무릎 꿇어라.', win: '금화, 고맙게 받지.', lose: '이번 한 번만 봐주마.' },
+    { name: '유령 선장', stars: 5, sky: ['#9CD8B8', '#2E6A5E', '#0A2420'], coat: ['#2E4A44', '#0E1E1A'], shirt: '#B8D8CC', skin: ['#BFE3D2', '#6FA396'], hat: 'torn', hatC: ['#3A5048', '#141E1A'], trim: '#9CCBB8', hair: ['sides', '#7FA89A'], beard: 'long', beardC: '#4E6E64', eyes: 'glow', iris: '#7CF5E0', brows: 'angry', browC: '#2E4A44', mouth: 'flat', hi: '…바다가 널 부른다.', win: '…너도 이제 우리 배다.', lose: '…다시 돌아오겠다.' },
+    { name: '검은수염', stars: 5, sky: ['#F08A4A', '#8E2A22', '#2E0A08'], coat: ['#5A1712', '#1C0807'], shirt: '#2A1410', epaulet: true, skin: ['#8A5638', '#D9A47C'], hat: 'tricorn', hatC: ['#34394F', '#0C0E1A'], trim: GOLD, band: '#A8231A', emblem: ['#A8231A', '#F8EED6'], beard: 'long', beardC: '#14100E', eyes: 'patch', iris: '#7A1C10', brows: 'patch', mouth: 'sneer', scar: 'M59.5 43l-3.5 14', hi: '한 판 붙자!', win: '금화는 잘 받겠다!', lose: '다음엔 안 봐준다.' },
+  ];
+  const RING = Array.from({ length: 12 }, (_, i) => { const a = i * Math.PI / 6; return `<circle cx="${(50 + Math.cos(a) * 45).toFixed(1)}" cy="${(50 + Math.sin(a) * 45).toFixed(1)}" r="1.3" fill="#FFF3C2" stroke="#6B4A14" stroke-width=".5"/>`; }).join('');
+  function rivalArt(r) {
+    const n = `r${RIVALS.indexOf(r)}`, stroke = (d, c, w) => `<path d="${d}" fill="none" stroke="${c}" stroke-width="${w}" stroke-linecap="round"/>`;
+    const grad = (id, a, b, x2 = 0, y2 = 1) => `<linearGradient id="${id}${n}" x1="0" y1="0" x2="${x2}" y2="${y2}"><stop offset="0" stop-color="${a}"/><stop offset="1" stop-color="${b}"/></linearGradient>`;
+    const hc = r.hair?.[1], kind = r.hair?.[0], patch = r.eyes === 'patch', xs = patch ? [56] : [44, 56], bc = r.beardC;
+    const coat = `<path d="M12 104C14 82 30 77 41 73l9 9 9-9c11 4 27 9 29 31z" fill="url(#coat${n})"/>${r.stripes ? `<path d="M15 90h70M12 98h76" stroke="${r.stripes}" stroke-width="3.4"/>` : ''}<path d="M41 73l9 9 9-9-3-3H44z" fill="${r.shirt}"/>${r.stripes ? '' : `<path d="M41 73l9 9M59 73l-9 9" stroke="${GOLD}" stroke-width="1.6"/>`}${r.epaulet ? `<ellipse cx="25" cy="84" rx="11" ry="5" transform="rotate(-20 25 84)" fill="${GOLD}" stroke="#7A5210"/><ellipse cx="75" cy="84" rx="11" ry="5" transform="rotate(20 75 84)" fill="${GOLD}" stroke="#7A5210"/>` : ''}`;
+    const back = kind === 'long' ? `<path d="M31 38C25 52 23 76 31 90C38 86 40 78 41 71H59C60 78 62 86 69 90C77 76 75 52 69 38Z" fill="${hc}"/>${stroke('M33 50C31 62 31 74 34 84M67 50C69 62 69 74 66 84', 'rgba(255,255,255,.18)', 1.2)}` : '';
+    const head = r.female ? 'M36 44C36 33 64 33 64 44C65 55 59 66 50 68.5C41 66 35 55 36 44Z' : 'M35.5 44C35.5 33 64.5 33 64.5 44C65.5 57 60.5 69 50 71C39.5 69 34.5 57 35.5 44Z';
+    const skin = `<path d="M43 62h14v13l-7 6-7-6z" fill="${r.skin[1]}"/><path d="${head}" fill="url(#skin${n})"/><path d="M35.5 42h29v4.5C58 44 42 44 35.5 46.5z" fill="rgba(30,15,5,.42)"/>${stroke('M50.5 49.5l-2.2 7.5q2.6 1.6 5 .2', 'rgba(90,45,25,.7)', 1.3)}${r.rednose ? '<ellipse cx="51" cy="56.5" rx="3.6" ry="2.8" fill="#D8604A" opacity=".8"/>' : ''}${r.freckles ? '<g fill="#B97A50"><circle cx="41" cy="55" r=".7"/><circle cx="44" cy="56.5" r=".7"/><circle cx="56" cy="56.5" r=".7"/><circle cx="59" cy="55" r=".7"/></g>' : ''}`;
+    const tache = c => `<path d="M40 58c5-3.5 8-3.5 10-1 2-2.5 5-2.5 10 1-4 1-7 .8-10 .2-3 .6-6 .8-10-.2z" fill="${c}"/>`;
+    const beard = { stubble: '<path d="M37.5 57C40 67 46 70 50 70.6C54 70 60 67 62.5 57C58 63 54 60.5 50 60.5C46 60.5 42 63 37.5 57Z" fill="rgba(45,28,16,.42)"/>', mustache: tache(bc), curled: `<path d="M37 55.5c2 3.500 8 3.500 13 .5 5 3 11 3 13-.5-.5 5.500-9 7-13 3.500-4 3.500-12.500 2-13-3.500z" fill="${bc}"/>`, long: `<path d="M35.5 52C33 68 39 88 50 94C61 88 67 68 64.5 52C60 60 56 59.5 50 59.5C44 59.5 40 60 35.5 52Z" fill="${bc}"/>${stroke('M42 64c0 9 2 15 4 21M50 63v26M58 64c0 9-2 15-4 21M46 63c0 8 1 16 2 24M54 63c0 8-1 16-2 24', 'rgba(255,255,255,.14)', 1)}<rect x="46.5" y="84" width="7" height="5" rx="2" fill="${GOLD}" stroke="#6B4A14" stroke-width=".7"/>${tache('#0B0A0C')}`, white: `<path d="M36 52C35 66 40 79 50 83C60 79 65 66 64 52C60 60 56 59.5 50 59.5C44 59.5 40 60 36 52Z" fill="${bc}"/>${stroke('M44 66c0 5 2 9 4 12M56 66c0 5-2 9-4 12', 'rgba(120,110,90,.4)', 1)}${tache('#F7F4EC')}` }[r.beard] || '';
+    const closed = { sneer: `<path d="M44 62.500c4 2.500 9 2.500 13-.5-1 4-4 5.500-7 5.500-3 0-5-2-6-5z" fill="#3A0F0A"/><path d="M45.500 63.200h10l-.6 1.600h-8.700z" fill="#EFE6CF"/><rect x="52" y="63.300" width="2.600" height="1.700" fill="${GOLD}"/>`, gold: `<path d="M43 62c4 2.500 10 2.500 14 0-1 5-4 6.500-7 6.500s-6-1.500-7-6.500z" fill="#3A0F0A"/><path d="M44.500 62.600c3.700 1.800 7.300 1.800 11 0l-.5 2.200c-3.300 1.200-6.700 1.200-10 0z" fill="${GOLD}" stroke="#A8741A" stroke-width=".4"/>`, smile: stroke('M44 63c3 2.600 9 2.600 12 0', '#5C2A1E', 1.6), flat: stroke('M45 64.200h10', '#4A2418', 1.6), lips: '<path d="M45 63.500c2-1.400 3.500-1.200 5-.4 1.500-.8 3-1 5 .4-2.400 2.800-7.600 2.800-10 0z" fill="#A8231A"/>' }[r.mouth];
+    const mouths = `<g class="m-closed">${closed}</g><g class="m-open"><path d="M42 61c5 2 11 2 16 0-1 7-5 10-8 10-3 0-7-3-8-10z" fill="#3A0F0A"/><path d="M43.500 62c4 1.200 9 1.200 13 0l-.5 2c-4 1-8 1-12 0z" fill="#EFE6CF"/></g><ellipse class="m-shock" cx="50" cy="65.500" rx="3.400" ry="4.400" fill="#3A0F0A"/><g class="m-cry">${stroke('M44 67.500c3-3.200 9-3.200 12 0', '#3A0F0A', 2.2)}</g>`;
+    const idle = r.eyes === 'glow' ? xs.map(x => `<circle cx="${x}" cy="50" r="4.400" fill="${r.iris}" opacity=".35"/><circle class="pupil" cx="${x}" cy="50" r="2.400" fill="${r.iris}"/>`).join('')
+      : r.eyes === 'sleepy' ? xs.map(x => `<path d="M${x - 4} 50.600c2-1.100 6-1.100 8 0-2 1.500-6 1.500-8 0z" fill="#F0E3C8"/><circle class="pupil" cx="${x - .8}" cy="50.900" r="1.500" fill="${r.iris}"/>`).join('')
+      : xs.map(x => `<path d="M${x - 4} 50.200c2-2.200 6-2.200 8 0-2 1.500-6 1.500-8 0z" fill="#F6EFE0"/><circle class="pupil" cx="${x - .9}" cy="50" r="1.800" fill="${r.iris}"/>`).join('');
+    const lash = r.female ? stroke(xs.map(x => `M${x - 4.200} 49.800q4.200-3 8.400 0`).join(''), '#1A1210', 1) : '';
+    const eyes = `<g class="e-idle">${idle}${lash}</g><g class="e-happy">${stroke(xs.map(x => `M${x - 4} 51c2-3 6-3 8 0`).join(''), '#0B0A0C', 1.8)}</g><g class="e-shock">${xs.map(x => `<circle cx="${x}" cy="50" r="4" fill="#F6EFE0"/><circle cx="${x}" cy="50" r="1.500" fill="${r.iris}"/>`).join('')}</g><g class="e-cry">${stroke(xs.map(x => `M${x - 4} 49c2 2.600 6 2.600 8 0`).join(''), '#0B0A0C', 1.8)}</g><g class="tears" fill="#8FD3F0">${xs.map(x => `<path d="M${x} 53c-1.500 3-2 4.500 0 5 2-.5 1.500-2 0-5z"/>`).join('')}</g>`;
+    const eyePatch = patch ? `<path d="M38.800 48.500L35.600 46M49.500 48l15-4.500" stroke="#0B0A0C" stroke-width="1.800"/><path d="M38.500 47.500c3-1.500 9-1.500 11 .5.5 4-1.500 7-5.500 7.500-3.500-.5-6-4-5.500-8z" fill="#0B0A0C" stroke="rgba(255,255,255,.14)" stroke-width=".7"/>` : '';
+    const scar = r.scar ? stroke(r.scar, '#E8A090', 1.3) : '';
+    const bcol = r.browC || (patch ? '#0B0A0C' : '#1C120A');
+    const bIdle = { angry: 'M39 46.800l9 1.600M61 46.800l-9 1.600', soft: 'M39.500 46.500l8.500-.6M60.500 46.500l-8.500-.6', arch: 'M39.500 47.500q4-3 8.500-1M60.500 47.500q-4-3-8.500-1', patch: 'M51.500 48.500l10-3' }[r.brows || 'angry'], bScowl = patch ? 'M50.500 49.800l11-1.300' : 'M39 48.400l9.500 2.200M61 48.400l-9.500 2.200';
+    const brows = `<g class="b-idle">${stroke(bIdle, bcol, patch ? 3 : 2.4)}</g><g class="b-scowl">${stroke(bScowl, bcol, 3.4)}</g>`;
+    const front = { sides: `<path d="M35 40c-3 8-3 17 1 24 1-8 1-15 2-22zM65 40c3 8 3 17-1 24-1-8-1-15-2-22z" fill="${hc}"/>`, white: `<path d="M35 40c-5 6-6 16-2 24 3-6 3-14 5-22zM65 40c5 6 6 16 2 24-3-6-3-14-5-22z" fill="${hc}"/>`, fringe: `<path d="M35 39l1.500 9 3-4 3 4 3.500-4 3.500 4 3.500-4 3.500 4 3-4 1.500-9z" fill="${hc}"/>`, long: `<path d="M36 40c-2 9-2 17 0 24l3-10 1-13zM64 40c2 9 2 17 0 24l-3-10-1-13z" fill="${hc}"/>` }[kind] || '';
+    const ear = r.earring ? `<circle cx="36" cy="61.500" r="2.400" fill="none" stroke="${GOLD}" stroke-width="1.300"/>` : '';
+    const emblem = r.emblem ? `<g transform="translate(50 29) rotate(45)"><rect x="-6.500" y="-6.500" width="13" height="13" rx="2.600" fill="${r.emblem[0]}" stroke="#7A5210" stroke-width="1"/>${[[-3.400, -3.400], [3.400, -3.400], [0, 0], [-3.400, 3.400], [3.400, 3.400]].map(([a, b]) => `<circle cx="${a}" cy="${b}" r="1.200" fill="${r.emblem[1]}"/>`).join('')}</g>` : '';
+    const shine = stroke('M32 28c5-5 12-7 18-7', 'rgba(255,255,255,.25)', 2);
+    const tri = 'M12 40C22 35 26 18 50 18S78 35 88 40C69 45 31 45 12 40Z', band = `<path d="M20 40c19 3.500 41 3.500 60 0" fill="none" stroke="${r.band || r.trim}" stroke-width="2"/>`;
+    const hat = {
+      tricorn: `<path d="${tri}" fill="url(#hat${n})" stroke="${r.trim}" stroke-width="1.800"/>${band}${shine}${emblem}`,
+      worn: `<g transform="rotate(-7 50 32)"><path d="${tri}" fill="url(#hat${n})" stroke="${r.trim}" stroke-width="1.500"/>${stroke('M38 26l6 5M58 25l-3 6', 'rgba(20,12,6,.7)', 1.400)}${stroke('M62 32l5 1M64 30l-1 5', '#C9B48A', .8)}${shine}</g>`,
+      torn: `<path d="M12 40C22 35 26 18 50 18S78 35 88 40l-6 2.500-4-2-6 3.500-5-2.500-6 3-5-2.500-6 2.500-6-2.500-5 2.500-6-3-5 2.500-6-3.500-4 2z" fill="url(#hat${n})" stroke="${r.trim}" stroke-width="1.300"/><circle cx="38" cy="31" r="2.200" fill="#0A1A16"/><path d="M60 26l4 3-3 4-4-3z" fill="#0A1A16"/>${shine}`,
+      bandana: `<path d="M66 33l11-5-2 7 6 5-13-3z" fill="url(#hat${n})"/><path d="M33.500 41.500C32 21 68 21 66.500 41.500C60 37.500 40 37.500 33.500 41.500Z" fill="url(#hat${n})"/>${stroke('M34.500 39.500C41 35.800 59 35.800 65.500 39.500', 'rgba(255,255,255,.3)', 1)}${r.spots ? '<g fill="#F8EED6"><circle cx="42" cy="29" r="1.500"/><circle cx="50" cy="26" r="1.500"/><circle cx="58" cy="29" r="1.500"/><circle cx="46" cy="34" r="1.500"/><circle cx="55" cy="34" r="1.500"/></g>' : ''}`,
+      bicorne: `<path d="M6 43C20 36 28 10 50 10S80 36 94 43C72 48 28 48 6 43Z" fill="url(#hat${n})" stroke="${r.trim}" stroke-width="2"/><path d="M15 43c23 4 47 4 70 0" fill="none" stroke="${r.band}" stroke-width="2"/>${r.cockade ? `<circle cx="50" cy="27" r="6" fill="#A8231A" stroke="${GOLD}" stroke-width="1.600"/><circle cx="50" cy="27" r="2.200" fill="${GOLD}"/>` : stroke('M50 18v18', r.band, 1.600)}${shine}`,
+      crown: `<path d="M33 40l-3-20 10 8 10-15 10 15 10-8-3 20c-11-3.500-23-3.500-34 0z" fill="url(#crownG${n})" stroke="#7A5210" stroke-width="1.300"/><circle cx="50" cy="14" r="2.200" fill="#E5281C"/><circle cx="30" cy="20" r="1.800" fill="#4FA8E8"/><circle cx="70" cy="20" r="1.800" fill="#4FA8E8"/><circle cx="50" cy="33" r="2.800" fill="#A8231A" stroke="#FFF3C2" stroke-width=".8"/><path d="M34.500 37c10-3 21-3 31 0" fill="none" stroke="#7A5210" stroke-width="1"/>`,
+    }[r.hat];
+    const plume = r.plume ? `<g transform="translate(100 0) scale(-1 1)"><path d="M70 32C76 14 90 6 99 6C97 18 88 32 74 36Z" fill="${r.plume}" stroke="rgba(40,20,60,.6)" stroke-width=".9"/>${stroke('M72 35C80 24 88 15 97 8', 'rgba(40,20,60,.6)', 1)}</g>` : '';
+    return `<defs><linearGradient id="rim${n}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFF3C2"/><stop offset=".4" stop-color="#A8741A"/><stop offset=".65" stop-color="${GOLD}"/><stop offset="1" stop-color="#6B4A14"/></linearGradient><radialGradient id="sky${n}" cx=".5" cy="1" r="1.050"><stop offset="0" stop-color="${r.sky[0]}"/><stop offset=".55" stop-color="${r.sky[1]}"/><stop offset="1" stop-color="${r.sky[2]}"/></radialGradient>${grad('coat', r.coat[0], r.coat[1])}${grad('skin', r.skin[0], r.skin[1], 1, 0)}${grad('hat', ...(r.hatC || ['#000', '#000']))}${grad('crownG', '#FFF0B0', '#B9801E')}<clipPath id="pic${n}"><circle cx="50" cy="50" r="41"/></clipPath></defs><circle cx="50" cy="50" r="49" fill="url(#rim${n})" stroke="#3A2A12" stroke-width="1.200"/>${RING}<circle cx="50" cy="50" r="41.500" fill="url(#sky${n})" stroke="#3A2A12" stroke-width="1.600"/><g clip-path="url(#pic${n})"><g class="nb">${coat}${back}${skin}${beard}${mouths}${eyes}${eyePatch}${scar}${brows}${front}${ear}${hat}</g></g>${plume}`;
+  }
+  /*RIVALS-END*/
+  let foe = null, bag = [], played = false;
+  const foeIs = () => foe.name + ((foe.name.charCodeAt(foe.name.length - 1) - 0xAC00) % 28 ? '이' : '가');
+  function shuffledRivals() {
+    const list = RIVALS.slice();
+    for (let i = list.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [list[i], list[j]] = [list[j], list[i]]; }
+    if (list[list.length - 1] === foe) [list[0], list[list.length - 1]] = [list[list.length - 1], list[0]];
+    return list;
+  }
+  /* 판마다 선장이 바뀐다. 열 명을 다 만나기 전에는 같은 선장이 또 나오지 않고, 처음 하는 사람의 첫 판은 별 하나 선장이다. */
+  function nextRival() {
+    if (!bag.length) bag = shuffledRivals();
+    const r = Record.read(), newcomer = !foe && r.w + r.l + r.d === 0;
+    foe = newcomer ? bag.splice(bag.indexOf(RIVALS[0]), 1)[0] : bag.pop();
+    npc.innerHTML = rivalArt(foe);
+    set($('#nameCom'), foe.name);
+    const stars = $('#foeStars');
+    stars.innerHTML = [1, 2, 3, 4, 5].map(i => `<i class="${i <= foe.stars ? '' : 'off'}"></i>`).join('');
+    stars.setAttribute('aria-label', `난이도 별 ${foe.stars}개`);
+  }
   /* 바다와 보물지도 : 코드로 그린 배경이라 화면 크기가 바뀔 때만 다시 그린다. */
   const skyC = $('#sky'), mapC = $('#map'), topEl = $('.top'), fieldEl = $('#field');
   const seeded = n => { let s = n; return () => (s = (s * 16807) % 2147483647) / 2147483647; };
@@ -875,7 +945,7 @@ const Game = (() => {
     if (!holdBtn.disabled) { const t = tipText('hold', '홀드가 켜졌어요! 누르면 지금 판 그대로 이기고 끝나요.'); if (t) return t; }
     if (bet === 'open') { const t = tipText('predict', '이길 것 같으면 승리 예측을 눌러 보세요. 금화를 더 걸 수 있어요.'); if (t) return t; }
     if (state.next === 'first') return tipText('first', '첫 주사위예요. 노란 칸을 눌러 내 판에 놓아 보세요.');
-    if (state.next === 'shield') return tipText('bonus', '알까기 상으로 받은 주사위예요. 파란 칸을 누르면 검은수염 판에도 놓아서 칸을 막을 수 있어요.');
+    if (state.next === 'shield') return tipText('bonus', '알까기 상으로 받은 주사위예요. 파란 칸을 누르면 상대 판에도 놓아서 칸을 막을 수 있어요.');
     return tipText('place', '노란 칸을 누르면 주사위가 놓여요. 칸의 숫자는 오를 점수예요.') || tipText('reroll', '눈이 마음에 안 들면 ‘한 번 더’를 눌러 다시 굴릴 수 있어요.');
   }
 
@@ -1070,33 +1140,47 @@ const Game = (() => {
     pickOld.classList.toggle('on', !!choosing && inHand.picked === 'old');
     pickOld.classList.toggle('off', !!choosing && inHand.picked === 'now');
     if (choosing) {
-      if (!pickOld.firstElementChild) pickOld.innerHTML = '<span class="tray"><span class="shade"></span><span class="hop"><span class="cube"></span></span></span>';
-      dressCube(pickOld.querySelector('.cube'), inHand.old, tray.classList.contains('shield'));
+      if (!pickOld.firstElementChild) pickOld.innerHTML = '<span class="tray"><span class="shade"></span><span class="hop"><img class="cube" alt=""></span></span>';
+      pickOld.querySelector('.cube').src = dieSprite(inHand.old, 1, tray.classList.contains('shield')).src;
       pickOld.setAttribute('aria-label', `처음 눈 ${inHand.old} 고르기`);
     }
   }
 
-  const setFace = v => { lastFace = v; dressCube(cube, v, tray.classList.contains('shield')); };
+  const setFace = v => { lastFace = v; cube.src = dieSprite(v, 1, tray.classList.contains('shield')).src; cube.alt = `주사위 눈 ${v}`; };
   const setHeld = on => { hop.style.visibility = shade.style.visibility = on ? 'visible' : 'hidden'; };
 
+  /* 빈 접시에 주사위가 위에서 떨어진다. 공중에서는 눈이 정해지지 않았다가 접시에 닿는 순간 눈이 정해진다. */
   async function rollCube(v) {
+    const D = T(700), land = .6, lean = (Math.random() - .5) * 14, turn = (Math.random() < .5 ? -1 : 1) * (420 + Math.random() * 360);
+    const at = (x, y, s, r) => `translate(calc(var(--u)*${x}),calc(var(--u)*${y})) scale(${s}) rotate(${r}deg)`;
+    const fall = 'cubic-bezier(.5,0,.9,.6)';
+    setFace(rollValue());
     setHeld(true);
+    hop.style.transform = shade.style.rotate = '';
+    hop.style.transform = `rotate(${lean}deg)`;
+    shade.style.rotate = `${lean}deg`;
+    const flick = calm ? 0 : setInterval(() => setFace(rollValue()), 60);
+    const settle = setTimeout(() => { clearInterval(flick); setFace(v); }, D * land);
+    const drop = hop.animate([
+      { transform: at(-5, -78, 3, lean + turn), opacity: 0, easing: fall },
+      { transform: at(-3, -48, 2.4, lean + turn * .6), opacity: 1, offset: .2, easing: fall },
+      { transform: at(0, 0, .92, lean), opacity: 1, offset: land, easing: 'ease-out' },
+      { transform: at(0, -7, 1.2, lean * .4), opacity: 1, offset: .8, easing: 'ease-in' },
+      { transform: at(0, 0, .97, lean), opacity: 1, offset: .93, easing: 'ease-out' },
+      { transform: at(0, 0, 1, lean), opacity: 1 },
+    ], { duration: D });
+    const far = 'translate(calc(var(--u)*14),calc(var(--u)*17)) scale(.42)', near = 'translate(0,0) scale(1)';
+    shade.animate([
+      { transform: far, opacity: 0, easing: fall },
+      { transform: near, opacity: 1, offset: land, easing: 'ease-out' },
+      { transform: 'translate(calc(var(--u)*2.6),calc(var(--u)*3.2)) scale(.84)', opacity: .7, offset: .8, easing: 'ease-in' },
+      { transform: near, opacity: 1, offset: .93 },
+      { transform: near, opacity: 1 },
+    ], { duration: D });
+    await drop.finished.catch(() => {});
+    clearInterval(flick);
+    clearTimeout(settle);
     setFace(v);
-    cube.dataset.spin = '1';
-    hop.animate([
-      { transform: 'translateY(0) scale(1)' },
-      { transform: 'translateY(calc(var(--u)*-26)) scale(1.35)', offset: .38 },
-      { transform: 'translateY(0) scale(1.18,.8)', offset: .82 },
-      { transform: 'translateY(calc(var(--u)*-4)) scale(.95,1.06)', offset: .92 },
-      { transform: 'none' },
-    ], { duration: T(780), easing: 'ease-out' });
-    const spin = cube.animate([
-      { transform: poseOf(v, -360 * (2 + Math.floor(Math.random() * 2)), 360 * (1 + Math.floor(Math.random() * 2))) },
-      { transform: poseOf(v) },
-    ], { duration: T(740), easing: 'cubic-bezier(.16,.72,.3,1)' });
-    shade.animate([{ transform: 'scale(1)' }, { transform: 'scale(.55)', offset: .38 }, { transform: 'scale(1.15)', offset: .82 }, { transform: 'none' }], { duration: T(780), easing: 'ease-out' });
-    await spin.finished.catch(() => {});
-    delete cube.dataset.spin;
   }
 
   /* 판이 시작될 때 : 두 선장이 들어오고 칼이 부딪힌다. */
@@ -1219,14 +1303,14 @@ const Game = (() => {
 
   async function announce(res, p) {
     const mine = p === 'me', parts = [], n = res.removed.length, reacted = foeReacts(res, mine, n);
-    if (n) parts.push(mine ? `주사위 ${n}개를 알까기! 실드를 굴려요.` : `검은수염이 내 주사위 ${n}개를 알까기했어요.`);
-    if (res.die?.shield && res.side !== p) parts.push(mine ? '상대 판의 빈칸을 막았어요.' : '검은수염이 내 판의 빈칸을 막았어요.');
+    if (n) parts.push(mine ? `주사위 ${n}개를 알까기! 실드를 굴려요.` : `${foeIs()} 내 주사위 ${n}개를 알까기했어요.`);
+    if (res.die?.shield && res.side !== p) parts.push(mine ? '상대 판의 빈칸을 막았어요.' : `${foeIs()} 내 판의 빈칸을 막았어요.`);
     if (parts.length) { say(parts.join(' ')); await wait(n ? 950 : 760); }
     else await wait(reacted ? 640 : 220);
     const same = res.die ? state.boards[res.side][res.row].filter(d => d.v === res.die.v).length : 0;
     if (res.die?.shield) await tipWait('shield', '파란 테두리는 실드 주사위예요. 알까기로 없앨 수 없어요.');
     else if (mine && same >= 2) await tipWait('combo', '같은 눈이 모여서 점수가 커졌어요! 두 개면 3배, 세 개면 5배예요.');
-    else if (!mine && n) await tipWait('hit', '검은수염이 같은 눈을 쳐냈어요. 내 눈과 같은 눈이 나오면 당할 수 있어요.');
+    else if (!mine && n) await tipWait('hit', `${foeIs()} 같은 눈을 쳐냈어요. 내 눈과 같은 눈이 나오면 당할 수 있어요.`);
   }
 
   function placeCard(card) {
@@ -1268,7 +1352,7 @@ const Game = (() => {
     const me = i => Game.rowScore(state.boards.me[i]), com = i => Game.rowScore(state.boards.com[i]);
     const names = ['첫째 줄', '둘째 줄', '셋째 줄'];
     const row = i => { const w = out.rows[i]; return `<div class="rr"><span>${names[i]}</span><b class="g">${me(i)}</b><i>:</i><b class="o">${com(i)}</b><em class="${w === 'me' ? 'w' : 'l'}">${w === 'me' ? '승' : w === 'com' ? '패' : '-'}</em></div>`; };
-    $('#resultRows').innerHTML = `<h3>전리품 장부</h3>${[0, 1, 2].map(row).join('')}<div class="pxcut"></div>
+    $('#resultRows').innerHTML = `<h3>전리품 장부</h3><p class="vs-line">상대 ${foe.name} ${'★'.repeat(foe.stars)}</p>${[0, 1, 2].map(row).join('')}<div class="pxcut"></div>
       <div class="rr"><span>가져간 줄</span><b class="g">${out.won.me}</b><i>:</i><b class="o">${out.won.com}</b><span></span></div>
       <div class="rr"><span>합계</span><b class="g n-me">${out.totals.me}</b><i>:</i><b class="o n-com">${out.totals.com}</b><span></span></div>`;
     const big = mode === 'forfeit' ? ['기권', 'flat'] : mode === 'hold' ? ['홀드 승리', 'win'] : out.winner === 'me' ? ['승리!', 'win'] : out.winner === 'com' ? ['패배', 'lose'] : ['무승부', 'flat'];
@@ -1312,8 +1396,8 @@ const Game = (() => {
     const title = out.winner === 'me' ? '이겼어요' : out.winner === 'com' ? '졌어요' : '비겼어요';
     say(`${title}. ${held ? '홀드, ' : ''}줄 ${out.won.me} : ${out.won.com}, ${pointText(delta)}`);
     showResult(out, delta, held ? 'hold' : '', info);
-    if (out.winner === 'me') { react('cry', '다음엔 안 봐준다', 0); coinRain(); }
-    else if (out.winner === 'com') react('laugh', '금화는 잘 받겠다!', 0);
+    if (out.winner === 'me') { react('cry', foe.lose, 0); coinRain(); }
+    else if (out.winner === 'com') react('laugh', foe.win, 0);
     else react('grin', '비겼군. 한 판 더!', 0);
   }
 
@@ -1337,21 +1421,21 @@ const Game = (() => {
       await wait(700);
       if (g !== session) return null;
       let held = v;
-      if (Game.wantsReroll(state, v)) {
+      if (Game.wantsReroll(state, v, foe.stars)) {
         state = Game.useReroll(state);
         paintRerolls();
-        say('검은수염이 한 번 더 굴려요.');
+        say(`${foeIs()} 한 번 더 굴려요.`);
         react('think', '다시 굴린다!', 1000);
         const next = rollValue();
         await rollCube(next);
         if (g !== session) return null;
         await wait(420);
         if (g !== session) return null;
-        held = Game.choose(state, next).score >= Game.choose(state, v).score ? next : v;
-        if (held !== next) { say('검은수염이 처음 눈을 골랐어요.'); setFace(held); await wait(420); }
+        held = Game.bestMove(state, next, foe.stars).score >= Game.bestMove(state, v, foe.stars).score ? next : v;
+        if (held !== next) { say(`${foeIs()} 처음 눈을 골랐어요.`); setFace(held); await wait(420); }
         if (g !== session) return null;
       }
-      const m = Game.choose(state, held);
+      const m = Game.choose(state, held, foe.stars);
       return { v: held, side: m.side, row: m.row, knock: m.knock, from: tray };
     },
   };
@@ -1375,17 +1459,20 @@ const Game = (() => {
     clearHints();
     paintRerolls();
     paintScores();
-    say(state.turn === 'me' ? '내가 먼저 굴려요.' : '검은수염이 먼저 굴려요.');
+    if (played) nextRival();
+    played = true;
+    say(`${foe.name} 등장!`);
     await wait(clashIn() || 520);
     if (g !== session) return;
-    react('grin', '한 판 붙자!', 1400);
-    await wait(240);
+    say(state.turn === 'me' ? '내가 먼저 굴려요.' : `${foeIs()} 먼저 굴려요.`);
+    react('grin', foe.hi, 1400);
+    await wait(420);
     if (g !== session) return;
     let last = null;
     while (g === session && !state.over) {
       const p = state.turn, kind = state.next;
       if (last === p && kind === 'normal') {
-        say(p === 'me' ? '검은수염 판이 다 차서 내가 이어서 둬요.' : '내 판이 다 차서 검은수염이 이어서 둬요.');
+        say(p === 'me' ? `${foe.name} 판이 다 차서 내가 이어서 둬요.` : `내 판이 다 차서 ${foeIs()} 이어서 둬요.`);
         await wait(700);
         if (g !== session) return;
       }
@@ -1397,7 +1484,7 @@ const Game = (() => {
       $('#nameCom').classList.toggle('active', p === 'com');
       tray.classList.toggle('shield', kind !== 'normal');
       if (p === 'com') react('think', null, 0);
-      say(p === 'me' ? '내 차례예요. 주사위를 굴려요.' : kind === 'normal' ? '검은수염이 굴리는 중이에요.' : '검은수염이 실드를 굴려요.');
+      say(p === 'me' ? '내 차례예요. 주사위를 굴려요.' : kind === 'normal' ? `${foeIs()} 굴리는 중이에요.` : `${foeIs()} 실드를 굴려요.`);
       const v = rollValue();
       await rollCube(v);
       if (g !== session) return;
@@ -1421,7 +1508,6 @@ const Game = (() => {
     set($('#logo'), '티티카카');
     set($('#rulesBtn'), '규칙');
     set($('#statsBtn'), '전적');
-    set($('#nameCom'), '검은수염');
     set($('#rerollCap'), '한 번 더');
     set(holdBtn, '홀드');
     set(forfeitBtn, '기권');
@@ -1438,7 +1524,7 @@ const Game = (() => {
     const row = (art, head, sub) => `<li><span class="g-art">${art}</span><div><b>${head}</b><small>${sub}</small></div></li>`;
     $('#guideList').innerHTML = $('#rulesGuide').innerHTML = [
       row('<span class="g-score"><b class="lead">12</b><i>:</i><b>7</b></span>', '세 줄 중 두 줄을 이기면 승리', '줄마다 점수가 높은 쪽이 그 줄을 가져가요. 얼굴 아래 동그라미가 앞선 줄 수예요.'),
-      row('<span class="g-tile">+5</span>', '주사위가 나오면 노란 칸을 눌러요', '검은수염과 번갈아 내 판에 놓아요.'),
+      row('<span class="g-tile">+5</span>', '주사위가 나오면 노란 칸을 눌러요', '상대 선장과 번갈아 내 판에 놓아요.'),
       row(`${die(5, 2)}${die(5, 2)}<span class="g-pod">${CHAIN}</span>`, '같은 눈을 모으면 점수가 크게 올라요', '두 개면 3배, 세 개면 5배예요.'),
       row(`<span class="g-target">${die(3, 1)}</span>`, '상대 주사위를 없앨 수 있어요', '화살표가 뜬 주사위를 누르면 알까기! 상으로 받은 주사위는 상대 판에도 놓을 수 있어요.'),
       row(die(2, 1, true), '파란 테두리는 실드예요', '실드 주사위는 알까기로 없앨 수 없어요.'),
@@ -1540,6 +1626,7 @@ const Game = (() => {
   showFace('idle');
   paintStatic();
   paintRecord();
+  nextRival();
   let started = false;
   const begin = () => { if (!started) { started = true; run(); } };
   $('#guideStart').addEventListener('click', () => guide.close());
