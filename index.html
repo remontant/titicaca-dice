@@ -99,7 +99,7 @@ body[data-turn="me"] .lane.me,body[data-turn="com"] .lane.com{opacity:1}
 .die{position:absolute;left:0;top:0;width:calc(var(--u)*20);height:calc(var(--u)*20);transition:transform .36s cubic-bezier(.25,.9,.3,1.05)}
 .layer.snap .die{transition:none}
 .die.fly{z-index:5}
-.body{position:absolute;inset:0;transform-origin:50% 100%;filter:drop-shadow(0 var(--u) calc(var(--u)*1.2) rgba(110,85,40,.28));animation:jiggle 2.8s var(--b,0s) ease-in-out infinite}
+.body{position:absolute;inset:0;transform-origin:50% 100%;filter:drop-shadow(0 var(--u) calc(var(--u)*1.2) rgba(110,85,40,.28))}
 .body img{width:100%;height:100%}
 .die.doomed{z-index:4}
 .doomed .body{animation:wiggle .34s ease-in-out infinite}
@@ -199,7 +199,6 @@ dialog::backdrop{background:rgba(70,55,35,.5)}
 @keyframes n-scowl{0%,100%{transform:none}30%{transform:scale(1.12)}45%{transform:scale(1.12) rotate(-5deg)}60%{transform:scale(1.12) rotate(5deg)}}
 @keyframes n-cry{to{transform:translateY(12px) scale(.96)}}
 @keyframes n-tear{from{transform:translateY(-4px);opacity:1}to{transform:translateY(34px);opacity:0}}
-@keyframes jiggle{0%,100%{transform:none}50%{transform:scale(1.04,.95)}}
 @keyframes wiggle{0%,100%{transform:rotate(-8deg) scale(1.05)}50%{transform:rotate(8deg) scale(.96)}}
 @keyframes target{0%,100%{border-color:var(--red)}50%{border-color:#fff}}
 @keyframes arrow{from{transform:translateY(calc(var(--u)*-1))}to{transform:translateY(calc(var(--u)*2))}}
@@ -635,7 +634,7 @@ const Game = (() => {
   function makeDie(d) {
     const el = document.createElement('div');
     el.className = `die v${d.v}${d.shield ? ' warded' : ''}`;
-    el.innerHTML = `<div class="body" style="--b:${(Math.random() * 3).toFixed(2)}s"><img src="${dieSprite(d.v, 1, d.shield).src}" alt=""></div>`;
+    el.innerHTML = `<div class="body"><img src="${dieSprite(d.v, 1, d.shield).src}" alt=""></div>`;
     layer.append(el);
     dice.set(d.id, el);
     return el;
@@ -797,10 +796,6 @@ const Game = (() => {
     setFace(v);
   }
 
-  function thump() {
-    table.animate([{ transform: 'translateY(0)' }, { transform: 'translateY(calc(var(--u)*3))' }, { transform: 'translateY(calc(var(--u)*-1))' }, { transform: 'translateY(0)' }], { duration: T(220), easing: 'ease-out' });
-  }
-
   function burst(x, y) {
     if (calm) return;
     const u = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--u'));
@@ -840,7 +835,6 @@ const Game = (() => {
       { transform: `scale(1.25,.78) rotate(${dir * 720}deg)` },
     ], { duration: T(300), easing: 'ease-out', fill: 'forwards' }).finished;
     if (g !== session) return;
-    thump();
     layer.querySelectorAll(`.link[data-key^="${res.side}-${res.row}-"]`).forEach(l => l.remove());
     const r = el.getBoundingClientRect(), o = layer.getBoundingClientRect();
     burst(r.left - o.left + r.width / 2, r.top - o.top + r.height / 2);
@@ -896,7 +890,6 @@ const Game = (() => {
       { transform: 'scale(1)' },
     ], { duration: T(440), easing: 'ease-out' }).finished;
     if (g !== session) return null;
-    thump();
     el.classList.remove('fly');
     state = res.state;
     sync();
@@ -933,7 +926,6 @@ const Game = (() => {
       { transform: 'scale(1.14,.86)', offset: .84 },
       { transform: 'none', opacity: 1 },
     ], { duration: T(340), easing: 'ease-out' });
-    setTimeout(thump, T(230));
   }
 
   function beanRain() {
@@ -998,7 +990,6 @@ const Game = (() => {
     const title = out.winner === 'me' ? '이겼어요' : out.winner === 'com' ? '졌어요' : '비겼어요';
     say(`${title}. ${held ? '홀드, ' : ''}줄 ${out.won.me} : ${out.won.com}, ${pointText(delta)}`);
     showResult(out, delta, held ? 'hold' : '', info);
-    thump();
     if (out.winner === 'me') { react('cry', '내일 또 오세요', 0); beanRain(); }
     else if (out.winner === 'com') react('laugh', '콩 잘 먹을게!', 0);
     else react('grin', '비겼네, 한판 더!', 0);
