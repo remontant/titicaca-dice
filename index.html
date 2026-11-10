@@ -323,8 +323,9 @@ body[data-tip="place"] .gain{animation:tile-pulse .8s ease-in-out infinite}
 <dialog id="rules">
   <div class="rules">
     <h2 id="rulesTitle" tabindex="-1" autofocus></h2>
-    <button class="bet guide-again" id="guideAgain" type="button">그림으로 보기</button>
-    <ul id="rulesList"></ul>
+    <ul class="guide" id="rulesGuide"></ul>
+    <button class="bet guide-again" id="rulesMore" type="button" aria-expanded="false">자세한 설명 보기</button>
+    <ul id="rulesList" hidden></ul>
     <button class="bet" id="rulesClose" type="button"></button>
   </div>
 </dialog>
@@ -1165,7 +1166,7 @@ const Game = (() => {
     rerollBtn.title = '한 판에 한 번 다시 굴려요';
     const die = (v, same, ward) => `<img src="${dieSprite(v, same, ward).src}" alt="">`;
     const row = (art, head, sub) => `<li><span class="g-art">${art}</span><div><b>${head}</b><small>${sub}</small></div></li>`;
-    $('#guideList').innerHTML = [
+    $('#guideList').innerHTML = $('#rulesGuide').innerHTML = [
       row('<span class="g-score"><b class="lead">12</b><i>:</i><b>7</b></span>', '세 줄 중 두 줄을 이기면 승리', '줄마다 점수가 높은 쪽이 그 줄을 가져가요.'),
       row('<span class="g-tile">+5</span>', '주사위가 나오면 노란 칸을 눌러요', '병아리와 번갈아 내 판에 놓아요.'),
       row(`${die(5, 2)}${die(5, 2)}<span class="g-pod">${POD}</span>`, '같은 눈을 모으면 점수가 크게 올라요', '두 개면 3배, 세 개면 5배예요.'),
@@ -1239,7 +1240,7 @@ const Game = (() => {
     showResult(Game.outcome(state), -lost, 'forfeit', info);
     react('laugh', '벌써 가게?', 0);
   });
-  $('#rulesBtn').addEventListener('click', () => rules.showModal());
+  $('#rulesBtn').addEventListener('click', () => { showDetail(false); rules.showModal(); });
   $('#statsBtn').addEventListener('click', () => { paintStats(); stats.showModal(); });
   $('#statsClose').addEventListener('click', () => stats.close());
   stats.addEventListener('click', e => { if (e.target === stats) stats.close(); });
@@ -1272,7 +1273,9 @@ const Game = (() => {
   const begin = () => { if (!started) { started = true; run(); } };
   $('#guideStart').addEventListener('click', () => guide.close());
   guide.addEventListener('close', () => { try { localStorage.setItem('titicaca-guide', '1'); } catch {} begin(); });
-  $('#guideAgain').addEventListener('click', () => { rules.close(); guide.showModal(); });
+  const rulesMore = $('#rulesMore'), rulesList = $('#rulesList');
+  const showDetail = on => { rulesList.hidden = !on; rulesMore.textContent = on ? '자세한 설명 접기' : '자세한 설명 보기'; rulesMore.setAttribute('aria-expanded', on); };
+  rulesMore.addEventListener('click', () => { showDetail(rulesList.hidden); if (!rulesList.hidden) rulesMore.scrollIntoView({ block: 'start', behavior: calm ? 'auto' : 'smooth' }); });
   let seen = false;
   try { seen = localStorage.getItem('titicaca-guide') === '1'; } catch {}
   if (seen) begin(); else guide.showModal();
