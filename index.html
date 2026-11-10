@@ -499,7 +499,7 @@ const Game = (() => {
   const PROMPT = {
     first: '첫 주사위는 실드예요. 내 판에 놓으세요.',
     normal: '놓을 줄을 고르세요.',
-    shield: '실드예요. 어느 판에든 놓을 수 있어요.',
+    shield: '받은 주사위는 병아리 판에도 놓을 수 있어요.',
   };
   const RULES = [
     '왼쪽이 내 판, 오른쪽이 병아리 판이에요. 줄은 세 개이고 한 줄에 주사위를 세 개까지 놓아요.',
@@ -645,7 +645,7 @@ const Game = (() => {
     if (!holdBtn.disabled) { const t = tipText('hold', '홀드가 켜졌어요! 누르면 지금 판 그대로 이기고 끝나요.'); if (t) return t; }
     if (bet === 'open') { const t = tipText('predict', '이길 것 같으면 승리 예측을 눌러 보세요. 콩을 더 걸 수 있어요.'); if (t) return t; }
     if (state.next === 'first') return tipText('first', '첫 주사위예요. 노란 칸을 눌러 내 판에 놓아 보세요.');
-    if (state.next === 'shield') return tipText('bonus', '실드 주사위는 내 판이나 병아리 판 어디든 놓을 수 있어요.');
+    if (state.next === 'shield') return tipText('bonus', '알까기 상으로 받은 주사위예요. 파란 칸을 누르면 병아리 판에도 놓아서 칸을 막을 수 있어요.');
     return tipText('place', '노란 칸을 누르면 주사위가 놓여요. 칸의 숫자는 오를 점수예요.') || tipText('reroll', '눈이 마음에 안 들면 ‘한 번 더’를 눌러 다시 굴릴 수 있어요.');
   }
 
@@ -1169,7 +1169,7 @@ const Game = (() => {
       row('<span class="g-score"><b class="lead">12</b><i>:</i><b>7</b></span>', '세 줄 중 두 줄을 이기면 승리', '줄마다 점수가 높은 쪽이 그 줄을 가져가요.'),
       row('<span class="g-tile">+5</span>', '주사위가 나오면 노란 칸을 눌러요', '병아리와 번갈아 내 판에 놓아요.'),
       row(`${die(5, 2)}${die(5, 2)}<span class="g-pod">${POD}</span>`, '같은 눈을 모으면 점수가 크게 올라요', '두 개면 3배, 세 개면 5배예요.'),
-      row(`<span class="g-target">${die(3, 1)}</span>`, '상대 주사위를 없앨 수 있어요', '화살표가 뜬 주사위를 누르면 알까기! 한 번 더 굴려요.'),
+      row(`<span class="g-target">${die(3, 1)}</span>`, '상대 주사위를 없앨 수 있어요', '화살표가 뜬 주사위를 누르면 알까기! 상으로 받은 주사위는 상대 판에도 놓을 수 있어요.'),
       row(die(2, 1, true), '파란 테두리는 실드예요', '실드 주사위는 알까기로 없앨 수 없어요.'),
     ].join('');
     $('#rulesList').innerHTML = RULES.map(r => `<li>${r}</li>`).join('');
