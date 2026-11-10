@@ -45,7 +45,7 @@ body[data-short] .top::before{height:calc(var(--u)*8)}
 .record svg{width:calc(var(--u)*11);height:calc(var(--u)*11)}
 .record b{font-weight:400}
 .record small{font-size:.85em;color:var(--ink-soft)}
-.shelf{position:absolute;left:calc(var(--u)*32);bottom:calc(var(--u)*5);width:calc(var(--u)*52);height:auto}
+.shelf{position:absolute;left:0;bottom:calc(var(--u)*5);width:calc(var(--u)*52);height:auto}
 .npc{position:absolute;z-index:1;right:calc(var(--u)*2);bottom:calc(var(--u)*-3);width:calc(var(--u)*84);height:calc(var(--u)*71.4);overflow:visible}
 body[data-short] .npc{width:calc(var(--u)*50);height:calc(var(--u)*42.5)}
 body[data-short] .shelf{display:none}
@@ -64,7 +64,7 @@ body[data-short] .bubble{left:auto;right:calc(var(--u)*50);bottom:calc(var(--u)*
 .npc[data-face="grin"] .m-open,.npc[data-face="laugh"] .m-open,.npc[data-face="shock"] .m-open{display:inline}
 .npc[data-face="think"] .e-idle{transform:translateX(7px)}
 .npc[data-face="cry"] .tears{animation:n-tear .7s ease-in infinite}
-.bubble{position:absolute;z-index:3;left:0;bottom:calc(var(--u)*19);max-width:calc(var(--u)*80);padding:calc(var(--u)*3) calc(var(--u)*5);border-radius:calc(var(--u)*8) calc(var(--u)*8) calc(var(--u)*2) calc(var(--u)*8);background:#fff;box-shadow:0 0 0 calc(var(--u)*1) #E2D5B8,0 var(--u) 0 calc(var(--u)*1) rgba(120,100,60,.2);transform-origin:100% 100%;scale:0}
+.bubble{position:absolute;z-index:3;left:0;bottom:calc(var(--u)*33);max-width:calc(var(--u)*80);padding:calc(var(--u)*3) calc(var(--u)*5);border-radius:calc(var(--u)*8) calc(var(--u)*8) calc(var(--u)*2) calc(var(--u)*8);background:#fff;box-shadow:0 0 0 calc(var(--u)*1) #E2D5B8,0 var(--u) 0 calc(var(--u)*1) rgba(120,100,60,.2);transform-origin:100% 100%;scale:0}
 .bubble.pop{scale:1;animation:pop .3s cubic-bezier(.3,1.6,.5,1)}
 
 /* 식탁 */
@@ -74,7 +74,8 @@ body[data-layout="side"] .wrap{grid-template-columns:auto calc(var(--u)*150);gap
 .table{position:relative;display:grid;gap:calc(var(--u)*3)}
 .names{display:flex;justify-content:space-between;align-items:center}
 .name{padding:0 calc(var(--u)*5);border-radius:99px;background:#fff;box-shadow:0 var(--u) 0 rgba(120,100,60,.2);transition:scale .15s,background-color .15s}
-.name.active{background:var(--amber);scale:1.08}
+.name.active{background:var(--amber);scale:1.12}
+#nameCom.active{background:#FFC4B4}
 #nameMe{transform-origin:left center}
 #nameCom{transform-origin:right center}
 .rows{display:grid;gap:calc(var(--u)*3)}
@@ -115,6 +116,13 @@ body[data-turn="me"] .lane.me,body[data-turn="com"] .lane.com{opacity:1}
 .card.com{color:#D2573E}
 
 .ctrl{display:grid;gap:calc(var(--u)*5);justify-items:center;width:calc(var(--u)*150)}
+body[data-turn="me"] .status{background:var(--amber)}
+body[data-turn="com"] .status{background:#FFE4DB}
+.status.flip{animation:turn-pop .42s cubic-bezier(.3,1.6,.5,1)}
+body[data-turn="com"] .pick:not(.old){box-shadow:inset 0 0 0 calc(var(--u)*2.4) var(--coral),inset 0 0 0 calc(var(--u)*3.4) #fff,0 calc(var(--u)*2) calc(var(--u)*4) rgba(110,85,40,.26)}
+body[data-turn="com"] .field,body[data-turn="com"] .field *{cursor:not-allowed}
+.lane:disabled{cursor:not-allowed}
+body[data-turn="me"] .pick:not(.on):not(.off):not(.old){box-shadow:inset 0 0 0 calc(var(--u)*2.4) var(--amber-deep),inset 0 0 0 calc(var(--u)*3.4) #fff,0 calc(var(--u)*2) calc(var(--u)*4) rgba(110,85,40,.26)}
 .status{display:grid;place-items:center;width:100%;min-height:calc(var(--u)*30);padding:calc(var(--u)*2) calc(var(--u)*6);border-radius:calc(var(--u)*9);background:#fff;box-shadow:0 var(--u) 0 rgba(120,100,60,.2);text-align:center;text-wrap:balance}
 body[data-short] .status{min-height:calc(var(--u)*24)}
 .hand{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:calc(var(--u)*4);width:100%}
@@ -129,7 +137,7 @@ body[data-short] .status{min-height:calc(var(--u)*24)}
 .hop{position:absolute;inset:0;display:block}
 .cube{width:100%;height:100%;filter:drop-shadow(0 var(--u) calc(var(--u)*1.2) rgba(110,85,40,.28))}
 .reroll{grid-column:3;justify-self:start;display:grid;justify-items:center;gap:var(--u);cursor:pointer}
-.reroll:disabled{cursor:default}
+.reroll:disabled{cursor:not-allowed}
 .reroll:disabled .bean{filter:grayscale(1);opacity:.6}
 .bean{position:relative;display:block;width:calc(var(--u)*30);height:calc(var(--u)*30)}
 .bean svg{width:100%;height:100%}
@@ -138,7 +146,7 @@ body[data-short] .status{min-height:calc(var(--u)*24)}
 .bets{display:flex;flex-wrap:wrap;justify-content:center;gap:calc(var(--u)*3)}
 .bet{padding:calc(var(--u)*3) calc(var(--u)*6);border-radius:99px;background:#fff;box-shadow:0 calc(var(--u)*1.2) 0 rgba(120,100,60,.26);cursor:pointer;white-space:nowrap;transition:translate .08s,box-shadow .08s}
 .bet:active:enabled{translate:0 var(--u);box-shadow:0 0 0 rgba(120,100,60,.26)}
-.bet:disabled{cursor:default;opacity:.6}
+.bet:disabled{cursor:not-allowed;opacity:.6}
 #predictBtn.open,#holdBtn:enabled{background:var(--mint);color:#21493C;animation:nudge 1s ease-in-out infinite}
 #predictBtn.done{opacity:1;background:#DFF5EC;color:var(--mint-deep)}
 #forfeitBtn.armed{background:var(--red);color:#fff}
@@ -202,12 +210,13 @@ dialog::backdrop{background:rgba(70,55,35,.5)}
 @keyframes wiggle{0%,100%{transform:rotate(-8deg) scale(1.05)}50%{transform:rotate(8deg) scale(.96)}}
 @keyframes target{0%,100%{border-color:var(--red)}50%{border-color:#fff}}
 @keyframes arrow{from{transform:translateY(calc(var(--u)*-1))}to{transform:translateY(calc(var(--u)*2))}}
+@keyframes turn-pop{from{transform:scale(.86)}60%{transform:scale(1.05)}to{transform:none}}
 @keyframes pop{from{scale:0;rotate:-8deg}to{scale:1;rotate:0deg}}
 @keyframes pod-in{from{scale:0;rotate:-120deg}to{scale:1;rotate:0deg}}
 @keyframes nudge{0%,100%,50%{transform:none}25%{transform:translateY(calc(var(--u)*-1.5)) scale(1.04)}}
 @media (prefers-reduced-motion:reduce){
   .die,.lane,.name{transition:none}
-  .npc .nb,.npc .e-idle,.npc .tears,.body,.doomed .body,.doomed .body::after,.doomed::before,.link.new,.bubble.pop,#predictBtn.open,#holdBtn:enabled{animation:none!important}
+  .npc .nb,.npc .e-idle,.npc .tears,.body,.doomed .body,.doomed .body::after,.doomed::before,.link.new,.status.flip,.bubble.pop,#predictBtn.open,#holdBtn:enabled{animation:none!important}
 }
 </style>
 </head>
@@ -780,7 +789,6 @@ const Game = (() => {
 
   async function rollCube(v) {
     setHeld(true);
-    const dur = T(720);
     hop.animate([
       { transform: 'translateY(0) scale(1)' },
       { transform: 'translateY(calc(var(--u)*-22)) scale(1.3)', offset: .38 },
@@ -788,7 +796,7 @@ const Game = (() => {
       { transform: 'translateY(calc(var(--u)*-4)) scale(.94,1.08)', offset: .92 },
       { transform: 'none' },
     ], { duration: T(780), easing: 'ease-out' });
-    const spin = cube.animate([{ transform: 'rotate(0deg)' }, { transform: 'rotate(720deg)' }], { duration: dur, easing: 'ease-out' });
+    const spin = cube.animate([{ transform: 'rotate(0deg)' }, { transform: 'rotate(720deg)' }], { duration: T(720), easing: 'ease-out' });
     shade.animate([{ transform: 'scaleX(1)' }, { transform: 'scaleX(.55)', offset: .38 }, { transform: 'scaleX(1.15)', offset: .82 }, { transform: 'none' }], { duration: T(780), easing: 'ease-out' });
     const flick = calm ? 0 : setInterval(() => setFace(rollValue()), 70);
     await spin.finished.catch(() => {});
@@ -1000,7 +1008,7 @@ const Game = (() => {
       inHand = { now: v, old: null, picked: 'now' };
       paintPick();
       showHints();
-      if (layer.querySelector('.doomed')) say('흔들리는 상대 주사위를 누르면 알까기해요.');
+      if (layer.querySelector('.doomed')) say('내 차례! 화살표가 뜬 주사위를 누르면 알까기해요.');
       resolveHuman = (side, row) => {
         const from = inHand.picked === 'old' ? pickOld : tray;
         const held = heldValue();
@@ -1011,7 +1019,7 @@ const Game = (() => {
       paintBet();
     }),
     com: async (v, g) => {
-      await wait(460);
+      await wait(700);
       if (g !== session) return null;
       let held = v;
       if (Game.wantsReroll(state, v)) {
@@ -1041,6 +1049,7 @@ const Game = (() => {
     resolveHuman = null;
     inHand = null;
     state = Game.create(Math.random() < .5 ? 'me' : 'com');
+    setHeld(false);
     hand.hidden = false;
     bets.hidden = false;
     result.hidden = true;
@@ -1062,17 +1071,19 @@ const Game = (() => {
         await wait(700);
         if (g !== session) return;
       }
+      const changed = last !== p;
       last = p;
       document.body.dataset.turn = p;
+      if (changed) { statusEl.classList.remove('flip'); statusEl.getBoundingClientRect(); statusEl.classList.add('flip'); }
       $('#nameMe').classList.toggle('active', p === 'me');
       $('#nameCom').classList.toggle('active', p === 'com');
       tray.classList.toggle('shield', kind !== 'normal');
       if (p === 'com') react('think', null, 0);
-      say(p === 'me' ? '내 주사위를 굴려요.' : kind === 'normal' ? '병아리가 굴리는 중이에요.' : '병아리가 실드를 굴려요.');
+      say(p === 'me' ? '내 차례예요. 주사위를 굴려요.' : kind === 'normal' ? '병아리가 굴리는 중이에요.' : '병아리가 실드를 굴려요.');
       const v = rollValue();
       await rollCube(v);
       if (g !== session) return;
-      if (p === 'me') say(PROMPT[kind]);
+      if (p === 'me') say(`내 차례! ${PROMPT[kind]}`);
       const move = await decide[p](v, g);
       if (g !== session || !move) return;
       if (p === 'me') clearHints();
