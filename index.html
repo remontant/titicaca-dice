@@ -145,6 +145,7 @@ body[data-layout="side"] .wrap{grid-template-columns:auto calc(var(--u)*150);gap
 .lane:enabled{--edge:#F2B124;background:linear-gradient(transparent calc(50% - calc(var(--u)*0.35)),rgba(210,150,30,.3) calc(50% - calc(var(--u)*0.35)) calc(50% + calc(var(--u)*0.35)),transparent calc(50% + calc(var(--u)*0.35))),linear-gradient(165deg,#FFFBE2,#FFE07A);box-shadow:inset 0 0 0 calc(var(--u)*1.1) var(--edge),inset 0 calc(var(--u)*1.2) 0 rgba(255,255,255,.7),0 0 calc(var(--u)*3.4) calc(var(--u)*0.6) rgba(255,214,70,.75),0 calc(var(--u)*1) 0 rgba(160,110,20,.4);cursor:pointer}
 .lane.com.knock:enabled{--edge:#EE8DB4;background:linear-gradient(transparent calc(50% - calc(var(--u)*0.35)),rgba(220,110,150,.28) calc(50% - calc(var(--u)*0.35)) calc(50% + calc(var(--u)*0.35)),transparent calc(50% + calc(var(--u)*0.35))),linear-gradient(165deg,#FFF3F7,#FFC2D8);box-shadow:inset 0 0 0 calc(var(--u)*1) var(--edge),inset 0 calc(var(--u)*1.2) 0 rgba(255,255,255,.6),0 calc(var(--u)*1) 0 rgba(150,50,90,.3)}
 .socket{display:grid;place-items:center;width:calc(var(--u)*20);height:calc(var(--u)*20);border-radius:44%;background:radial-gradient(circle at 50% 46%,rgba(150,95,40,.35) 0 calc(var(--u)*0.9),transparent calc(var(--u)*1.1)),repeating-radial-gradient(circle at 50% 46%,#F8E7C6 0 calc(var(--u)*1.5),#EBCF9E calc(var(--u)*1.5) calc(var(--u)*2.2));box-shadow:inset 0 0 0 calc(var(--u)*1.1) #B98048,inset 0 calc(var(--u)*-1.4) 0 calc(var(--u)*0.4) rgba(140,85,35,.28),0 calc(var(--u)*1) 0 #8E5E30}
+.socket.full{background:none;box-shadow:none}
 /* 놓을 수 있는 칸 : 숫자 없이 노란 젤리 칸이 숨 쉬듯 부풀고 반짝인다. 파란 칸은 상대 판에 놓는 실드 */
 .gain{position:relative;display:block;width:100%;height:100%;border-radius:44%;background:radial-gradient(circle at 42% 32%,#FFFBE3,#FFE37A 55%,#FFC83A);box-shadow:inset 0 0 0 calc(var(--u)*.9) #fff,0 0 calc(var(--u)*3) calc(var(--u)*.6) rgba(255,210,63,.6);animation:breathe 1.3s ease-in-out infinite}
 .gain::after{content:"";position:absolute;right:calc(var(--u)*1.8);top:calc(var(--u)*1.8);width:calc(var(--u)*4.4);height:calc(var(--u)*4.4);background:#fff;clip-path:polygon(50% 0,62% 38%,100% 50%,62% 62%,50% 100%,38% 62%,0 50%,38% 38%);animation:twinkle 1.3s ease-in-out infinite}
@@ -163,8 +164,17 @@ body[data-layout="side"] .wrap{grid-template-columns:auto calc(var(--u)*150);gap
 .die.fly{z-index:5}
 .body{position:absolute;inset:0;transform-origin:50% 100%;filter:drop-shadow(0 calc(var(--u)*1.1) calc(var(--u)*.9) rgba(60,90,70,.35))}
 .body img{width:100%;height:100%}
-/* 실드 : 물방울 막 위로 가끔 빛이 지나간다 */
-.warded .body::after{content:"";position:absolute;inset:0;border-radius:28%;pointer-events:none;background:linear-gradient(115deg,rgba(255,255,255,0) 36%,rgba(255,255,255,.8) 47%,rgba(255,255,255,0) 58%) no-repeat;background-size:250% 100%;background-position:150% 0;animation:glint 3.2s ease-in-out infinite}
+/* 실드 : 물방울 막 위로 빛이 지나가고, 둘레에서 별이 번갈아 반짝이며, 푸른 빛이 숨 쉰다 */
+.die.warded::before,.die.warded::after,.warded .body::before,.tray.shield::before,.tray.shield::after{content:"";position:absolute;z-index:4;width:calc(var(--u)*9.4);aspect-ratio:1;background:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2040%2040%27%3E%3Cdefs%3E%3CradialGradient%20id%3D%27g%27%3E%3Cstop%20offset%3D%270%27%20stop-color%3D%27%239FD8FF%27%20stop-opacity%3D%27.95%27%2F%3E%3Cstop%20offset%3D%27.45%27%20stop-color%3D%27%239FD8FF%27%20stop-opacity%3D%27.45%27%2F%3E%3Cstop%20offset%3D%271%27%20stop-color%3D%27%239FD8FF%27%20stop-opacity%3D%270%27%2F%3E%3C%2FradialGradient%3E%3C%2Fdefs%3E%3Ccircle%20cx%3D%2720%27%20cy%3D%2720%27%20r%3D%2719%27%20fill%3D%27url(%23g)%27%2F%3E%3Cpath%20d%3D%27M20%201.5L23.6%2016.4L38.5%2020L23.6%2023.6L20%2038.5L16.4%2023.6L1.5%2020L16.4%2016.4Z%27%20fill%3D%27%23fff%27%20stroke%3D%27%234FA8F5%27%20stroke-width%3D%271.6%27%20stroke-linejoin%3D%27round%27%2F%3E%3Cpath%20d%3D%27M20%209L21.4%2018.6L31%2020L21.4%2021.4L20%2031L18.6%2021.4L9%2020L18.6%2018.6Z%27%20fill%3D%27%23DDF2FF%27%2F%3E%3C%2Fsvg%3E") center/100% 100% no-repeat;pointer-events:none;scale:0;animation:spark 1.5s ease-in-out infinite}
+.die.warded::before{right:calc(var(--u)*-3.4);top:calc(var(--u)*-3.6)}
+.die.warded::after{left:calc(var(--u)*-2.8);bottom:calc(var(--u)*-1.4);width:calc(var(--u)*7);animation-delay:-.5s}
+.warded .body::before{right:calc(var(--u)*-2.2);bottom:calc(var(--u)*2.6);width:calc(var(--u)*5.6);animation-delay:-1s}
+.tray.shield::before{right:calc(var(--u)*-5);top:calc(var(--u)*-5);width:calc(var(--u)*13)}
+.tray.shield::after{left:calc(var(--u)*-4);bottom:calc(var(--u)*-1.6);width:calc(var(--u)*9);animation-delay:-.9s}
+.warded .body{animation:ward-glow 2s ease-in-out infinite}
+@keyframes spark{0%,100%{scale:0;rotate:0deg;opacity:0}35%{scale:1;opacity:1}55%{scale:1.15;rotate:45deg;opacity:1}80%{scale:.2;rotate:70deg;opacity:0}}
+@keyframes ward-glow{0%,100%{filter:drop-shadow(0 calc(var(--u)*1.1) calc(var(--u)*0.9) rgba(60,90,70,.35)) drop-shadow(0 0 calc(var(--u)*0.6) rgba(110,190,255,.5))}50%{filter:drop-shadow(0 calc(var(--u)*1.1) calc(var(--u)*0.9) rgba(60,90,70,.35)) drop-shadow(0 0 calc(var(--u)*3.2) rgba(80,170,255,1))}}
+.warded .body::after{content:"";position:absolute;inset:0;border-radius:28%;pointer-events:none;background:linear-gradient(115deg,rgba(255,255,255,0) 36%,rgba(255,255,255,.8) 47%,rgba(255,255,255,0) 58%) no-repeat;background-size:250% 100%;background-position:150% 0;animation:glint 2.2s ease-in-out infinite}
 .die.doomed{z-index:4}
 .doomed .body::after{content:"";position:absolute;inset:calc(var(--u)*-1.2);border:calc(var(--u)*1.3) solid var(--red);border-radius:calc(var(--u)*5);box-shadow:0 0 calc(var(--u)*5) calc(var(--u)*.8) rgba(255,59,92,.75);animation:target .7s ease-in-out infinite}
 .doomed::before{content:"";position:absolute;z-index:5;left:50%;top:calc(var(--u)*-8.5);width:calc(var(--u)*10);height:calc(var(--u)*8.6);translate:-50% 0;background:var(--arrow) center/100% 100% no-repeat;animation:arrow .7s ease-in-out infinite}
@@ -392,7 +402,7 @@ body[data-tip="place"] .gain{animation:tile-pulse .8s ease-in-out infinite}
 @keyframes nudge{0%,100%,50%{transform:none}25%{transform:translateY(calc(var(--u)*-1.5)) scale(1.04)}}
 @media (prefers-reduced-motion:reduce){
   .die{transition:none}
-  .mote,.gain,.gain::after,.pt .sb,.pt .sh,.pt .lid,.pt .prop,.pt .flick,.pt .glowtip,.burst,.hero-crown,.lv-badge.up,.st.new,.st.lost,.q-me.hop,.npc .nb,.npc .tears,.warded .body::after,.doomed .body::after,.doomed::before,.link.new,body[data-tip="place"] .gain,.status.flip,.bubble.pop,#predictBtn.open,#holdBtn:enabled,.dots i.on,.pick.ask .tray{animation:none!important}
+  .mote,.gain,.gain::after,.pt .sb,.pt .sh,.pt .lid,.pt .prop,.pt .flick,.pt .glowtip,.burst,.hero-crown,.lv-badge.up,.st.new,.st.lost,.q-me.hop,.npc .nb,.npc .tears,.warded .body::after,.warded .body,.die.warded::before,.die.warded::after,.warded .body::before,.tray.shield::before,.tray.shield::after,.doomed .body::after,.doomed::before,.link.new,body[data-tip="place"] .gain,.status.flip,.bubble.pop,#predictBtn.open,#holdBtn:enabled,.dots i.on,.pick.ask .tray{animation:none!important}
 }
 </style>
 </head>
@@ -1707,6 +1717,7 @@ const Game = (() => {
     });
     paintDots($('#dotsMe'), ahead.me);
     paintDots($('#dotsCom'), ahead.com);
+    SIDES.forEach(side => sockets[side].forEach((row, r) => row.forEach((sk, i) => sk.classList.toggle('full', i < state.boards[side][r].length))));
     paintBet();
   }
 
