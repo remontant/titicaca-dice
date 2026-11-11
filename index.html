@@ -50,6 +50,9 @@ img,svg{display:block;max-width:none}
 .record b{font-weight:400}
 .chips{justify-self:end;display:flex;gap:calc(var(--u)*1.4)}
 .chip{padding:calc(var(--u)*1.9) calc(var(--u)*3.6);white-space:nowrap;cursor:pointer}
+.chip.snd{display:grid;place-items:center;padding:0 calc(var(--u)*2.4)}
+.chip.snd svg{width:calc(var(--u)*7.2);height:calc(var(--u)*7.2)}
+.chip.snd[aria-pressed="false"]{background:#F3EEF6}
 
 .stage{position:relative;z-index:3;width:calc(var(--u)*var(--w));max-width:100%;height:calc(var(--u)*var(--stage));margin-inline:auto}
 body[data-layout="side"] .stage{width:calc(var(--u)*240)}
@@ -325,7 +328,7 @@ body[data-tip="place"] .gain{animation:tile-pulse .8s ease-in-out infinite}
         <header class="bar">
           <div class="record" id="record"></div>
           <div class="logo"><svg viewBox="0 0 220 64" aria-hidden="true"><path d="M22 44c-8-6-12-18-4-26 4 8 10 12 18 14-4 6-8 10-14 12z" fill="#5CCB78" stroke="#2E8F4A" stroke-width="2.5"/><path d="M198 44c8-6 12-18 4-26-4 8-10 12-18 14 4 6 8 10 14 12z" fill="#5CCB78" stroke="#2E8F4A" stroke-width="2.5"/><text x="110" y="47" text-anchor="middle" font-family="Jua, sans-serif" font-size="42" letter-spacing="1" fill="none" stroke="#3B2F4A" stroke-width="10" stroke-linejoin="round">티티카카</text><text x="110" y="45" text-anchor="middle" font-family="Jua, sans-serif" font-size="42" letter-spacing="1" fill="url(#logoG)" stroke="#fff" stroke-width="1.5">티티카카</text><circle cx="64" cy="14" r="3" fill="#fff"/><circle cx="160" cy="12" r="2" fill="#fff"/></svg><h1 class="vh" id="logo"></h1></div>
-          <div class="chips"><button class="chip" id="statsBtn" type="button"></button><button class="chip" id="rulesBtn" type="button"></button></div>
+          <div class="chips"><button class="chip snd" id="soundBtn" type="button" aria-pressed="true"></button><button class="chip" id="statsBtn" type="button"></button><button class="chip" id="rulesBtn" type="button"></button></div>
         </header>
         <div class="stage" id="stage">
           <div class="cap me" id="capMe"><svg class="pt" id="meArt" viewBox="0 0 100 100" aria-hidden="true"></svg><span class="tag"><span class="name" id="nameMe"></span><small id="lvMe"></small></span><span class="dots" id="dotsMe" role="img"><i></i><i></i><i></i></span></div>
@@ -1024,7 +1027,7 @@ const Game = (() => {
         if (e.t === 'reroll') {
           state = Game.useReroll(state);
           paintRerolls();
-          say(`${foeIs()} 다시 굴려요.`);
+          sfx('reroll'); say(`${foeIs()} 다시 굴려요.`);
           react('think', null, 1000);
           await rollCube(e.v);
           if (g !== session) return null;
@@ -1097,6 +1100,80 @@ const Game = (() => {
     }
     return { get on() { return on; }, fast: () => replay.length > 0, send, rollFor, foeTurn, feedMine, firstSide, dressFoe, alreadyPaid, askAgain, afterGuide, boot };
   })();
+  /* 효과음 : 소리 파일 없이 Web Audio 로 그때그때 만든다. 첫 터치 뒤에만 소리가 나고, 끄면 기억한다. */
+  const Sfx = (() => {
+    let ctx = null, master = null, on = true;
+    try { on = localStorage.getItem('titicaca-sound') !== '0'; } catch {}
+    const ensure = () => {
+      if (!ctx) {
+        const AC = window.AudioContext || window.webkitAudioContext;
+        if (!AC) return null;
+        ctx = new AC(); master = ctx.createGain(); master.gain.value = .5; master.connect(ctx.destination);
+      }
+      if (ctx.state === 'suspended') ctx.resume().catch(() => {});
+      return ctx;
+    };
+    ['pointerdown', 'touchend', 'keydown'].forEach(ev => addEventListener(ev, () => { if (on) ensure(); }, { capture: true, passive: true }));
+    function tone(t, { f = 440, f2, type = 'sine', dur = .15, vol = .3, attack = .005 }) {
+      const o = ctx.createOscillator(), g = ctx.createGain();
+      o.type = type; o.frequency.setValueAtTime(f, t);
+      if (f2) o.frequency.exponentialRampToValueAtTime(f2, t + dur);
+      g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(vol, t + attack); g.gain.exponentialRampToValueAtTime(.0001, t + dur);
+      o.connect(g); g.connect(master); o.start(t); o.stop(t + dur + .03);
+    }
+    function hiss(t, { dur = .12, vol = .2, f = 1200, f2, q = 1 }) {
+      const n = Math.ceil(ctx.sampleRate * dur), buf = ctx.createBuffer(1, n, ctx.sampleRate), d = buf.getChannelData(0);
+      for (let i = 0; i < n; i++) d[i] = (Math.random() * 2 - 1) * (1 - i / n);
+      const s = ctx.createBufferSource(), fl = ctx.createBiquadFilter(), g = ctx.createGain();
+      s.buffer = buf; fl.type = 'bandpass'; fl.frequency.setValueAtTime(f, t); if (f2) fl.frequency.exponentialRampToValueAtTime(f2, t + dur); fl.Q.value = q;
+      g.gain.setValueAtTime(vol, t); g.gain.exponentialRampToValueAtTime(.0001, t + dur);
+      s.connect(fl); fl.connect(g); g.connect(master); s.start(t);
+    }
+    const SOUNDS = {
+      /* 꽃 접시에 떨어지는 말랑한 "통" 과 작은 되튐 */
+      drop: t => { tone(t, { f: 190, f2: 70, dur: .16, vol: .55 }); hiss(t, { dur: .05, vol: .12, f: 900 }); tone(t + .11, { f: 140, f2: 95, dur: .08, vol: .22 }); },
+      /* 판에 놓는 "뽁" */
+      place: t => { tone(t, { f: 540, f2: 250, dur: .1, vol: .42 }); tone(t, { f: 1080, f2: 720, type: 'triangle', dur: .05, vol: .12 }); },
+      /* 실드가 놓일 때 유리 같은 "팅" */
+      shield: t => { [1568, 2093, 2637].forEach((f, i) => tone(t + i * .016, { f, dur: .55, vol: .15 })); tone(t, { f: 3136, type: 'triangle', dur: .25, vol: .05 }); },
+      /* 같은 눈 두 개, 세 개 : 음이 올라간다 */
+      combo2: t => { tone(t, { f: 784, type: 'triangle', dur: .14, vol: .24 }); tone(t + .09, { f: 1175, type: 'triangle', dur: .22, vol: .24 }); },
+      combo3: t => { [784, 988, 1319].forEach((f, i) => tone(t + i * .08, { f, type: 'triangle', dur: .2, vol: .24 })); tone(t + .26, { f: 1568, dur: .4, vol: .18 }); },
+      /* 알까기 "퐁!" 과 날아가는 바람 소리 */
+      knock: t => { tone(t, { f: 900, f2: 300, type: 'square', dur: .07, vol: .1 }); tone(t, { f: 330, f2: 120, dur: .15, vol: .42 }); hiss(t + .02, { dur: .38, vol: .16, f: 1500, f2: 4200, q: .8 }); },
+      /* 다시 굴리기 "샤라랑" */
+      reroll: t => { [1047, 1319, 1568, 2093, 1568, 2637].forEach((f, i) => tone(t + i * .045, { f, dur: .2, vol: .11 })); },
+      /* 상대 슬라임 반응 */
+      boing: t => { tone(t, { f: 220, f2: 540, dur: .12, vol: .3 }); tone(t + .1, { f: 540, f2: 250, dur: .17, vol: .22 }); },
+      giggle: t => { [660, 880, 740, 990].forEach((f, i) => tone(t + i * .07, { f, f2: f * 1.15, type: 'triangle', dur: .07, vol: .13 })); },
+      grump: t => { tone(t, { f: 180, f2: 135, type: 'sawtooth', dur: .24, vol: .07 }); tone(t, { f: 182, f2: 133, type: 'triangle', dur: .24, vol: .15 }); },
+      /* 판 시작 : 슬라임이 떨어지고 VS 별이 튀어나온다 */
+      land: t => { tone(t, { f: 150, f2: 60, dur: .14, vol: .42 }); tone(t + .08, { f: 300, f2: 620, dur: .1, vol: .14 }); },
+      vs: t => { hiss(t, { dur: .22, vol: .16, f: 600, f2: 3000 }); tone(t + .1, { f: 523, type: 'triangle', dur: .12, vol: .2 }); tone(t + .18, { f: 784, type: 'triangle', dur: .26, vol: .22 }); },
+      /* 줄마다 '승' 도장 */
+      stampMe: t => { tone(t, { f: 260, f2: 120, dur: .12, vol: .4 }); tone(t + .04, { f: 1047, type: 'triangle', dur: .16, vol: .12 }); },
+      stampFoe: t => { tone(t, { f: 220, f2: 100, dur: .12, vol: .4 }); tone(t + .04, { f: 622, type: 'triangle', dur: .16, vol: .1 }); },
+      /* 끝 : 이기면 팡파르와 도토리 쏟아지는 소리, 지면 내려가는 "뿌우" */
+      win: t => { [523, 659, 784].forEach((f, i) => tone(t + i * .12, { f, type: 'triangle', dur: .16, vol: .24 })); [1047, 1319].forEach(f => tone(t + .38, { f, type: 'triangle', dur: .65, vol: .18 })); for (let i = 0; i < 12; i++) tone(t + .6 + i * .07 + Math.random() * .03, { f: 1400 + Math.random() * 1600, dur: .06, vol: .06 }); },
+      lose: t => { [392, 370, 349].forEach((f, i) => tone(t + i * .2, { f, type: 'triangle', dur: .2, vol: .2 })); tone(t + .6, { f: 330, f2: 196, type: 'triangle', dur: .6, vol: .2 }); },
+      draw: t => { tone(t, { f: 523, type: 'triangle', dur: .15, vol: .2 }); tone(t + .16, { f: 523, type: 'triangle', dur: .3, vol: .2 }); },
+      bet: t => { [1319, 1760].forEach((f, i) => tone(t + i * .06, { f, dur: .22, vol: .14 })); },
+      tick: t => tone(t, { f: 1200, dur: .05, vol: .12 }),
+    };
+    function play(name, delay = 0) {
+      if (!on || Online.fast() || !SOUNDS[name]) return;
+      if (!ensure() || ctx.state !== 'running') return;
+      try { SOUNDS[name](ctx.currentTime + .01 + delay / 1000); } catch {}
+    }
+    function toggle(v) { on = v; try { localStorage.setItem('titicaca-sound', v ? '1' : '0'); } catch {} if (v) ensure(); }
+    return { play, toggle, get on() { return on; } };
+  })();
+  const sfx = (name, delay) => Sfx.play(name, delay);
+  const soundBtn = $('#soundBtn');
+  const SPEAKER = on => `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 9h4l5-4.2v14.4l-5-4.2h-4z" fill="#3B2F4A" stroke="#3B2F4A" stroke-width="1.2" stroke-linejoin="round"/>${on ? '<path d="M15.6 9.2a4 4 0 0 1 0 5.6M18.3 6.6a7.6 7.6 0 0 1 0 10.8" fill="none" stroke="#3B2F4A" stroke-width="2" stroke-linecap="round"/>' : '<path d="M15.5 9.5l5 5M20.5 9.5l-5 5" stroke="#E2558E" stroke-width="2.2" stroke-linecap="round"/>'}</svg>`;
+  const paintSound = () => { soundBtn.innerHTML = SPEAKER(Sfx.on); soundBtn.setAttribute('aria-pressed', String(Sfx.on)); soundBtn.setAttribute('aria-label', Sfx.on ? '효과음 끄기' : '효과음 켜기'); soundBtn.title = Sfx.on ? '효과음 끄기' : '효과음 켜기'; };
+  soundBtn.addEventListener('click', () => { Sfx.toggle(!Sfx.on); paintSound(); sfx('tick'); });
+  paintSound();
   /* 숲속 배경 : 하늘·햇살·나무·풀밭은 위 캔버스, 판 아래 풀밭은 아래 캔버스. 화면 크기가 바뀔 때만 다시 그린다. */
   const skyC = $('#sky'), mapC = $('#map'), topEl = $('.top'), fieldEl = $('#field'), stageEl = $('#stage');
   const seeded = n => { let s = n; return () => (s = (s * 16807) % 2147483647) / 2147483647; };
@@ -1281,6 +1358,7 @@ const Game = (() => {
   let faceTimer = 0, lineTimer = 0;
   function showFace(face) { npc.dataset.face = face; }
   function react(face, line, ms = 1700) {
+    sfx({ shock: 'boing', laugh: 'giggle', scowl: 'grump' }[face]);
     clearTimeout(faceTimer);
     npc.dataset.face = 'none';
     npc.getBoundingClientRect();
@@ -1489,7 +1567,7 @@ const Game = (() => {
     hop.style.transform = `rotate(${lean}deg)`;
     shade.style.rotate = `${lean}deg`;
     const flick = calm ? 0 : setInterval(() => setFace(rollValue()), 60);
-    const settle = setTimeout(() => { clearInterval(flick); setFace(v); }, D * land);
+    const settle = setTimeout(() => { clearInterval(flick); setFace(v); sfx('drop'); }, D * land);
     const drop = hop.animate([
       { transform: at(-5, -78, 3, lean + turn), opacity: 0, easing: fall },
       { transform: at(-3, -48, 2.4, lean + turn * .6), opacity: 1, offset: .2, easing: fall },
@@ -1520,6 +1598,7 @@ const Game = (() => {
     run($('#capMe'), fall('-12vw'), { duration: 700, delay: 40, easing: 'ease-out' });
     run($('#capFoe'), fall('12vw'), { duration: 700, delay: 200, easing: 'ease-out' });
     run($('.vs'), [{ transform: 'scale(0) rotate(-90deg)' }, { transform: 'scale(1.25) rotate(8deg)', offset: .7 }, { transform: 'none' }], { duration: 480, delay: 640, easing: 'ease-out' });
+    sfx('land', 460); sfx('land', 620); sfx('vs', 700);
     return 1120;
   }
 
@@ -1565,6 +1644,7 @@ const Game = (() => {
     if (g !== session) return;
     layer.querySelectorAll(`.link[data-key^="${res.side}-${res.row}-"]`).forEach(l => l.remove());
     const r = el.getBoundingClientRect(), o = layer.getBoundingClientRect();
+    sfx('knock');
     burst(r.left - o.left + r.width / 2, r.top - o.top + r.height / 2);
     const back = (dir > 0 ? r.right : innerWidth - r.left) + r.width;
     const bounce = el.firstElementChild.animate([
@@ -1619,11 +1699,12 @@ const Game = (() => {
     ], { duration: T(440), easing: 'ease-out' }).finished;
     if (g !== session) return null;
     el.classList.remove('fly');
+    sfx(res.die?.shield ? 'shield' : 'place');
     state = res.state;
     sync();
     paintScores();
     const same = state.boards[side][row].filter(d => d.v === v);
-    if (same.length > 1) await comboJump(same);
+    if (same.length > 1) { sfx(same.length > 2 ? 'combo3' : 'combo2'); await comboJump(same); }
     return g === session ? res : null;
   }
 
@@ -1645,6 +1726,7 @@ const Game = (() => {
     card.style.top = `${pos.y}px`;
   }
   function slap(w, r) {
+    sfx(w === 'me' ? 'stampMe' : 'stampFoe');
     const card = document.createElement('div');
     card.className = `card ${w}`;
     card.innerHTML = '<b>승</b>';
@@ -1688,6 +1770,7 @@ const Game = (() => {
     const r = info.r, left = toNext(r.pts);
     $('#resultGain').innerHTML = `<span class="pill">${ACORN}${delta > 0 ? '+' : ''}${delta}개</span>${delta > 0 && r.s >= 2 ? `<span class="pill hot">${r.s}연승 보너스 +${streakBonus(r.s)}개</span>` : ''}${info.up ? '<span class="pill hot">레벨 업!</span>' : ''}`;
     $('#resultLevel').textContent = `Lv.${levelOf(r.pts)}, 도토리 ${r.pts.toLocaleString('ko-KR')}개. ${left ? `다음 레벨까지 ${left}개` : '최고 레벨이에요'}`;
+    sfx(delta > 0 ? 'win' : delta < 0 ? 'lose' : 'draw', 150);
     result.hidden = false;
     result.classList.remove('peek');
     unpeekBtn.hidden = true;
@@ -1754,7 +1837,7 @@ const Game = (() => {
       if (Game.wantsReroll(state, v, foe.stars)) {
         state = Game.useReroll(state);
         paintRerolls();
-        say(`${foeIs()} 다시 굴려요.`);
+        sfx('reroll'); say(`${foeIs()} 다시 굴려요.`);
         react('think', '다시 굴릴래!', 1000);
         const next = rollValue();
         await rollCube(next);
@@ -1876,6 +1959,7 @@ const Game = (() => {
     state = Game.useReroll(state);
     paintRerolls();
     clearHints();
+    sfx('reroll');
     say('다시 굴려요.');
     inHand = { now: next, old, picked: 'now' };
     await rollCube(next);
@@ -1899,6 +1983,7 @@ const Game = (() => {
   predictBtn.addEventListener('click', () => {
     if (bet !== 'open') return;
     bet = 'done';
+    sfx('bet');
     paintBet();
     react('scowl', '자신 있어?');
   });
