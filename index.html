@@ -9,14 +9,14 @@
 <title>티티카카</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jua&family=Gothic+A1:wght@500;700;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Jua&family=Gothic+A1:wght@500;700;800&display=swap">
 <style>
 :root{
   /* 배치: 위는 햇살 드는 숲속 공터에서 마주 보는 두 슬라임, 아래는 꽃 핀 풀밭 위 반투명 젤리 판. 크기는 모두 --u 의 배수이고, 밝은 낮 한 벌로 고정. */
   --u:2px; --w:161; --stage:58; --sky-extra:0px;
   --ink:#3B2F4A; --ink-soft:#6E6380; --mint:#7FE3C8; --mint-deep:#1FA38A; --pink:#FF9EC4; --pink-deep:#E2558E; --leaf:#4CC26B; --leaf-deep:#2E8F4A; --cream:#FFF9EC; --red:#FF3B5C;
   --ui:"Gothic A1","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
-  --display:"Jua","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  --display:"Do Hyeon","Jua","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
   --arrow:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 22'%3E%3Cpath d='M8 1h8v8h7L12 21 1 9h7z' fill='%23FF3B5C' stroke='%23fff' stroke-width='2' stroke-linejoin='round'/%3E%3C/svg%3E");
   --star:polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);
   color-scheme:light;
@@ -243,7 +243,7 @@ body[data-turn="com"] .pick:not(.old){filter:drop-shadow(0 0 calc(var(--u)*3.4) 
 #predictBtn.done{--top:#A8F0DC;--bot:#34C6A2;--edge:#1E8C77;--o:#146B5A;opacity:1;filter:none}
 #rulesMore,#peekBtn,#unpeekBtn,#roomCancel{--top:#FFFFFF;--bot:#EAF8EF;--edge:#9ACFA8;color:var(--ink);text-shadow:none}
 #predictBtn.open,#holdBtn:enabled{animation:nudge 1s ease-in-out infinite}
-.vs b,.status,.bet,.card b,.big,.c-big b,.md-n{--ow:calc(var(--u)*.7);text-shadow:0 var(--ow) 0 var(--o),var(--ow) 0 0 var(--o),calc(var(--ow)*-1) 0 0 var(--o),0 calc(var(--ow)*-1) 0 var(--o),calc(var(--ow)*.7) calc(var(--ow)*.7) 0 var(--o),calc(var(--ow)*-.7) calc(var(--ow)*.7) 0 var(--o),calc(var(--ow)*.7) calc(var(--ow)*-.7) 0 var(--o),calc(var(--ow)*-.7) calc(var(--ow)*-.7) 0 var(--o),0 calc(var(--ow)*2) 0 rgba(0,0,0,.15)}
+.vs b,.status,.bet,.card b,.big,.c-big b,.md-n,.quest.hot b,.quest.done b{--ow:calc(var(--u)*.7);text-shadow:0 var(--ow) 0 var(--o),var(--ow) 0 0 var(--o),calc(var(--ow)*-1) 0 0 var(--o),0 calc(var(--ow)*-1) 0 var(--o),calc(var(--ow)*.7) calc(var(--ow)*.7) 0 var(--o),calc(var(--ow)*-.7) calc(var(--ow)*.7) 0 var(--o),calc(var(--ow)*.7) calc(var(--ow)*-.7) 0 var(--o),calc(var(--ow)*-.7) calc(var(--ow)*-.7) 0 var(--o),0 calc(var(--ow)*2) 0 rgba(0,0,0,.15)}
 #rulesMore,#peekBtn,#unpeekBtn,#roomCancel{text-shadow:none}
 
 /* 결과판 */
@@ -316,17 +316,20 @@ body[data-short] .b-hero .pt{width:calc(var(--u)*28);height:calc(var(--u)*28)}
 body[data-short] .burst{top:calc(var(--u)*15);width:calc(var(--u)*66)}
 body[data-short] .board{gap:calc(var(--u)*1.8);padding-block:calc(var(--u)*3) calc(var(--u)*4)}
 /* VS 아래 연승 게이지 */
-.quest{position:absolute;z-index:2;left:50%;top:calc(var(--u)*40);translate:-50% 0;display:grid;justify-items:center;gap:calc(var(--u)*1);padding:calc(var(--u)*1.5) calc(var(--u)*3.2) calc(var(--u)*1.8);border-radius:calc(var(--u)*4);background:#fff;box-shadow:inset 0 0 0 calc(var(--u)*0.8) #F0C77A,0 calc(var(--u)*1) 0 #E0A84A;color:#8A4F0E;white-space:nowrap}
-.quest .q-top{display:flex;align-items:center;gap:calc(var(--u)*0.8)}
-.quest b{font:400 calc(var(--u)*5)/1 var(--display)}
-.quest .flame{width:calc(var(--u)*4.4);height:calc(var(--u)*5.5);transform-origin:50% 100%;animation:flick .5s ease-in-out infinite alternate}
-.quest .pips{display:flex;gap:calc(var(--u)*0.5)}
-.quest .pips i{width:calc(var(--u)*2);height:calc(var(--u)*2);border-radius:50%;background:#F3E3C2;box-shadow:inset 0 0 0 calc(var(--u)*0.3) rgba(160,110,40,.35)}
+.quest{position:absolute;z-index:3;left:50%;top:calc(var(--u)*37.5);translate:-50% 0;display:grid;justify-items:center;gap:calc(var(--u)*1.2);padding:calc(var(--u)*1.6) calc(var(--u)*3.6) calc(var(--u)*2);border-radius:calc(var(--u)*5);background:#fff;box-shadow:inset 0 0 0 calc(var(--u)*0.9) #F0C77A,0 calc(var(--u)*1.2) 0 #E0A84A;color:#8A4F0E;white-space:nowrap}
+.quest .q-top{display:flex;align-items:center;gap:calc(var(--u)*1)}
+.quest b{--o:#B8461A;font:400 calc(var(--u)*6.6)/1 var(--display)}
+.quest .flame{width:calc(var(--u)*6.2);height:calc(var(--u)*7.8);margin-top:calc(var(--u)*-1.6);transform-origin:50% 100%;animation:flick .45s ease-in-out infinite alternate;filter:drop-shadow(0 0 calc(var(--u)*1.2) rgba(255,220,120,.9))}
+.quest .pips{display:flex;gap:calc(var(--u)*0.7)}
+.quest .pips i{width:calc(var(--u)*2.6);height:calc(var(--u)*2.6);border-radius:50%;background:#F3E3C2;box-shadow:inset 0 0 0 calc(var(--u)*0.35) rgba(160,110,40,.35)}
 .quest .pips i.on{background:radial-gradient(circle at 35% 30%,#FFF3B0,#FF8A2A 70%);box-shadow:0 0 calc(var(--u)*0.8) rgba(255,140,40,.8)}
-.quest.hot{background:linear-gradient(#FFF7E4,#FFD9A0);box-shadow:inset 0 0 0 calc(var(--u)*0.9) #FF9A3C,0 calc(var(--u)*1) 0 #E07A1E,0 0 calc(var(--u)*4) rgba(255,150,50,.55)}
-.quest.hot b{color:#C2410C}
-.quest.done{background:linear-gradient(#FFF8C8,#FFD45A);box-shadow:inset 0 0 0 calc(var(--u)*0.9) #F0B020,0 calc(var(--u)*1) 0 #D9900F,0 0 calc(var(--u)*4) rgba(255,200,40,.6)}
-.quest.done svg{width:calc(var(--u)*6);height:calc(var(--u)*4.6)}
+.quest.hot{background:linear-gradient(#FFB54A,#FF6F1E);box-shadow:inset 0 0 0 calc(var(--u)*0.9) rgba(255,255,255,.75),0 calc(var(--u)*1.2) 0 #B8461A,0 0 calc(var(--u)*5) rgba(255,130,30,.7)}
+.quest.hot b{color:#fff}
+.quest.hot .pips i{background:rgba(255,255,255,.4);box-shadow:inset 0 0 0 calc(var(--u)*0.35) rgba(160,60,10,.35)}
+.quest.hot .pips i.on{background:radial-gradient(circle at 35% 30%,#FFFFFF,#FFE27A 60%);box-shadow:0 0 calc(var(--u)*1.2) rgba(255,240,150,1)}
+.quest.done{background:linear-gradient(#FFE27A,#F5A623);box-shadow:inset 0 0 0 calc(var(--u)*0.9) rgba(255,255,255,.8),0 calc(var(--u)*1.2) 0 #A86A08,0 0 calc(var(--u)*5) rgba(255,200,40,.8)}
+.quest.done b{--o:#9A5B00;color:#fff}
+.quest.done svg{width:calc(var(--u)*7.6);height:calc(var(--u)*5.8)}
 body[data-short] .quest{top:calc(var(--u)*29)}
 /* 판 시작 연승 알림 */
 .call{position:absolute;z-index:7;left:50%;top:50%;translate:-50% -50%;display:grid;justify-items:center;gap:calc(var(--u)*2);pointer-events:none;text-align:center;white-space:nowrap}
@@ -772,6 +775,7 @@ const Game = (() => {
     '기권은 내 차례에 할 수 있어요. 걸린 도토리의 절반만 잃고 패로 남아요.',
     '10연승 도전 : 이길수록 센 슬라임이 나와요. 1~3번째 판은 별 1개, 4~5번째는 별 2개, 6~7번째는 별 3개, 8~9번째는 별 4개, 10번째 판은 별 5개예요. 지면 1번째 판부터 다시 시작해요.',
     '같은 별 슬라임은 다섯 명씩이고, 다섯 명을 다 만나기 전에는 같은 슬라임이 또 나오지 않아요.',
+    '판을 많이 할수록 가끔 별 하나 더 센 슬라임이 나와요. 20판부터 조금, 50판부터는 더 자주 나와요.',
     '주사위 눈 1은 빨간 버섯으로 그려져 있어요.',
     '키보드로는 1, 2, 3으로 내 줄, 4, 5, 6으로 상대 줄이나 알까기, R로 다시 굴리기, H로 홀드해요.',
   ];
@@ -1055,9 +1059,13 @@ const Game = (() => {
     callEl.animate(kf, { duration: 1800, easing: 'ease-out' }).finished.then(() => { callEl.hidden = true; }).catch(() => {});
     return 1150;
   }
+  /* 판을 많이 한 사람은 가끔 사다리보다 별 하나 더 센 상대를 만난다. */
+  let bumped = false;
+  const bumpChance = n => (n >= 50 ? .3 : n >= 20 ? .15 : 0);
   function nextRival() {
-    const r = Record.read(), newcomer = !foe && r.w + r.l + r.d === 0;
-    foe = newcomer ? RIVALS[0] : pickRival(tierFor(r.s));
+    const r = Record.read(), games = r.w + r.l + r.d, newcomer = !foe && games === 0, base = tierFor(r.s);
+    bumped = !newcomer && base < 5 && Math.random() < bumpChance(games);
+    foe = newcomer ? RIVALS[0] : pickRival(base + (bumped ? 1 : 0));
     npc.innerHTML = rivalArt(foe);
     set($('#nameCom'), foe.name);
     const stars = $('#foeStars');
@@ -1072,6 +1080,7 @@ const Game = (() => {
     const s = Record.read().s;
     if (s >= GOAL) return `${s + 1}연승에 도전! ${foe.name} 등장!`;
     if (s === GOAL - 1) return `마지막 10번째 판! ${foe.name} 등장!`;
+    if (bumped) return `${s + 1}번째 판, 센 상대 등장! 별 ${foe.stars}개 ${foe.name}!`;
     return `${s + 1}번째 판, ${foe.name} 등장!`;
   }
   /* 친구 대결 : Firebase 실시간 DB 에 행동 기록을 쌓고 두 화면이 같은 기록을 따라 둔다. 새로고침하면 기록을 빠르게 다시 돌려 이어서 한다. */
