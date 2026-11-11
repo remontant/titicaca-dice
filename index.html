@@ -665,8 +665,8 @@ const Game = (() => {
     if (!s.rerolls[s.turn] || !LEVELS[stars].reroll) return false;
     const now = bestMove(s, v, stars).score;
     let sum = 0;
-    for (let a = 1; a <= 6; a++) sum += Math.max(now, bestMove(s, a, stars).score);
-    return sum / 6 - now > 0.05;
+    for (let a = 1; a <= 6; a++) if (a !== v) sum += Math.max(now, bestMove(s, a, stars).score);
+    return sum / 5 - now > 0.05;
   }
 
 
@@ -689,6 +689,7 @@ const Game = (() => {
   const T = ms => (Online.fast() ? 0 : calm ? Math.min(ms, 60) : ms);
   const wait = ms => new Promise(r => setTimeout(r, T(ms)));
   const rollValue = () => 1 + Math.floor(Math.random() * 6);
+  const rerollValue = old => { const v = 1 + Math.floor(Math.random() * 5); return v >= old ? v + 1 : v; };
   const SIDES = ['me', 'com'];
   const INK = '#4A2F2A', CREAM = '#FFF6DF', GREEN = '#3C8C4A', ORANGE = '#C9602B', MUTED = '#A08F7C', RED = '#C73A2E';
   const PROMPT = {
@@ -703,7 +704,7 @@ const Game = (() => {
     '굴린 일반 주사위와 같은 눈의 일반 주사위가 상대 줄에 있으면 알까기할 수 있어요. 화살표가 뜬 주사위를 누르면 내 주사위가 날아가서 같은 눈을 모두 튕겨 내고 함께 사라져요. 내 같은 줄에 빈칸이 있어야 해요.',
     '알까기를 하면 실드 주사위를 새로 굴려요. 내 판이나 상대 판 어디든 놓을 수 있어요.',
     '실드 주사위는 파란 물방울 막에 싸여 있고 알까기로 튕겨 낼 수 없어요. 상대 판에 놓으면 그 눈은 상대 점수가 되지만 빈칸을 막아요.',
-    '다시 굴리기는 한 판에 한 번 쓸 수 있어요. 주사위를 다시 굴린 뒤 처음 눈과 새 눈 중에 골라요.',
+    '다시 굴리기는 한 판에 한 번 쓸 수 있어요. 주사위를 다시 굴리면 처음과 다른 눈이 나오고, 처음 눈과 새 눈 중에 골라요.',
     '판이 꽉 찬 쪽은 차례를 건너뛰고, 양쪽 판이 다 차면 끝나요.',
     '줄마다 합이 높은 쪽이 그 줄을 가져가고, 두 줄 이상 가져가면 이겨요. 가져간 줄 수가 같으면 전체 합으로 가려요.',
     '이기면 도토리 100개를 얻고 지면 100개를 잃어요.',
@@ -1264,7 +1265,7 @@ const Game = (() => {
     }
     return { get on() { return on; }, fast: () => replay.length > 0, send, rollFor, foeTurn, feedMine, firstSide, dressFoe, alreadyPaid, askAgain, afterGuide, boot };
   })();
-  /* 소리 : 파일 없이 Web Audio 로 그때그때 만든다. 효과음과 배경음악은 따로 끄고 켜며, 끈 것은 기억한다. 첫 터치 뒤에만 소리가 난다. */
+  /* 소리 : 파일 없이 Web Audio 로 그때그때 만든다. 스피커 버튼은 소리 전체, 음표 버튼은 배경음악만 끄고 켜며, 끈 것은 기억한다. 첫 터치 뒤에만 소리가 난다. */
   const Sfx = (() => {
     let ctx = null, master = null, mus = null, on = true, musicOn = true;
     try { on = localStorage.getItem('titicaca-sound') !== '0'; musicOn = localStorage.getItem('titicaca-music') !== '0'; } catch {}
@@ -1281,7 +1282,7 @@ const Game = (() => {
       if (ctx.state === 'suspended') ctx.resume().catch(() => {});
       return ctx;
     };
-    ['pointerdown', 'touchend', 'keydown'].forEach(ev => addEventListener(ev, () => { if (on || musicOn) { ensure(); startMusic(); } }, { capture: true, passive: true }));
+    ['pointerdown', 'touchend', 'keydown'].forEach(ev => addEventListener(ev, () => { if (on) { ensure(); startMusic(); } }, { capture: true, passive: true }));
     function tone(t, { f = 440, f2, type = 'sine', dur = .15, vol = .3, attack = .005 }, out = master) {
       const o = ctx.createOscillator(), g = ctx.createGain();
       o.type = type; o.frequency.setValueAtTime(f, t);
@@ -1367,7 +1368,7 @@ const Game = (() => {
       while (nextT < ctx.currentTime + .3) { try { beat(step, nextT, e); } catch {} nextT += e; step = (step + 1) % (SONG.length * 8); }
     }
     function startMusic() {
-      if (!musicOn || timer || !ctx || ctx.state !== 'running' || document.hidden) return;
+      if (!on || !musicOn || timer || !ctx || ctx.state !== 'running' || document.hidden) return;
       const t = ctx.currentTime;
       mus.gain.cancelScheduledValues(t); mus.gain.setValueAtTime(.0001, t); mus.gain.exponentialRampToValueAtTime(MUS_LEVEL, t + 1.5);
       nextT = t + .08;
@@ -1375,11 +1376,14 @@ const Game = (() => {
       pump();
     }
     function stopMusic() {
-      if (!timer) return;
-      clearInterval(timer); timer = 0;
-      if (ctx) { const t = ctx.currentTime; mus.gain.cancelScheduledValues(t); mus.gain.setValueAtTime(mus.gain.value, t); mus.gain.linearRampToValueAtTime(0, t + .2); }
+      if (timer) { clearInterval(timer); timer = 0; }
+      if (!ctx || !mus) return;
+      const old = mus, t = ctx.currentTime;
+      try { old.gain.cancelScheduledValues(t); old.gain.setTargetAtTime(0, t, .03); } catch {}
+      setTimeout(() => { try { old.disconnect(); } catch {} }, 160);
+      mus = ctx.createGain(); mus.gain.value = 0; mus.connect(ctx.destination);
     }
-    document.addEventListener('visibilitychange', () => { if (document.hidden) stopMusic(); else if (musicOn && ctx) { ensure(); startMusic(); } });
+    document.addEventListener('visibilitychange', () => { if (document.hidden) stopMusic(); else if (on && musicOn && ctx) { ensure(); startMusic(); } });
     /* 결과 팡파르가 들리게 잠깐 음악을 줄인다. */
     function duck(ms = 2500) {
       if (!timer) return;
@@ -1387,8 +1391,10 @@ const Game = (() => {
       mus.gain.cancelScheduledValues(t); mus.gain.setValueAtTime(mus.gain.value, t); mus.gain.linearRampToValueAtTime(MUS_LEVEL * .2, t + .2);
       mus.gain.setValueAtTime(MUS_LEVEL * .2, t + ms / 1000); mus.gain.linearRampToValueAtTime(MUS_LEVEL, t + ms / 1000 + 1.2);
     }
-    function toggle(v) { on = v; try { localStorage.setItem('titicaca-sound', v ? '1' : '0'); } catch {} if (v) ensure(); }
-    function toggleMusic(v) { musicOn = v; try { localStorage.setItem('titicaca-music', v ? '1' : '0'); } catch {} if (v) { ensure(); startMusic(); } else stopMusic(); }
+    /* 스피커 : 소리 전체 */
+    function toggle(v) { on = v; try { localStorage.setItem('titicaca-sound', v ? '1' : '0'); } catch {} if (v) { ensure(); startMusic(); } else stopMusic(); }
+    /* 음표 : 배경음악만. 소리 전체가 꺼져 있을 때 음표를 누르면 소리를 켜고 음악을 튼다. */
+    function toggleMusic(v) { musicOn = v; try { localStorage.setItem('titicaca-music', v ? '1' : '0'); } catch {} if (v) { if (!on) toggle(true); ensure(); startMusic(); } else stopMusic(); }
     const tier = n => { bpm = BPM[n] || BPM[1]; };
     return { play, toggle, toggleMusic, duck, tier, get on() { return on; }, get musicOn() { return musicOn; }, get playing() { return !!timer; } };
   })();
@@ -1397,12 +1403,12 @@ const Game = (() => {
   const SPEAKER = on => `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 9h4l5-4.2v14.4l-5-4.2h-4z" fill="#3B2F4A" stroke="#3B2F4A" stroke-width="1.2" stroke-linejoin="round"/>${on ? '<path d="M15.6 9.2a4 4 0 0 1 0 5.6M18.3 6.6a7.6 7.6 0 0 1 0 10.8" fill="none" stroke="#3B2F4A" stroke-width="2" stroke-linecap="round"/>' : '<path d="M15.5 9.5l5 5M20.5 9.5l-5 5" stroke="#E2558E" stroke-width="2.2" stroke-linecap="round"/>'}</svg>`;
   const NOTE_ICON = on => `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.2 17.4V6.2l10-2.4v11.4" fill="none" stroke="#3B2F4A" stroke-width="2.1" stroke-linejoin="round"/><path d="M9.2 9.2l10-2.4" stroke="#3B2F4A" stroke-width="2.1"/><ellipse cx="6.6" cy="17.6" rx="3.1" ry="2.5" fill="#3B2F4A"/><ellipse cx="16.6" cy="15.4" rx="3.1" ry="2.5" fill="#3B2F4A"/>${on ? '' : '<path d="M3.5 3.5l17 17" stroke="#fff" stroke-width="5" stroke-linecap="round"/><path d="M3.5 3.5l17 17" stroke="#E2558E" stroke-width="2.4" stroke-linecap="round"/>'}</svg>`;
   const paintSound = () => {
-    const label = Sfx.on ? '효과음 끄기' : '효과음 켜기', mlabel = Sfx.musicOn ? '배경음악 끄기' : '배경음악 켜기';
+    const music = Sfx.on && Sfx.musicOn, label = Sfx.on ? '소리 모두 끄기' : '소리 켜기', mlabel = music ? '배경음악 끄기' : '배경음악 켜기';
     soundBtn.innerHTML = SPEAKER(Sfx.on); soundBtn.setAttribute('aria-pressed', String(Sfx.on)); soundBtn.setAttribute('aria-label', label); soundBtn.title = label;
-    musicBtn.innerHTML = NOTE_ICON(Sfx.musicOn); musicBtn.setAttribute('aria-pressed', String(Sfx.musicOn)); musicBtn.setAttribute('aria-label', mlabel); musicBtn.title = mlabel;
+    musicBtn.innerHTML = NOTE_ICON(music); musicBtn.setAttribute('aria-pressed', String(music)); musicBtn.setAttribute('aria-label', mlabel); musicBtn.title = mlabel;
   };
   soundBtn.addEventListener('click', () => { Sfx.toggle(!Sfx.on); paintSound(); sfx('tick'); });
-  musicBtn.addEventListener('click', () => { Sfx.toggleMusic(!Sfx.musicOn); paintSound(); sfx('tick'); });
+  musicBtn.addEventListener('click', () => { Sfx.toggleMusic(!(Sfx.on && Sfx.musicOn)); paintSound(); sfx('tick'); });
   paintSound();
   /* 숲속 배경 : 하늘·햇살·나무·풀밭은 위 캔버스, 판 아래 풀밭은 아래 캔버스. 화면 크기가 바뀔 때만 다시 그린다. */
   const skyC = $('#sky'), mapC = $('#map'), topEl = $('.top'), fieldEl = $('#field'), stageEl = $('#stage');
@@ -1582,7 +1588,7 @@ const Game = (() => {
     if (bet === 'open') { const t = tipText('predict', '이길 것 같으면 승리 예측을 눌러 보세요. 도토리를 더 걸 수 있어요.'); if (t) return t; }
     if (state.next === 'first') return tipText('first', '첫 주사위예요. 노란 칸을 눌러 내 판에 놓아 보세요.');
     if (state.next === 'shield') return tipText('bonus', '알까기 상으로 받은 주사위예요. 파란 칸을 누르면 상대 판에도 놓아서 칸을 막을 수 있어요.');
-    return tipText('place', '노란 칸을 누르면 주사위가 놓여요.') || tipText('reroll', '눈이 마음에 안 들면 ‘다시 굴리기’를 눌러 보세요. 한 판에 한 번 쓸 수 있어요.');
+    return tipText('place', '노란 칸을 누르면 주사위가 놓여요.') || tipText('reroll', '눈이 마음에 안 들면 ‘다시 굴리기’를 눌러 보세요. 꼭 다른 눈이 나오고, 한 판에 한 번 쓸 수 있어요.');
   }
 
   let faceTimer = 0, lineTimer = 0;
@@ -2128,7 +2134,7 @@ const Game = (() => {
         paintRerolls();
         sfx('reroll'); say(`${foeIs()} 다시 굴려요.`);
         react('think', '다시 굴릴래!', 1000);
-        const next = rollValue();
+        const next = rerollValue(v);
         await rollCube(next);
         if (g !== session) return null;
         await wait(420);
@@ -2243,7 +2249,7 @@ const Game = (() => {
   });
   const doReroll = async forced => {
     if (rerollBtn.disabled || !resolveHuman || !inHand) return;
-    const g = session, old = inHand.now, next = forced || rollValue();
+    const g = session, old = inHand.now, next = forced || rerollValue(old);
     if (!forced) Online.send({ t: 'reroll', v: next });
     state = Game.useReroll(state);
     paintRerolls();
