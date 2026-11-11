@@ -243,7 +243,7 @@ body[data-turn="com"] .pick:not(.old){filter:drop-shadow(0 0 calc(var(--u)*3.4) 
 #predictBtn.done{--top:#A8F0DC;--bot:#34C6A2;--edge:#1E8C77;--o:#146B5A;opacity:1;filter:none}
 #rulesMore,#peekBtn,#unpeekBtn,#roomCancel{--top:#FFFFFF;--bot:#EAF8EF;--edge:#9ACFA8;color:var(--ink);text-shadow:none}
 #predictBtn.open,#holdBtn:enabled{animation:nudge 1s ease-in-out infinite}
-.vs b,.status,.bet,.card b,.big{--ow:calc(var(--u)*.7);text-shadow:0 var(--ow) 0 var(--o),var(--ow) 0 0 var(--o),calc(var(--ow)*-1) 0 0 var(--o),0 calc(var(--ow)*-1) 0 var(--o),calc(var(--ow)*.7) calc(var(--ow)*.7) 0 var(--o),calc(var(--ow)*-.7) calc(var(--ow)*.7) 0 var(--o),calc(var(--ow)*.7) calc(var(--ow)*-.7) 0 var(--o),calc(var(--ow)*-.7) calc(var(--ow)*-.7) 0 var(--o),0 calc(var(--ow)*2) 0 rgba(0,0,0,.15)}
+.vs b,.status,.bet,.card b,.big,.c-big b,.md-n{--ow:calc(var(--u)*.7);text-shadow:0 var(--ow) 0 var(--o),var(--ow) 0 0 var(--o),calc(var(--ow)*-1) 0 0 var(--o),0 calc(var(--ow)*-1) 0 var(--o),calc(var(--ow)*.7) calc(var(--ow)*.7) 0 var(--o),calc(var(--ow)*-.7) calc(var(--ow)*.7) 0 var(--o),calc(var(--ow)*.7) calc(var(--ow)*-.7) 0 var(--o),calc(var(--ow)*-.7) calc(var(--ow)*-.7) 0 var(--o),0 calc(var(--ow)*2) 0 rgba(0,0,0,.15)}
 #rulesMore,#peekBtn,#unpeekBtn,#roomCancel{text-shadow:none}
 
 /* 결과판 */
@@ -315,13 +315,54 @@ body[data-layout="side"] .board{grid-template-columns:calc(var(--u)*86) calc(var
 body[data-short] .b-hero .pt{width:calc(var(--u)*28);height:calc(var(--u)*28)}
 body[data-short] .burst{top:calc(var(--u)*15);width:calc(var(--u)*66)}
 body[data-short] .board{gap:calc(var(--u)*1.8);padding-block:calc(var(--u)*3) calc(var(--u)*4)}
-/* VS 아래 10연승 도전 표 */
-.quest{position:absolute;z-index:2;left:50%;top:calc(var(--u)*40.5);translate:-50% 0;display:grid;justify-items:center;gap:calc(var(--u)*.7);padding:calc(var(--u)*1.4) calc(var(--u)*3.6) calc(var(--u)*1.6);border-radius:calc(var(--u)*4);background:#fff;box-shadow:inset 0 0 0 calc(var(--u)*.8) #F0C77A,0 calc(var(--u)*1) 0 #E0A84A;color:#8A4F0E;white-space:nowrap}
-.quest small{font:400 calc(var(--u)*3.4)/1 var(--display);color:#B07A1E}
+/* VS 아래 연승 게이지 */
+.quest{position:absolute;z-index:2;left:50%;top:calc(var(--u)*40);translate:-50% 0;display:grid;justify-items:center;gap:calc(var(--u)*1);padding:calc(var(--u)*1.5) calc(var(--u)*3.2) calc(var(--u)*1.8);border-radius:calc(var(--u)*4);background:#fff;box-shadow:inset 0 0 0 calc(var(--u)*0.8) #F0C77A,0 calc(var(--u)*1) 0 #E0A84A;color:#8A4F0E;white-space:nowrap}
+.quest .q-top{display:flex;align-items:center;gap:calc(var(--u)*0.8)}
 .quest b{font:400 calc(var(--u)*5)/1 var(--display)}
-.quest.done{grid-auto-flow:column;align-items:center;gap:var(--u);background:linear-gradient(#FFF6B0,#FFD45A)}
-.quest.done svg{width:calc(var(--u)*7);height:calc(var(--u)*5.4)}
-body[data-short] .quest{top:calc(var(--u)*30)}
+.quest .flame{width:calc(var(--u)*4.4);height:calc(var(--u)*5.5);transform-origin:50% 100%;animation:flick .5s ease-in-out infinite alternate}
+.quest .pips{display:flex;gap:calc(var(--u)*0.5)}
+.quest .pips i{width:calc(var(--u)*2);height:calc(var(--u)*2);border-radius:50%;background:#F3E3C2;box-shadow:inset 0 0 0 calc(var(--u)*0.3) rgba(160,110,40,.35)}
+.quest .pips i.on{background:radial-gradient(circle at 35% 30%,#FFF3B0,#FF8A2A 70%);box-shadow:0 0 calc(var(--u)*0.8) rgba(255,140,40,.8)}
+.quest.hot{background:linear-gradient(#FFF7E4,#FFD9A0);box-shadow:inset 0 0 0 calc(var(--u)*0.9) #FF9A3C,0 calc(var(--u)*1) 0 #E07A1E,0 0 calc(var(--u)*4) rgba(255,150,50,.55)}
+.quest.hot b{color:#C2410C}
+.quest.done{background:linear-gradient(#FFF8C8,#FFD45A);box-shadow:inset 0 0 0 calc(var(--u)*0.9) #F0B020,0 calc(var(--u)*1) 0 #D9900F,0 0 calc(var(--u)*4) rgba(255,200,40,.6)}
+.quest.done svg{width:calc(var(--u)*6);height:calc(var(--u)*4.6)}
+body[data-short] .quest{top:calc(var(--u)*29)}
+/* 판 시작 연승 알림 */
+.call{position:absolute;z-index:7;left:50%;top:50%;translate:-50% -50%;display:grid;justify-items:center;gap:calc(var(--u)*2);pointer-events:none;text-align:center;white-space:nowrap}
+.c-big{display:flex;align-items:center;gap:calc(var(--u)*1.6);filter:drop-shadow(0 calc(var(--u)*1.4) calc(var(--u)*2) rgba(120,40,0,.35))}
+.c-big b{--o:#C2410C;color:#fff;font:400 calc(var(--u)*15)/1 var(--display)}
+.c-big .flame{width:calc(var(--u)*11);height:calc(var(--u)*14);transform-origin:50% 100%;animation:flick .45s ease-in-out infinite alternate}
+.c-big svg:not(.flame){width:calc(var(--u)*14);height:calc(var(--u)*10.5)}
+.call small{padding:calc(var(--u)*1.6) calc(var(--u)*4.4);border-radius:99px;background:#fff;color:#C2410C;font:400 max(13px,calc(var(--u)*6))/1.1 var(--display);box-shadow:inset 0 0 0 calc(var(--u)*0.8) #FFB070,0 calc(var(--u)*1) 0 #E07A1E}
+/* 판돈 아래 연승 보너스 */
+.pot-bonus{padding:calc(var(--u)*0.9) calc(var(--u)*2.6);border-radius:99px;background:linear-gradient(#FFF1A0,#FFB347);box-shadow:0 calc(var(--u)*0.6) 0 #E07A1E;color:#9A3412;font:400 max(11px,calc(var(--u)*4.6))/1 var(--display);font-style:normal;white-space:nowrap}
+/* 결과판 연승 메달 */
+.r-streak{display:flex;align-items:center;gap:calc(var(--u)*3);margin-top:calc(var(--u)*5);padding:calc(var(--u)*1.6) calc(var(--u)*5) calc(var(--u)*1.6) calc(var(--u)*2);border-radius:99px;background:linear-gradient(#FFF7E4,#FFE0B0);box-shadow:inset 0 0 0 calc(var(--u)*0.8) #FFB070}
+.r-streak .md{position:relative;flex:none;display:grid;place-items:center;width:calc(var(--u)*16);height:calc(var(--u)*16);border-radius:50%;background:radial-gradient(circle at 35% 30%,#FFE9A8,#FF9A3C 60%,#E8571E);box-shadow:inset 0 0 0 calc(var(--u)*0.9) #fff,0 calc(var(--u)*1) 0 #B8461A,0 0 calc(var(--u)*4) rgba(255,140,40,.6)}
+.r-streak .md-fire{position:absolute;left:50%;top:calc(var(--u)*-8);translate:-50% 0;width:calc(var(--u)*9);height:calc(var(--u)*11)}
+.r-streak .md-fire svg{width:100%;height:100%;transform-origin:50% 100%;animation:flick .5s ease-in-out infinite alternate}
+.r-streak .md-n{--o:#9A3412;display:block;color:#fff;font:400 calc(var(--u)*9)/1 var(--display)}
+.r-streak .md-t{display:grid;gap:calc(var(--u)*0.8);text-align:left}
+.r-streak .md-t b{font:400 max(15px,calc(var(--u)*7))/1.1 var(--display);color:#C2410C}
+.r-streak .md-t small{font-size:.78em;color:#A0623A}
+.r-streak.start .md-t b{color:#D9631A}
+.r-streak.gold{background:linear-gradient(#FFFBE0,#FFE58A);box-shadow:inset 0 0 0 calc(var(--u)*0.8) #F0B020}
+.r-streak.gold .md{background:radial-gradient(circle at 35% 30%,#FFF8C8,#FFC531 60%,#D9900F);box-shadow:inset 0 0 0 calc(var(--u)*0.9) #fff,0 calc(var(--u)*1) 0 #A86A08,0 0 calc(var(--u)*5) rgba(255,200,40,.8)}
+.r-streak.gold .md-fire{top:calc(var(--u)*-6);width:calc(var(--u)*11);height:calc(var(--u)*8.4)}
+.r-streak.gold .md-fire svg{animation:none}
+.r-streak.keep{background:#EEF9F1;box-shadow:inset 0 0 0 calc(var(--u)*0.8) #A6DDB0}
+.r-streak.cold{background:#F3EEF6;box-shadow:inset 0 0 0 calc(var(--u)*0.8) #D6CDE0}
+.r-streak.cold .md-t b{color:var(--ink-soft)}.r-streak.cold .md-t small{color:#8A7F96}
+.r-streak.out .md{background:radial-gradient(circle at 35% 30%,#F4F0F8,#BDB3CC 60%,#8E83A3);box-shadow:inset 0 0 0 calc(var(--u)*0.9) #fff,0 calc(var(--u)*1) 0 #6E6380;transition:background .6s,box-shadow .6s}
+.r-streak.out .md-fire svg{filter:grayscale(1);opacity:.45;animation:none;transition:opacity .6s,filter .6s}
+.r-streak.out .md-n{--o:#5A5276}
+body[data-short] .r-streak{margin-top:calc(var(--u)*4)}
+body[data-short][data-layout="side"] .r-streak{margin-top:calc(var(--u)*3);padding-block:calc(var(--u)*1)}
+body[data-short][data-layout="side"] .r-streak .md{width:calc(var(--u)*12);height:calc(var(--u)*12)}
+body[data-short][data-layout="side"] .r-streak .md-n{font-size:calc(var(--u)*7)}
+body[data-short][data-layout="side"] .r-streak .md-fire{top:calc(var(--u)*-6);width:calc(var(--u)*7);height:calc(var(--u)*8.5)}
+body[data-short][data-layout="side"] .r-streak .md-t small{display:none}
 /* 낮은 가로 화면 : 결과판을 줄인다 */
 body[data-short][data-layout="side"] .result{gap:calc(var(--u)*2.4)}
 body[data-short][data-layout="side"] .board{gap:calc(var(--u)*1.2);padding-block:calc(var(--u)*2.4) calc(var(--u)*3)}
@@ -402,7 +443,7 @@ body[data-tip="place"] .gain{animation:tile-pulse .8s ease-in-out infinite}
 @keyframes nudge{0%,100%,50%{transform:none}25%{transform:translateY(calc(var(--u)*-1.5)) scale(1.04)}}
 @media (prefers-reduced-motion:reduce){
   .die{transition:none}
-  .mote,.gain,.gain::after,.pt .sb,.pt .sh,.pt .lid,.pt .prop,.pt .flick,.pt .glowtip,.burst,.hero-crown,.lv-badge.up,.st.new,.st.lost,.q-me.hop,.npc .nb,.npc .tears,.warded .body::after,.warded .body,.die.warded::before,.die.warded::after,.warded .body::before,.tray.shield::before,.tray.shield::after,.doomed .body::after,.doomed::before,.link.new,body[data-tip="place"] .gain,.status.flip,.bubble.pop,#predictBtn.open,#holdBtn:enabled,.dots i.on,.pick.ask .tray{animation:none!important}
+  .mote,.gain,.gain::after,.pt .sb,.pt .sh,.pt .lid,.pt .prop,.pt .flick,.quest .flame,.c-big .flame,.r-streak .md-fire svg,.pt .glowtip,.burst,.hero-crown,.lv-badge.up,.st.new,.st.lost,.q-me.hop,.npc .nb,.npc .tears,.warded .body::after,.warded .body,.die.warded::before,.die.warded::after,.warded .body::before,.tray.shield::before,.tray.shield::after,.doomed .body::after,.doomed::before,.link.new,body[data-tip="place"] .gain,.status.flip,.bubble.pop,#predictBtn.open,#holdBtn:enabled,.dots i.on,.pick.ask .tray{animation:none!important}
 }
 </style>
 </head>
@@ -437,11 +478,12 @@ body[data-tip="place"] .gain{animation:tile-pulse .8s ease-in-out infinite}
         <section class="table" id="table" aria-label="주사위 판">
           <div class="rows" id="rows"></div>
           <div class="layer" id="layer"></div>
+          <div class="call" id="call" aria-hidden="true" hidden></div>
         </section>
         <section class="ctrl" aria-label="내 주사위">
           <div class="ribbon"><svg viewBox="0 0 340 44" preserveAspectRatio="none" aria-hidden="true"><path class="tail" d="M0 8l26 3v30L0 38l10-15zM340 8l-26 3v30l26-3-10-15z"/><rect class="band" x="14" y="2" width="312" height="36" rx="18" stroke="#fff" stroke-width="3" vector-effect="non-scaling-stroke"/><rect class="shine" x="26" y="7" width="288" height="9" rx="4.5"/></svg><div class="status" id="status" role="status"></div></div>
           <div class="hand" id="hand">
-            <div class="pot" id="pot"><svg id="potArt" viewBox="0 0 86 64" aria-hidden="true"></svg><small id="potCap"></small></div>
+            <div class="pot" id="pot"><svg id="potArt" viewBox="0 0 86 64" aria-hidden="true"></svg><small id="potCap"></small><em class="pot-bonus" id="potBonus" hidden></em></div>
             <button class="pick old" id="pickOld" type="button" hidden></button>
             <button class="pick" id="pickNew" type="button" disabled aria-label="새로 굴린 눈 고르기">
               <span class="tray" id="tray"><span class="shade" id="shade"></span><span class="hop" id="hop"><img class="cube" id="cube" alt=""></span></span>
@@ -470,6 +512,7 @@ body[data-tip="place"] .gain{animation:tile-pulse .8s ease-in-out infinite}
           </div>
           <div class="b-info">
             <p class="r-msg" id="resultMsg"></p>
+            <div class="r-streak" id="resultStreak" hidden></div>
             <div class="gain-row" id="resultGain"></div>
             <p class="r-note" id="resultNote"></p>
             <div class="r-lv" id="resultLv"></div>
@@ -984,12 +1027,33 @@ const Game = (() => {
   const questEl = $('#quest');
   const CROWN = '<svg viewBox="0 0 40 30" aria-hidden="true"><path d="M5 26L3 7l10 8 7-12 7 12 10-8-2 19z" fill="url(#crownG)" stroke="#B8860B" stroke-width="2.4" stroke-linejoin="round"/><circle cx="20" cy="18" r="3" fill="#FF8DB8" stroke="#fff" stroke-width="1.2"/></svg>';
   /* VS 아래 작은 도전 표 : 지금 몇 번째 판인지 */
+  const FLAME = '<svg class="flame" viewBox="0 0 24 30" aria-hidden="true"><path d="M12 1C14 7 21 10 21 19C21 25 17 29 12 29C7 29 3 25 3 19C3 14 6 11 8 8C9 11 10 12 11 12C11 8 10 5 12 1Z" fill="#FF7A2A" stroke="#C2410C" stroke-width="1.6" stroke-linejoin="round"/><path d="M12 13C13 16 17 18 17 22C17 25 15 27 12 27C9 27 7 25 7 22C7 19 9 18 10 16C11 18 11 19 12 19C12 17 11.5 15 12 13Z" fill="#FFD23F"/></svg>';
+  let questShown = null;
+  /* VS 아래 연승 게이지 : 불꽃 + 'n연승 중' + 10칸 점. 연승이 오르면 통통 튄다. */
   function paintQuest() {
     const s = Record.read().s;
     questEl.hidden = Online.on;
-    questEl.classList.toggle('done', s >= GOAL);
-    questEl.innerHTML = s >= GOAL ? `${CROWN}<b>${s}연승 중</b>` : `<small>10연승 도전</small><b>${s + 1}번째 판</b>`;
-    questEl.setAttribute('aria-label', s >= GOAL ? `10연승 도전 성공, 지금 ${s}연승` : `10연승 도전 ${s + 1}번째 판`);
+    questEl.className = `quest${s >= GOAL ? ' done' : s >= 1 ? ' hot' : ''}`;
+    const pips = `<span class="pips">${Array.from({ length: GOAL }, (_, i) => `<i class="${i < Math.min(s, GOAL) ? 'on' : ''}"></i>`).join('')}</span>`;
+    questEl.innerHTML = `<span class="q-top">${s >= GOAL ? CROWN : s >= 1 ? FLAME : ''}<b>${s >= 1 ? `${s}연승 중` : '10연승 도전'}</b></span>${pips}`;
+    questEl.setAttribute('aria-label', s >= GOAL ? `10연승 도전 성공, 지금 ${s}연승` : `10연승 도전, 지금 ${s}연승`);
+    if (questShown !== null && s > questShown && !calm && !questEl.hidden) questEl.animate([{ transform: 'scale(1)' }, { transform: 'scale(1.35)' }, { transform: 'scale(.95)' }, { transform: 'none' }], { duration: 520, easing: 'ease-out' });
+    questShown = s;
+  }
+  /* 판 시작 연승 알림 : 연승 중이면 판 위에 크게 띄우고, 이기면 몇 연승 · 보너스 몇 개인지 알려 준다. */
+  const callEl = $('#call');
+  function streakCall() {
+    if (Online.on) return 0;
+    const s = Record.read().s;
+    if (s < 1) return 0;
+    const next = s + 1, bonus = streakBonus(next);
+    callEl.innerHTML = `<span class="c-big">${s >= GOAL ? CROWN : FLAME}<b>${s}연승 중!</b></span><small>${s === GOAL - 1 ? '이번 판을 이기면 10연승 달성!' : `이기면 ${next}연승, 보너스 +${bonus}개`}</small>`;
+    callEl.hidden = false;
+    sfx('fire');
+    const kf = calm ? [{ opacity: 0 }, { opacity: 1, offset: .12 }, { opacity: 1, offset: .82 }, { opacity: 0 }]
+      : [{ transform: 'scale(.3) rotate(-8deg)', opacity: 0 }, { transform: 'scale(1.18) rotate(2deg)', opacity: 1, offset: .14 }, { transform: 'scale(1)', opacity: 1, offset: .24 }, { transform: 'scale(1)', opacity: 1, offset: .8 }, { transform: `translateY(${-10 * parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--u'))}px) scale(.9)`, opacity: 0 }];
+    callEl.animate(kf, { duration: 1800, easing: 'ease-out' }).finished.then(() => { callEl.hidden = true; }).catch(() => {});
+    return 1150;
   }
   function nextRival() {
     const r = Record.read(), newcomer = !foe && r.w + r.l + r.d === 0;
@@ -1353,6 +1417,8 @@ const Game = (() => {
       draw: t => { tone(t, { f: 523, type: 'triangle', dur: .15, vol: .2 }); tone(t + .16, { f: 523, type: 'triangle', dur: .3, vol: .2 }); },
       bet: t => { [1319, 1760].forEach((f, i) => tone(t + i * .06, { f, dur: .22, vol: .14 })); },
       tick: t => tone(t, { f: 1200, dur: .05, vol: .12 }),
+      /* 연승 불꽃 "화르륵" + 올라가는 세 음 */
+      fire: t => { hiss(t, { dur: .35, vol: .12, f: 400, f2: 2600, q: .9 }); [784, 988, 1319].forEach((f, i) => tone(t + .1 + i * .07, { f, type: 'triangle', dur: .22, vol: .2 })); },
       /* 결과판 : 도전 길에서 한 칸 폴짝, 10연승 왕관, 연승이 끊겨 미끄러짐 */
       hop: t => { tone(t, { f: 420, f2: 900, dur: .13, vol: .24 }); tone(t + .12, { f: 700, f2: 520, type: 'triangle', dur: .1, vol: .14 }); },
       crown: t => { [523, 659, 784, 1047].forEach((f, i) => tone(t + i * .1, { f, type: 'triangle', dur: .18, vol: .22 })); [1047, 1319, 1568].forEach(f => tone(t + .45, { f, type: 'triangle', dur: 1.1, vol: .14 })); for (let i = 0; i < 18; i++) tone(t + .5 + i * .06, { f: 1600 + Math.random() * 2000, dur: .07, vol: .05 }); },
@@ -1734,6 +1800,9 @@ const Game = (() => {
   }
   function paintBet() {
     paintPot();
+    const pb = $('#potBonus'), nb = streakBonus(Record.read().s + 1);
+    pb.hidden = !nb;
+    if (nb) set(pb, `연승 보너스 +${nb}`);
     predictBtn.classList.toggle('open', bet === 'open');
     predictBtn.classList.toggle('done', bet === 'done');
     predictBtn.disabled = bet !== 'open' || !resolveHuman;
@@ -2049,13 +2118,32 @@ const Game = (() => {
       : k === 'win' ? `${josa(fname, '을', '를')} 이겼어요!` : k === 'lose' ? `${fname}에게 졌어요.` : `${josa(fname, '과', '와')} 비겼어요.`;
     const bonus = k === 'win' && delta > 0 ? streakBonus(s) : 0;
     const pills = [`<span class="pill acorn${delta < 0 ? ' minus' : ''}">${ACORN}${delta ? `${delta > 0 ? '+' : ''}${won(delta)}개` : '그대로'}</span>`];
-    if (cleared) pills.push(`<span class="pill gold">${CROWN}10연승 달성!</span>`);
-    else if (k === 'win') pills.push(`<span class="pill hot">${s >= 2 ? `${s}연승!` : '연승 시작!'}</span>`);
-    else if (k === 'lose' && prev.s >= 2) pills.push(`<span class="pill gray">${prev.s}연승에서 멈춤</span>`);
-    else if (k === 'draw' && s >= 1) pills.push(`<span class="pill">${s}연승 이어 가요</span>`);
     if (info.up) pills.push('<span class="pill hot">레벨 업!</span>');
     $('#resultGain').innerHTML = pills.join('');
-    $('#resultNote').textContent = bonus ? `연승 보너스 ${bonus}개가 더해졌어요.` : '';
+    $('#resultNote').textContent = '';
+    /* 연승 메달 : 이기면 숫자가 하나 올라가고, 지면 회색으로 식는다. */
+    const st = $('#resultStreak');
+    const medal = k === 'win' ? (s >= 2 ? { cls: cleared || s >= GOAL ? 'gold' : 'hot', from: s - 1, to: s, title: cleared ? '10연승 달성!' : `${s}연승!`, sub: `연승 보너스 +${bonus}개` } : { cls: 'start', from: 0, to: 1, title: '연승 시작!', sub: '한 판 더 이기면 연승 보너스가 붙어요' })
+      : k === 'lose' && prev.s >= 1 ? { cls: 'cold', from: prev.s, to: prev.s, title: prev.s >= 2 ? `${prev.s}연승에서 멈췄어요` : '연승이 끊겼어요', sub: r.b >= 2 ? `최고 기록 ${r.b}연승` : '다시 1승부터 시작해요' }
+      : k === 'draw' && s >= 1 ? { cls: 'keep', from: s, to: s, title: `${s}연승 이어 가요`, sub: '비기면 연승이 끊기지 않아요' } : null;
+    st.hidden = !medal;
+    if (medal) {
+      st.className = `r-streak ${medal.cls}`;
+      st.innerHTML = `<span class="md"><span class="md-fire">${medal.cls === 'gold' ? CROWN : FLAME}</span><b class="md-n">${medal.from}</b></span><span class="md-t"><b>${medal.title}</b><small>${medal.sub}</small></span>`;
+    }
+    const flipStreak = () => {
+      if (!medal) return;
+      const n = st.querySelector('.md-n');
+      if (medal.cls === 'cold') { st.classList.add('out'); return; }
+      if (medal.from === medal.to) return;
+      if (calm) { n.textContent = medal.to; return; }
+      n.animate([{ transform: 'none' }, { transform: 'scaleY(0)' }], { duration: 140, easing: 'ease-in' }).finished.then(() => {
+        n.textContent = medal.to;
+        n.animate([{ transform: 'scale(.2)' }, { transform: 'scale(1.5)', offset: .6 }, { transform: 'none' }], { duration: 420, easing: 'ease-out' });
+        st.querySelector('.md').animate([{ transform: 'none' }, { transform: 'scale(1.18) rotate(-6deg)' }, { transform: 'none' }], { duration: 420, easing: 'ease-out' });
+        sfx('fire');
+      }).catch(() => {});
+    };
     const lv = levelOf(r.pts), left = toNext(r.pts);
     $('#resultLv').innerHTML = `<span class="lv-badge${info.up ? ' up' : ''}"><small>Lv.</small>${lv}</span><span class="total">${ACORN}<b class="n-total">${won(prev.pts)}</b><small>개</small></span>`;
     $('#resultLevel').textContent = left ? `다음 레벨까지 ${won(left)}개 남았어요.` : '최고 레벨이에요.';
@@ -2093,7 +2181,7 @@ const Game = (() => {
         sfx('hop');
       }
     };
-    if (calm) { total.textContent = won(r.pts); moveQuest(); return; }
+    if (calm) { total.textContent = won(r.pts); flipStreak(); moveQuest(); return; }
     result.querySelector('.paper').animate([{ transform: 'translateY(-104%)' }, { transform: 'none' }], { duration: 900, easing: 'cubic-bezier(.2,.8,.3,1)', fill: 'backwards' });
     result.querySelector('.b-hero').animate([{ transform: 'scale(.2)', opacity: 0 }, { transform: 'scale(1.12)', opacity: 1, offset: .7 }, { transform: 'none', opacity: 1 }], { duration: 520, delay: 420, easing: 'ease-out', fill: 'backwards' });
     result.querySelector('.banner').animate([{ transform: 'scale(2.4) rotate(-8deg)', opacity: 0 }, { transform: 'scale(1) rotate(0deg)', opacity: 1, offset: .65 }, { transform: 'scale(1.08,.9)', offset: .82 }, { transform: 'none', opacity: 1 }], { duration: 420, delay: 760, easing: 'ease-in', fill: 'backwards' });
@@ -2106,6 +2194,8 @@ const Game = (() => {
       if (p < 1) requestAnimationFrame(step);
     };
     requestAnimationFrame(step);
+    if (medal) st.animate([{ transform: 'scale(0)' }, { transform: 'scale(1.1)', offset: .7 }, { transform: 'none' }], { duration: 380, delay: 950, easing: 'ease-out', fill: 'backwards' });
+    setTimeout(() => { if (my === countToken) flipStreak(); }, 1350);
     setTimeout(() => { if (my === countToken) moveQuest(); }, 1900);
     if (cleared) setTimeout(() => { if (my === countToken) acornRain(); }, 2100);
   }
@@ -2199,6 +2289,8 @@ const Game = (() => {
     say(introLine());
     await wait(clashIn() || 520);
     if (g !== session) return;
+    const callMs = streakCall();
+    if (callMs) { await wait(callMs); if (g !== session) return; }
     say(state.turn === 'me' ? '내가 먼저 굴려요.' : `${foeIs()} 먼저 굴려요.`);
     react('grin', foe.hi, 1400);
     await wait(420);
