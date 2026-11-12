@@ -541,6 +541,34 @@ body[data-tip="place"] .gain{animation:tile-pulse .8s ease-in-out infinite}
   .die{transition:none}
   .mote,.gain,.gain::after,.pt .sb,.pt .sh,.pt .lid,.pt .prop,.pt .flick,.quest .flame,.c-big .flame,.r-streak .md-fire svg,.pt .glowtip,.burst,.hero-crown,.lv-badge.up,.st.new,.st.lost,.q-me.hop,.npc .nb,.npc .tears,.warded .body::after,.warded .body,.die.warded::before,.die.warded::after,.warded .body::before,.tray.shield::before,.tray.shield::after,.doomed .body::after,.doomed::before,.link.new,body[data-tip="place"] .gain,.status.flip,.bubble.pop,#predictBtn.open,#holdBtn:enabled,.dots i.on,.pick.ask .tray{animation:none!important}
 }
+
+/* 꾸미기 : 내 슬라임 옆 옷걸이 단추와 꾸미기 창 */
+.cl-btn{position:absolute;left:calc(var(--u)*2);top:calc(var(--u)*1);z-index:2;display:grid;place-items:center;width:calc(var(--u)*13);height:calc(var(--u)*13);padding:0;border:0;border-radius:50%;background:#fff;box-shadow:inset 0 0 0 calc(var(--u)*1) #A6DDB0,0 calc(var(--u)*.9) 0 #7FC08C;cursor:pointer}
+.cl-btn svg{width:62%;height:62%}
+.cl-btn.new::after{content:"";position:absolute;right:calc(var(--u)*-.6);top:calc(var(--u)*-.6);width:calc(var(--u)*4.4);height:calc(var(--u)*4.4);border-radius:50%;background:#FF5D73;box-shadow:0 0 0 calc(var(--u)*.8) #fff}
+.cl-btn:focus-visible,.cl-tab:focus-visible,.cl-item:focus-visible{outline:calc(var(--u)*1.2) solid #FFB21E;outline-offset:calc(var(--u)*1)}
+#closet{width:min(calc(var(--u)*236),calc(100vw - 32px));overflow-y:auto;overscroll-behavior:contain}
+.closet-box{gap:calc(var(--u)*5)}
+#closetBody{display:grid;gap:calc(var(--u)*5)}
+.cl-top{display:grid;justify-items:center;gap:calc(var(--u)*2)}
+.cl-hero{width:calc(var(--u)*50);height:calc(var(--u)*50)}
+.cl-hero svg{width:100%;height:100%;overflow:visible}
+.cl-wins{margin:0;font-size:.92em;color:#5B7A66;text-align:center}
+.cl-wins b{font:400 1.25em var(--display);color:var(--leaf-deep)}
+.cl-tabs{display:flex;justify-content:center;gap:calc(var(--u)*2);padding:calc(var(--u)*1.6);border-radius:99px;background:#EAF7EE;justify-self:center}
+.cl-tab{font:400 max(14px,calc(var(--u)*6.4))/1 var(--display);padding:calc(var(--u)*2.8) calc(var(--u)*7);border:0;border-radius:99px;background:transparent;color:#5B7A66;cursor:pointer}
+.cl-tab[aria-selected="true"]{background:#fff;color:var(--ink);box-shadow:0 calc(var(--u)*.8) 0 #A6DDB0}
+.cl-items{display:grid;grid-template-columns:repeat(auto-fill,minmax(calc(var(--u)*42),1fr));gap:calc(var(--u)*3)}
+.cl-item{display:grid;justify-items:center;gap:calc(var(--u)*.8);padding:calc(var(--u)*2.6) calc(var(--u)*1.4) calc(var(--u)*3);border:calc(var(--u)*1) solid transparent;border-radius:calc(var(--u)*6);background:#F3FBF5;color:var(--ink);font:inherit;cursor:pointer}
+.cl-item svg{width:calc(var(--u)*28);height:calc(var(--u)*28);overflow:visible}
+.cl-item b{font:400 max(13px,calc(var(--u)*5.6))/1.15 var(--display);text-align:center;word-break:keep-all}
+.cl-item small{font-size:max(12px,calc(var(--u)*5));color:#5B7A66}
+.cl-item.on{border-color:#FFB428;background:#FFF6D6}
+.cl-item.picked{border-color:#E07FA6;background:#FFF0F6}
+.cl-item.locked svg{filter:grayscale(.65);opacity:.6}
+.cl-item.locked small{color:#C95F78}
+.cl-bar{margin:0;padding:calc(var(--u)*3.4) calc(var(--u)*5);border-radius:calc(var(--u)*5);background:#FFF0F6;color:#8A3A58;font-weight:500;line-height:1.45}
+.cl-bar.ok{background:#EAF7EE;color:#2E7A44}
 </style>
 </head>
 <body>
@@ -558,7 +586,7 @@ body[data-tip="place"] .gain{animation:tile-pulse .8s ease-in-out infinite}
           <div class="chips"><div class="chip pair"><button class="snd" id="musicBtn" type="button" aria-pressed="true"></button><button class="snd" id="soundBtn" type="button" aria-pressed="true"></button></div><button class="chip" id="statsBtn" type="button"></button><button class="chip" id="rulesBtn" type="button"></button></div>
         </header>
         <div class="stage" id="stage">
-          <div class="cap me" id="capMe"><svg class="pt" id="meArt" viewBox="0 0 100 100" aria-hidden="true"></svg><span class="tag"><small class="title" id="titleMe" hidden>듀얼리스트</small><span class="name" id="nameMe"></span><small id="lvMe"></small></span><span class="dots" id="dotsMe" role="img"><i></i><i></i><i></i></span></div>
+          <div class="cap me" id="capMe"><svg class="pt" id="meArt" viewBox="0 0 100 100" aria-hidden="true"></svg><button class="cl-btn" id="closetBtn" type="button" aria-label="꾸미기" title="꾸미기"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="#2E8F4A" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9.6 6.6a2.4 2.4 0 1 1 3.4 2.2c-.6.3-1 .9-1 1.6v.8"/><path d="M12 11.2L3 17.4c-.8.6-.4 1.8.6 1.8h16.8c1 0 1.4-1.2.6-1.8z"/></svg></button><span class="tag"><small class="title" id="titleMe" hidden>듀얼리스트</small><span class="name" id="nameMe"></span><small id="lvMe"></small></span><span class="dots" id="dotsMe" role="img"><i></i><i></i><i></i></span></div>
           <div class="vs"><svg viewBox="0 0 104 104" aria-hidden="true"><path d="M52 4l12 24 26-6-10 25 22 15-26 6 2 27-24-14-24 14 2-27-26-6 22-15-10-25 26 6z" fill="url(#vsG)" stroke="#fff" stroke-width="4" stroke-linejoin="round"/><path d="M52 4l12 24 26-6-10 25 22 15-26 6 2 27-24-14-24 14 2-27-26-6 22-15-10-25 26 6z" fill="none" stroke="#C7780A" stroke-width="2" stroke-linejoin="round" transform="translate(0 1)" opacity=".5"/></svg><b id="vsText">VS</b></div>
           <div class="quest" id="quest" role="img" hidden></div>
           <div class="quest h2h" id="h2h" hidden></div>
@@ -660,6 +688,14 @@ body[data-tip="place"] .gain{animation:tile-pulse .8s ease-in-out infinite}
       <button class="bet" id="roomShare" type="button" hidden>보내기</button>
       <button class="bet" id="roomCancel" type="button">닫기</button>
     </div>
+  </div>
+</dialog>
+
+<dialog id="closet">
+  <div class="rules closet-box">
+    <h2 id="closetTitle" tabindex="-1" autofocus>꾸미기</h2>
+    <div id="closetBody"></div>
+    <button class="bet" id="closetClose" type="button">닫기</button>
   </div>
 </dialog>
 
@@ -1185,6 +1221,94 @@ const Game = (() => {
     if (bumped) return `${s + 1}번째 판, 센 상대 등장! 별 ${foe.stars}개 ${foe.name}!`;
     return `${s + 1}번째 판, ${foe.name} 등장!`;
   }
+  /* 꾸미기 : 루루피아와 같은 아이템 목록(SHOP). 티티카카에서는 이긴 횟수로 열린다(값 ÷ 5 승).
+     입은 모습은 slime-closet 에 두어서 같은 주소의 루루피아와 함께 쓴다. 거기서 산 것도 여기서 입을 수 있다. */
+  const SHOP = {
+    hat: [
+      ['acorn', '도토리 모자', 0], ['none', '맨머리', 0], ['sprout', '새싹', 20], ['leaf', '나뭇잎', 20], ['berry', '딸기', 30], ['puff', '민들레 솜', 30],
+      ['flowers', '꽃 화관', 30], ['nightcap', '수면 모자', 40], ['bug', '더듬이', 40], ['shell', '달팽이 집', 40], ['lily', '연잎', 40], ['mushroom', '빨간 버섯', 50],
+      ['pinwheel', '바람개비', 50], ['straw', '밀짚모자', 60], ['scholar', '학사모', 60], ['pinecone', '솔방울', 70], ['helmet', '기사 투구', 70], ['antenna', '반딧불', 80],
+      ['wizard', '마법사 모자', 80], ['rainbow', '무지개', 90], ['cloud', '번개 구름', 90], ['frost', '얼음 왕관', 100], ['flame', '불꽃', 100], ['crown', '황금 왕관', 120],
+    ],
+    color: [
+      ['mint', '민트', 0, ['#EFFFF9', '#7FE3C8', '#26A88D'], '#1E8C77'], ['sprout', '연두', 25, ['#F4FFEC', '#A8E890', '#5DBE4E'], '#3E9A3A'],
+      ['lavender', '라벤더', 25, ['#F8F4FF', '#C8B6F2', '#8C70D6'], '#6A50B8'], ['milk', '우유', 25, ['#FFFFFF', '#F4ECF4', '#D3BCD3'], '#A584A5'],
+      ['strawberry', '딸기 우유', 30, ['#FFF6F8', '#FFCCD6', '#EE8AA0'], '#C95F78'], ['lemon', '레몬', 30, ['#FFFEF0', '#FFF29E', '#EBC93A'], '#BF9B18'],
+      ['peach', '살구', 30, ['#FFF6F0', '#FFC6A8', '#F08A64'], '#D0603C'], ['sky', '하늘', 30, ['#F0FBFF', '#9FDDF7', '#3FAEDF'], '#2A8BBE'],
+      ['honey', '꿀', 35, ['#FFFBE8', '#FFD45A', '#F0A51E'], '#B97A0C'], ['pink', '분홍', 35, ['#FFF0F6', '#FF9EC4', '#DE4F88'], '#B83A6E'],
+      ['tomato', '토마토', 35, ['#FFF1EE', '#FF8F84', '#E2453C'], '#A82A24'], ['grape', '포도', 40, ['#F0F3FF', '#AEBBF5', '#5A6CD2'], '#3E4AA8'],
+      ['storm', '먹구름', 40, ['#F2F3FA', '#BAC0DC', '#6C74A6'], '#474F86'], ['frost', '서리', 40, ['#FFFFFF', '#D4F1FF', '#7CC4EC'], '#3F92C8'],
+      ['ember', '불씨', 40, ['#FFF4EA', '#FFA266', '#E8572A'], '#B23A14'],
+    ],
+    deco: [
+      ['ears', '토끼 귀', 60, 'back'], ['wings', '꿀벌 날개', 70, 'back'], ['spikes', '고슴도치 가시', 60, 'back'],
+      ['stache', '콧수염', 30, 'stache'], ['spots', '무당벌레 점', 40, 'spots'], ['stripes', '꿀벌 줄무늬', 40, 'stripes'],
+    ],
+  };
+  const Closet = {
+    get() { let c = {}; try { c = JSON.parse(localStorage.getItem('slime-closet')) || {}; } catch {} return { owned: c.owned || ['hat:acorn', 'hat:none', 'color:mint'], hat: c.hat || 'acorn', color: c.color || 'mint', back: c.back || null, stache: !!c.stache, spots: !!c.spots, stripes: !!c.stripes }; },
+    set(c) { try { localStorage.setItem('slime-closet', JSON.stringify(c)); } catch {} },
+  };
+  const lookOf = (c, over = {}) => {
+    const x = { ...c, ...over }, col = SHOP.color.find(k => k[0] === x.color) || SHOP.color[0];
+    return { id: 'me', body: col[3], rim: col[4], hat: x.hat, eyes: 'two', mouth: 'cat', brows: 'none', back: x.back || undefined, stache: !!x.stache, spots: !!x.spots, stripes: !!x.stripes };
+  };
+  Object.assign(ME, lookOf(Closet.get()));
+  const winsNeed = price => Math.ceil(price / 5);
+  const myWins = () => { try { return (JSON.parse(localStorage.getItem('samsepan-record')) || {}).w || 0; } catch { return 0; } };
+  const itemOf = (kind, key) => SHOP[kind].find(x => x[0] === key);
+  const hasItem = (c, kind, key) => { const it = itemOf(kind, key); return !it[2] || c.owned.includes(`${kind}:${key}`) || myWins() >= winsNeed(it[2]); };
+  const overFor = (kind, key) => (kind === 'hat' ? { hat: key } : kind === 'color' ? { color: key } : itemOf('deco', key)[3] === 'back' ? { back: key } : { [itemOf('deco', key)[3]]: true });
+  const wearing = (c, kind, key) => (kind === 'hat' ? c.hat === key : kind === 'color' ? c.color === key : itemOf('deco', key)[3] === 'back' ? c.back === key : !!c[itemOf('deco', key)[3]]);
+  const unlockedCount = () => { const w = myWins(); return Object.values(SHOP).flat().filter(it => it[2] && w >= winsNeed(it[2])).length; };
+  const closetDlg = $('#closet'), closetBody = $('#closetBody');
+  let clTab = 'hat', clSel = null, clMsg = '', clSeq = 0;
+  function paintClosetDot() {
+    let seen = 0; try { seen = +localStorage.getItem('titicaca-closet-seen') || 0; } catch {}
+    $('#closetBtn').classList.toggle('new', unlockedCount() > seen);
+  }
+  function paintMe() { $('#meArt').innerHTML = rivalArt(ME); }
+  function renderCloset() {
+    const c = Closet.get(), w = myWins(), art = look => `<svg class="pt npc" viewBox="0 0 100 100" aria-hidden="true">${rivalArt({ ...look, id: 'cl' + (++clSeq) })}</svg>`;
+    const prev = lookOf(c, clSel ? overFor(clSel.kind, clSel.key) : {});
+    const items = SHOP[clTab].map(([key, name, price]) => {
+      const own = hasItem(c, clTab, key), on = wearing(c, clTab, key), picked = clSel && clSel.kind === clTab && clSel.key === key;
+      return `<button class="cl-item${on ? ' on' : ''}${picked ? ' picked' : ''}${own ? '' : ' locked'}" type="button" data-kind="${clTab}" data-key="${key}">${art(lookOf(c, overFor(clTab, key)))}<b>${name}</b><small>${on ? '입는 중' : own ? '입기' : `${winsNeed(price)}승`}</small></button>`;
+    }).join('');
+    let bar = '';
+    if (clSel) { const it = itemOf(clSel.kind, clSel.key), need = winsNeed(it[2]); bar = `<p class="cl-bar">${it[1]} · ${need}승 하면 열려요. 지금 ${w}승, ${need - w}번 더 이기면 돼요.</p>`; }
+    else if (clMsg) bar = `<p class="cl-bar ok">${clMsg}</p>`;
+    closetBody.innerHTML = `<div class="cl-top"><div class="cl-hero">${art(prev).replace('class="pt npc"', 'class="pt npc" data-face="laugh"')}</div><p class="cl-wins">이긴 판 <b>${w}</b> · 이길수록 새 꾸미기가 열려요</p></div>
+      <div class="cl-tabs" role="tablist">${[['hat', '모자'], ['color', '색'], ['deco', '장식']].map(([k, l]) => `<button class="cl-tab" type="button" role="tab" aria-selected="${k === clTab}" data-tab="${k}">${l}</button>`).join('')}</div>
+      <div class="cl-items">${items}</div>${bar}`;
+  }
+  function openCloset() {
+    clSel = null; clMsg = '';
+    renderCloset();
+    try { localStorage.setItem('titicaca-closet-seen', String(unlockedCount())); } catch {}
+    paintClosetDot();
+    if (!closetDlg.open) closetDlg.showModal();
+  }
+  closetBody.addEventListener('click', e => {
+    const t = e.target.closest('[data-tab],[data-kind]'); if (!t) return;
+    const c = Closet.get();
+    if (t.dataset.tab) { clTab = t.dataset.tab; clSel = null; clMsg = ''; }
+    else {
+      const kind = t.dataset.kind, key = t.dataset.key;
+      if (hasItem(c, kind, key)) {
+        if (kind === 'hat') c.hat = key; else if (kind === 'color') c.color = key;
+        else { const d = itemOf('deco', key); if (d[3] === 'back') c.back = c.back === key ? null : key; else c[d[3]] = !c[d[3]]; }
+        Closet.set(c); Object.assign(ME, lookOf(c)); paintMe(); clSel = null; clMsg = `${itemOf(kind, key)[1]} ${wearing(c, kind, key) ? '입었어요!' : '벗었어요'}`;
+        sfx('hop');
+      } else { clSel = { kind, key }; clMsg = ''; sfx('place'); }
+    }
+    const top = closetBody.scrollTop; renderCloset(); closetBody.scrollTop = top;
+  });
+  $('#closetBtn').addEventListener('click', e => { e.stopPropagation(); openCloset(); });
+  $('#closetClose').addEventListener('click', () => closetDlg.close());
+  closetDlg.addEventListener('close', () => { clSel = null; paintMe(); });
+  setTimeout(() => { const w0 = Record.write; Record.write = r => { w0(r); paintClosetDot(); }; paintClosetDot(); });
+  paintMe();
   /* 친구 대결 : Firebase 실시간 DB 에 행동 기록을 쌓고 화면들이 같은 기록을 따라 둔다. 새로고침하면 기록을 빠르게 다시 돌려 이어서 한다.
      방 하나에 대결 2명 + 줄 5명. 이긴 사람이 남고 진 사람은 줄 맨 뒤로, 줄 맨 앞 사람이 10초 안에 준비를 누르면 다음 판.
      줄 선 사람은 기록을 따라 읽으며 지금 판을 구경한다. 줄이 비어 있으면 둘이 '한 판 더 / 다음에'.

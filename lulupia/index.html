@@ -212,6 +212,115 @@ body[data-mute] .snd .off{display:block}
 .npc[data-face="cry"] .nb{animation:n-cry .5s both ease-in}
 .npc[data-face="cry"] .tears{animation:n-tear .7s ease-in infinite}
 
+/* 모드, 점수, 도구, 꾸미기, 도감 */
+.chip.sc svg,.chip.acorn svg,.tbtn svg,.hintbtn svg{width:calc(var(--u)*5);height:calc(var(--u)*5);flex:none}
+.chip.sc b,.chip.acorn b{font-weight:400;font-variant-numeric:tabular-nums}
+.hud .tbtn{pointer-events:auto;cursor:pointer;font:inherit;color:#FFF3D6}
+.hud .chip.acorn{margin-left:auto}
+.game:not([data-state="title"]) .hud .tbtn,.game:not([data-state="title"]) .hud .chip.acorn{display:none}
+.game[data-state="title"] .chip.lv,.game[data-state="title"] .chip.sc,.game[data-state="title"] .chip.alive{display:none}
+.pips{gap:calc(var(--u)*.45)}
+.pips i{width:calc(var(--u)*1.2)}
+.modes{position:absolute;z-index:8;left:50%;translate:-50% 0;bottom:calc(var(--u)*4.6);width:min(calc(100% - calc(var(--u)*8)),calc(var(--u)*126*var(--fs,1)));display:grid;grid-template-columns:repeat(3,1fr);gap:calc(var(--u)*2.8)}
+.mode{font:inherit;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:calc(var(--u)*1.6);min-height:calc(var(--u)*24);padding:calc(var(--u)*2.4) calc(var(--u)*1.2);border-radius:calc(var(--u)*5.5);border:calc(var(--u)*.8) solid #fff;color:#fff;text-align:center;transition:transform .12s,box-shadow .12s}
+.mode b{font-family:var(--display);font-weight:400;font-size:max(16px,calc(var(--u)*5.4*var(--fs,1)));line-height:1.05;text-shadow:0 calc(var(--u)*.45) 0 rgba(0,0,0,.25)}
+.mode small{font-size:max(12px,calc(var(--u)*3.3*var(--fs,1)));line-height:1.1;padding:calc(var(--u)*.9) calc(var(--u)*2) calc(var(--u)*.7);border-radius:calc(var(--u)*3);background:rgba(255,255,255,.92);color:var(--ink);white-space:nowrap}
+.m-daily{background:linear-gradient(#FFE07A,#FFB428);box-shadow:0 calc(var(--u)*1.4) 0 #C9790C,inset 0 calc(var(--u)*.8) 0 rgba(255,255,255,.55)}
+.m-free{background:linear-gradient(#A6E879,#4FA83A);box-shadow:0 calc(var(--u)*1.4) 0 #2F7A26,inset 0 calc(var(--u)*.8) 0 rgba(255,255,255,.45)}
+.m-tower{background:linear-gradient(#C3ADF6,#7C5CD6);box-shadow:0 calc(var(--u)*1.4) 0 #4E36A0,inset 0 calc(var(--u)*.8) 0 rgba(255,255,255,.45)}
+.m-daily.done small::before{content:"";display:inline-block;width:.8em;height:.42em;border-left:.2em solid #2F7A26;border-bottom:.2em solid #2F7A26;rotate:-45deg;translate:0 -.3em;margin-right:.4em}
+.mode:active{transform:translateY(calc(var(--u)*1.2))}
+.mode:focus-visible,.tab:focus-visible,.item:focus-visible,.dx-cat:focus-visible,.p-close:focus-visible{outline:calc(var(--u)*1) solid var(--gold);outline-offset:calc(var(--u)*.6)}
+.hintbtn{position:absolute;z-index:8;left:50%;translate:-50% 0;bottom:calc(var(--u)*26);pointer-events:auto;cursor:pointer;font:inherit;color:#FFF3D6}
+.hintbtn b{font-weight:400;min-width:1.3em;text-align:center;background:#FFD45A;color:#5E3418;border-radius:2em;padding:.1em .35em 0}
+.hintbtn:disabled{filter:grayscale(.75);opacity:.7;cursor:default}
+.owl{position:absolute;z-index:5;width:calc(var(--u)*11);translate:-50% -100%;animation:owlin .5s cubic-bezier(.2,1.6,.4,1) both;pointer-events:none}
+.owl svg{display:block;width:100%;height:auto}
+.owl i{position:absolute;left:50%;bottom:96%;translate:-50% 0;font-style:normal;white-space:nowrap;font-size:max(13px,calc(var(--u)*3.8*var(--fs,1)));line-height:1;color:var(--ink);background:#FFF6E2;border:calc(var(--u)*.5) solid var(--wood);border-radius:calc(var(--u)*3);padding:calc(var(--u)*1) calc(var(--u)*2.2) calc(var(--u)*.8)}
+.gain{position:absolute;z-index:7;translate:-50% -100%;font-family:var(--display);font-size:max(18px,calc(var(--u)*6.2));line-height:1.05;text-align:center;color:#FFE27A;paint-order:stroke fill;-webkit-text-stroke:calc(var(--u)*1.3) #7A4A22;white-space:nowrap;pointer-events:none;animation:gain 1.5s ease-out forwards}
+.gain small{display:block;font-size:.6em;color:#fff;-webkit-text-stroke-color:#C2410C}
+.tag.rev{background:#E8572A;box-shadow:0 calc(var(--u)*.5) 0 #B23A14}
+.flash{position:absolute;inset:0;z-index:10;background:#fff;pointer-events:none;animation:flash 1s ease forwards}
+.b-btns{flex-wrap:wrap;justify-content:center}
+.cta.blue{background:linear-gradient(#7CD8FF,#2FA6E4);box-shadow:0 calc(var(--u)*1.4) 0 #1A6FA0,inset 0 calc(var(--u)*.8) 0 rgba(255,255,255,.5);text-shadow:0 calc(var(--u)*.5) 0 rgba(0,60,100,.35)}
+.cta.gold{animation:revglow 1.4s ease-in-out infinite}
+.b-tip{margin:0;font-size:max(13px,calc(var(--u)*3.8*var(--fs,1)));color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.7)}
+.r-badges{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:calc(var(--u)*2)}
+.r-badges .r-new{margin:0;display:inline-block}
+.r-acorn{display:inline-flex;align-items:center;gap:calc(var(--u)*1.2);font-size:max(15px,calc(var(--u)*4.4*var(--fs,1)));line-height:1;padding:calc(var(--u)*1.2) calc(var(--u)*3);border-radius:calc(var(--u)*3.4);background:#fff;color:#7A4A26;box-shadow:0 calc(var(--u)*.6) 0 rgba(0,0,0,.12)}
+.r-acorn svg{width:calc(var(--u)*5.4);height:calc(var(--u)*5.4)}
+.r-acorn b{font-weight:400}
+.r-note{margin:0;font-size:max(13px,calc(var(--u)*3.6*var(--fs,1)));line-height:1.5;color:#7A4A26;text-align:center}
+.r-share{width:100%;display:flex;flex-direction:column;gap:calc(var(--u)*2.4);padding:calc(var(--u)*3);border-radius:calc(var(--u)*3.4);background:rgba(255,255,255,.72)}
+.r-share pre{margin:0;white-space:pre-wrap;word-break:break-all;font-family:var(--body);font-size:max(14px,calc(var(--u)*3.8*var(--fs,1)));line-height:1.55;color:var(--ink);user-select:text;-webkit-user-select:text}
+.r-share-b{display:flex;gap:calc(var(--u)*2.4)}
+.r-share-b .cta{flex:1;height:calc(var(--u)*11);font-size:max(15px,calc(var(--u)*4.6*var(--fs,1)))}
+.r-list li em.rv{font-style:normal;font-size:.82em;color:#fff;background:#E8572A;border-radius:.8em;padding:.1em .55em 0;margin-right:.2em}
+.panel{position:absolute;inset:0;z-index:12;display:grid;place-items:center;padding:calc(var(--u)*5) calc(var(--u)*4);background:rgba(20,40,30,.55)}
+.p-card{position:relative;width:100%;max-width:calc(var(--u)*120*var(--fs,1));max-height:100%;display:flex;flex-direction:column;border-radius:calc(var(--u)*5);border:calc(var(--u)*.9) solid var(--wood);background:repeating-linear-gradient(176deg,rgba(122,74,34,.1) 0 calc(var(--u)*.45),transparent calc(var(--u)*.45) calc(var(--u)*3.1)),linear-gradient(#FBE3B6,#EBBE84);box-shadow:0 calc(var(--u)*1.4) 0 var(--wood-dk);color:#4A2810;overflow:hidden;animation:fadeup .35s both}
+.p-head{display:flex;align-items:center;gap:calc(var(--u)*2.4);padding:calc(var(--u)*3.4) calc(var(--u)*3.6) calc(var(--u)*2.4)}
+.p-head h2{margin:0;font-family:var(--display);font-weight:400;font-size:max(22px,calc(var(--u)*8*var(--fs,1)));line-height:1;color:#FFE27A;paint-order:stroke fill;-webkit-text-stroke:calc(var(--u)*1.4) var(--wood);text-shadow:0 calc(var(--u)*.8) 0 var(--wood-dk)}
+.p-head .chip.acorn{margin-left:auto}
+.p-close{margin-left:auto;flex:none;display:grid;place-items:center;width:calc(var(--u)*9.5);height:calc(var(--u)*9.5);padding:0;border-radius:50%;border:calc(var(--u)*.6) solid #fff;background:#E8572A;cursor:pointer;box-shadow:0 calc(var(--u)*.6) 0 #B23A14}
+.p-head .chip.acorn + .p-close{margin-left:0}
+.p-close svg{width:55%;height:55%}
+.p-body{overflow-y:auto;overscroll-behavior:contain;padding:0 calc(var(--u)*3.6) calc(var(--u)*4);display:flex;flex-direction:column;gap:calc(var(--u)*3)}
+.cl-top{display:flex;flex-direction:column;align-items:center;gap:calc(var(--u)*2.4)}
+.cl-hero{width:calc(var(--u)*28*var(--fs,1));height:calc(var(--u)*28*var(--fs,1))}
+.cl-hero svg{width:100%;height:100%;overflow:visible}
+.tabs{display:flex;gap:calc(var(--u)*1.2);padding:calc(var(--u)*1);border-radius:calc(var(--u)*4);background:rgba(110,65,34,.15)}
+.tab{font:inherit;cursor:pointer;border:0;background:transparent;color:#7A4A26;font-size:max(15px,calc(var(--u)*4.4*var(--fs,1)));padding:calc(var(--u)*1.6) calc(var(--u)*3.4) calc(var(--u)*1.3);border-radius:calc(var(--u)*3.2)}
+.tab[aria-selected="true"]{background:#fff;color:var(--ink);box-shadow:0 calc(var(--u)*.5) 0 rgba(0,0,0,.12)}
+.items{display:grid;grid-template-columns:repeat(auto-fill,minmax(calc(var(--u)*21*var(--fs,1)),1fr));gap:calc(var(--u)*2)}
+.item{font:inherit;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:calc(var(--u)*.6);padding:calc(var(--u)*1.6) calc(var(--u)*.8) calc(var(--u)*1.8);border-radius:calc(var(--u)*3.6);border:calc(var(--u)*.6) solid transparent;background:rgba(255,255,255,.65);color:var(--ink)}
+.item > svg{width:calc(var(--u)*14*var(--fs,1));height:calc(var(--u)*14*var(--fs,1));overflow:visible}
+.item b{font-weight:400;font-size:max(12px,calc(var(--u)*3.4*var(--fs,1)));line-height:1.15;text-align:center;word-break:keep-all}
+.item small{display:inline-flex;align-items:center;gap:.2em;font-size:max(12px,calc(var(--u)*3.2*var(--fs,1)));color:#7A4A26}
+.item small svg,.tool .cta svg{width:1.2em;height:1.2em}
+.item.on{border-color:#FFB428;background:#FFF6D6}
+.item.picked{border-color:#E8572A;background:#FFEDE6}
+.buybar{position:sticky;bottom:calc(var(--u)*-4);margin:0 calc(var(--u)*-3.6) calc(var(--u)*-4);display:flex;align-items:center;gap:calc(var(--u)*2.4);padding:calc(var(--u)*2.6) calc(var(--u)*3.6);background:#5E3418;color:#FFF3D6;font-size:max(14px,calc(var(--u)*4*var(--fs,1)))}
+.buybar span{flex:1;min-width:0}
+.buybar .cta{height:calc(var(--u)*10);padding:0 calc(var(--u)*5);font-size:max(15px,calc(var(--u)*4.6*var(--fs,1)))}
+.buybar.poor{background:#8A3A2A}
+.buybar.ok{background:#2F7A26}
+.tools{display:grid;gap:calc(var(--u)*2.4)}
+.tool{display:flex;align-items:center;gap:calc(var(--u)*2.6);padding:calc(var(--u)*2.6);border-radius:calc(var(--u)*3.6);background:rgba(255,255,255,.65)}
+.t-ic{flex:none;width:calc(var(--u)*11);height:calc(var(--u)*11)}
+.t-ic svg{width:100%;height:100%}
+.t-tx{flex:1;min-width:0;display:flex;flex-direction:column;gap:calc(var(--u)*.8);font-size:max(13px,calc(var(--u)*3.5*var(--fs,1)));line-height:1.4;color:#7A4A26}
+.t-tx b{font-weight:400;font-size:max(15px,calc(var(--u)*4.6*var(--fs,1)));color:var(--ink)}
+.t-tx b small{font-size:.75em;color:#7A4A26;margin-left:.3em}
+.tool .cta{display:inline-flex;align-items:center;gap:.3em;height:calc(var(--u)*10);padding:0 calc(var(--u)*3.4);font-size:max(15px,calc(var(--u)*4.6*var(--fs,1)))}
+.cta.off{filter:grayscale(.8);opacity:.6}
+.dx-sum{margin:0;display:flex;align-items:baseline;gap:calc(var(--u)*2.4);flex-wrap:wrap;font-size:max(15px,calc(var(--u)*4.4*var(--fs,1)))}
+.dx-sum b{font-weight:400;color:#C2410C;font-size:1.3em}
+.dx-sum span{font-size:.8em;color:#7A4A26}
+.dx-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(calc(var(--u)*40*var(--fs,1)),1fr));gap:calc(var(--u)*2.2)}
+.dx-cat{font:inherit;cursor:pointer;text-align:left;display:flex;flex-direction:column;gap:calc(var(--u)*1.2);padding:calc(var(--u)*2.4) calc(var(--u)*3);border-radius:calc(var(--u)*3.4);border:0;background:rgba(255,255,255,.65);color:var(--ink)}
+.dx-cat b{font-weight:400;font-size:max(15px,calc(var(--u)*4.4*var(--fs,1)))}
+.dx-bar{display:block;height:calc(var(--u)*2);border-radius:calc(var(--u)*1);background:rgba(94,52,24,.18);overflow:hidden}
+.dx-bar i{display:block;height:100%;background:linear-gradient(90deg,#3E9A3A,#7FD86A);border-radius:inherit}
+.dx-cat small{font-size:max(12px,calc(var(--u)*3.2*var(--fs,1)));color:#7A4A26}
+.dx-cat.full{background:#FFF6D6;box-shadow:inset 0 0 0 calc(var(--u)*.6) #FFB428}
+.dx-back{align-self:flex-start;font:inherit;cursor:pointer;border:0;background:rgba(110,65,34,.15);color:#7A4A26;border-radius:calc(var(--u)*3);padding:calc(var(--u)*1.4) calc(var(--u)*3);font-size:max(14px,calc(var(--u)*4*var(--fs,1)))}
+.dx-title{margin:0;font-family:var(--display);font-weight:400;font-size:max(20px,calc(var(--u)*6.4*var(--fs,1)))}
+.dx-title small{font-family:var(--logo);font-size:.6em;color:#7A4A26}
+.dx-list{list-style:none;margin:0;padding:0;display:grid;gap:calc(var(--u)*2)}
+.dx-list li{display:grid;grid-template-columns:calc(var(--u)*7*var(--fs,1)) 1fr;gap:calc(var(--u)*2.2);align-items:start;padding:calc(var(--u)*2.4);border-radius:calc(var(--u)*3);background:rgba(255,255,255,.62)}
+.dx-list .mk{display:grid;place-items:center;width:calc(var(--u)*7*var(--fs,1));height:calc(var(--u)*7*var(--fs,1));border-radius:50%;color:#fff}
+.dx-list .mk.o{background:var(--o)}
+.dx-list .mk.x{background:var(--x)}
+.dx-list .mk.q{background:#B9A58A;font-size:max(14px,calc(var(--u)*4*var(--fs,1)))}
+.dx-list .mk .glyph{--gs:calc(var(--u)*3.4*var(--fs,1))}
+.dx-list p{margin:0;font-size:max(14px,calc(var(--u)*4*var(--fs,1)));line-height:1.5;color:var(--ink);word-break:keep-all}
+.dx-list small{display:block;margin-top:calc(var(--u)*.6);font-size:max(13px,calc(var(--u)*3.6*var(--fs,1)));line-height:1.5;color:#7A4A26}
+.dx-list li.miss{box-shadow:inset calc(var(--u)*.9) 0 0 #B9A58A}
+.dx-unseen{margin:0;text-align:center;color:#7A4A26;font-size:max(13px,calc(var(--u)*3.6*var(--fs,1)))}
+@keyframes owlin{from{transform:translateY(calc(var(--u)*-8)) scale(.5);opacity:0}to{transform:none;opacity:1}}
+@keyframes gain{0%{opacity:0;transform:translateY(calc(var(--u)*2)) scale(.6)}15%{opacity:1;transform:scale(1.12)}25%{transform:none}80%{opacity:1}100%{opacity:0;transform:translateY(calc(var(--u)*-9))}}
+@keyframes flash{0%{opacity:0}35%{opacity:1}100%{opacity:0}}
+@keyframes revglow{0%,100%{box-shadow:0 calc(var(--u)*1.4) 0 #C9790C,inset 0 calc(var(--u)*.8) 0 rgba(255,255,255,.55),0 0 0 0 rgba(255,226,122,.8)}50%{box-shadow:0 calc(var(--u)*1.4) 0 #C9790C,inset 0 calc(var(--u)*.8) 0 rgba(255,255,255,.55),0 0 0 calc(var(--u)*2.6) rgba(255,226,122,0)}}
 /* 큰 제목, 버튼, 숫자는 도현 */
 .b-title,.r-title,.chip,.clock,.startbtn,.cta,.r-stats b,.how b{font-family:var(--display)}
 @keyframes boing{0%,62%,100%{transform:none}70%{transform:scale(1.08,.9)}78%{transform:translateY(-12px) scale(.94,1.08)}86%{transform:translateY(0) scale(1.1,.88)}93%{transform:scale(.97,1.04)}}
@@ -1029,70 +1138,158 @@ const padHTML = (S, cx) => {
 const SEED = `<svg viewBox="0 0 60 80" aria-hidden="true"><path d="M30 80V34" stroke="#C9C09A" stroke-width="2.4" stroke-linecap="round"/><g stroke="#F2EEDC" stroke-width="1.6" stroke-linecap="round">${Array.from({ length: 13 }, (_, k) => { const a = Math.PI * (1 + k / 12); return `<path d="M30 30L${(30 + Math.cos(a) * 26).toFixed(1)} ${(30 + Math.sin(a) * 22).toFixed(1)}"/>`; }).join('')}</g><g fill="#fff">${Array.from({ length: 13 }, (_, k) => { const a = Math.PI * (1 + k / 12); return `<circle cx="${(30 + Math.cos(a) * 27).toFixed(1)}" cy="${(30 + Math.sin(a) * 23).toFixed(1)}" r="3"/>`; }).join('')}</g><circle cx="30" cy="32" r="3.4" fill="#E9C93A"/></svg>`;
 const SPEAKER = '<svg class="on" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9h4l5-4v14l-5-4H4z" fill="#fff"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/></svg><svg class="off" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9h4l5-4v14l-5-4H4z" fill="#fff"/><path d="M17 9l5 6M22 9l-5 6"/></svg>';
 const MINI = '<svg viewBox="0 0 24 22" aria-hidden="true"><path d="M2 18C1.4 11 6 4 12 4s10.6 7 10 14c-.2 2-3 2.6-10 2.6S2.2 20 2 18Z" fill="#7FE3C8" stroke="#fff" stroke-width="1.8"/><circle cx="9" cy="12" r="1.6" fill="#3B2F4A"/><circle cx="15" cy="12" r="1.6" fill="#3B2F4A"/></svg>';
+const ACORN = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.4 11.2c0 5.6 2.8 9 5.6 10.2c2.8-1.2 5.6-4.6 5.6-10.2z" fill="#E2A56C" stroke="#9A6224" stroke-width="1.5" stroke-linejoin="round"/><path d="M4.6 10.4c0-5 14.8-5 14.8 0c-2.4 1.8-12.4 1.8-14.8 0z" fill="#A8693A" stroke="#6E4122" stroke-width="1.5" stroke-linejoin="round"/><path d="M12 6.2V2.8" stroke="#6E4122" stroke-width="2.2" stroke-linecap="round"/><path d="M9 15c.6 1.6 1.4 2.6 2.4 3.2" stroke="#fff" stroke-width="1.4" stroke-linecap="round" fill="none" opacity=".7"/></svg>';
+const OWL = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9c0-4 3.5-6 8-6s8 2 8 6v6c0 4-3.5 6.5-8 6.5S4 19 4 15z" fill="#D9A15A" stroke="#7A4A22" stroke-width="1.4"/><path d="M4.4 6.4l2.4 3.2M19.6 6.4l-2.4 3.2" stroke="#7A4A22" stroke-width="1.8" stroke-linecap="round"/><circle cx="8.6" cy="11" r="3.2" fill="#fff"/><circle cx="15.4" cy="11" r="3.2" fill="#fff"/><circle cx="8.6" cy="11" r="1.5" fill="#3B2F4A"/><circle cx="15.4" cy="11" r="1.5" fill="#3B2F4A"/><path d="M10.8 14.2l1.2 1.8 1.2-1.8z" fill="#F0A51E"/><path d="M8 18q4 2 8 0" stroke="#7A4A22" stroke-width="1.2" fill="none" opacity=".6"/></svg>';
+const STAR = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8l2.7 5.6 6.1.8-4.5 4.2 1.1 6.1L12 16.6 6.6 19.5l1.1-6.1L3.2 9.2l6.1-.8z" fill="#FFD45A" stroke="#C97F0C" stroke-width="1.5" stroke-linejoin="round"/></svg>';
+const TUBE = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.2" fill="none" stroke="#C9507E" stroke-width="6.4"/><circle cx="12" cy="12" r="8.2" fill="none" stroke="#FF8DB8" stroke-width="4.6"/><circle cx="12" cy="12" r="8.2" fill="none" stroke="#FFF6FA" stroke-width="4.6" stroke-dasharray="6.4 6.5"/></svg>';
+const HANGER = '<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="#FFF3D6" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.6 6.6a2.4 2.4 0 1 1 3.4 2.2c-.6.3-1 .9-1 1.6v.8"/><path d="M12 11.2L3 17.4c-.8.6-.4 1.8.6 1.8h16.8c1 0 1.4-1.2.6-1.8z"/></svg>';
+const BOOK = '<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="#FFF3D6" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5C6.5 4 9.5 4 12 5.8 14.5 4 17.5 4 20 5.5v13c-2.5-1.5-5.5-1.5-8 .3-2.5-1.8-5.5-1.8-8-.3z"/><path d="M12 5.8v13"/></svg>';
+const CLOSE = '<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>';
 const MY_LINES = { fall: ['앗, 차가워!', '으아아!', '퐁당!'], win: '탈출이다!' };
+const PUBLIC_URL = 'https://remontant.github.io/titicaca-dice/lulupia/';
+const fmt = n => n.toLocaleString('ko-KR');
 
-/* ---------- 문제 고르기 : 아래 단은 쉽게, 위로 갈수록 어렵게. 한 번 나온 문제는 다 돌 때까지 다시 안 나온다. ---------- */
-function pickQuestions() {
-  let seen = new Set(store.get('lulupia-seen', []));
-  const out = [], used = new Set();
-  for (let r = 0; r < ROUNDS; r++) {
-    const d = PLAN[r];
-    let pool = QS.map((q, i) => i).filter(i => QS[i][1] === d && !seen.has(i) && !used.has(i));
-    if (pool.length < 4) { QS.forEach((q, i) => { if (q[1] === d) seen.delete(i); }); pool = QS.map((q, i) => i).filter(i => QS[i][1] === d && !used.has(i)); }
-    shuffle(pool);
-    const prev = out.length ? out[out.length - 1].c : '', two = out.length > 1 ? out[out.length - 2].c : '';
-    const i = pool.find(j => CATS[QS[j][0]] !== prev && CATS[QS[j][0]] !== two) ?? pool[0];
-    used.add(i); seen.add(i);
-    const [c, dd, a, q, e] = QS[i];
-    out.push({ i, c: CATS[c], d: dd, a: a ? 'O' : 'X', q, e });
-  }
-  store.set('lulupia-seen', [...seen]);
-  return out;
+/* ---------- 꾸미기 아이템 : 티티카카와 같은 목록. 그림은 슬라임 친구 25명의 모자, 몸 색, 장식에서 왔다. ---------- */
+const SHOP = {
+  hat: [
+    ['acorn', '도토리 모자', 0], ['none', '맨머리', 0], ['sprout', '새싹', 20], ['leaf', '나뭇잎', 20], ['berry', '딸기', 30], ['puff', '민들레 솜', 30],
+    ['flowers', '꽃 화관', 30], ['nightcap', '수면 모자', 40], ['bug', '더듬이', 40], ['shell', '달팽이 집', 40], ['lily', '연잎', 40], ['mushroom', '빨간 버섯', 50],
+    ['pinwheel', '바람개비', 50], ['straw', '밀짚모자', 60], ['scholar', '학사모', 60], ['pinecone', '솔방울', 70], ['helmet', '기사 투구', 70], ['antenna', '반딧불', 80],
+    ['wizard', '마법사 모자', 80], ['rainbow', '무지개', 90], ['cloud', '번개 구름', 90], ['frost', '얼음 왕관', 100], ['flame', '불꽃', 100], ['crown', '황금 왕관', 120],
+  ],
+  color: [
+    ['mint', '민트', 0, ['#EFFFF9', '#7FE3C8', '#26A88D'], '#1E8C77'], ['sprout', '연두', 25, ['#F4FFEC', '#A8E890', '#5DBE4E'], '#3E9A3A'],
+    ['lavender', '라벤더', 25, ['#F8F4FF', '#C8B6F2', '#8C70D6'], '#6A50B8'], ['milk', '우유', 25, ['#FFFFFF', '#F4ECF4', '#D3BCD3'], '#A584A5'],
+    ['strawberry', '딸기 우유', 30, ['#FFF6F8', '#FFCCD6', '#EE8AA0'], '#C95F78'], ['lemon', '레몬', 30, ['#FFFEF0', '#FFF29E', '#EBC93A'], '#BF9B18'],
+    ['peach', '살구', 30, ['#FFF6F0', '#FFC6A8', '#F08A64'], '#D0603C'], ['sky', '하늘', 30, ['#F0FBFF', '#9FDDF7', '#3FAEDF'], '#2A8BBE'],
+    ['honey', '꿀', 35, ['#FFFBE8', '#FFD45A', '#F0A51E'], '#B97A0C'], ['pink', '분홍', 35, ['#FFF0F6', '#FF9EC4', '#DE4F88'], '#B83A6E'],
+    ['tomato', '토마토', 35, ['#FFF1EE', '#FF8F84', '#E2453C'], '#A82A24'], ['grape', '포도', 40, ['#F0F3FF', '#AEBBF5', '#5A6CD2'], '#3E4AA8'],
+    ['storm', '먹구름', 40, ['#F2F3FA', '#BAC0DC', '#6C74A6'], '#474F86'], ['frost', '서리', 40, ['#FFFFFF', '#D4F1FF', '#7CC4EC'], '#3F92C8'],
+    ['ember', '불씨', 40, ['#FFF4EA', '#FFA266', '#E8572A'], '#B23A14'],
+  ],
+  deco: [
+    ['ears', '토끼 귀', 60, 'back'], ['wings', '꿀벌 날개', 70, 'back'], ['spikes', '고슴도치 가시', 60, 'back'],
+    ['stache', '콧수염', 30, 'stache'], ['spots', '무당벌레 점', 40, 'spots'], ['stripes', '꿀벌 줄무늬', 40, 'stripes'],
+  ],
+};
+const TOOLS = [
+  ['tube', '구명 튜브', 40, 3, TUBE, '연못에 빠지면 한 번 건져 줘요. 한 판에 하나만 써요.'],
+  ['hint', '부엉 귀띔', 20, 5, OWL, '부엉 박사가 고른 쪽을 미리 보여 줘요. 열에 여덟쯤 맞아요.'],
+];
+const Closet = {
+  get() { const c = store.get('slime-closet', null) || {}; return { owned: c.owned || ['hat:acorn', 'hat:none', 'color:mint'], hat: c.hat || 'acorn', color: c.color || 'mint', back: c.back || null, stache: !!c.stache, spots: !!c.spots, stripes: !!c.stripes }; },
+  set(c) { store.set('slime-closet', c); },
+};
+/* 같은 주소의 티티카카에서 이긴 판 수 : 값 ÷ 5 승이면 거기서 열린 꾸미기를 여기서도 입는다 */
+const diceWins = () => { try { return (JSON.parse(localStorage.getItem('samsepan-record')) || {}).w || 0; } catch (e) { return 0; } };
+const owns = (c, kind, key) => { const it = SHOP[kind].find(x => x[0] === key); return !it[2] || c.owned.includes(`${kind}:${key}`) || diceWins() >= Math.ceil(it[2] / 5); };
+const Wallet = { get: () => store.get('lulupia-acorn', 0), add(n) { const v = Math.max(0, Wallet.get() + n); store.set('lulupia-acorn', v); return v; } };
+const Bag = { get: () => Object.assign({ tube: 0, hint: 0 }, store.get('lulupia-bag', {})), set: b => store.set('lulupia-bag', b) };
+const Dex = {
+  get() { const d = store.get('lulupia-dex', {}) || {}; return { s: new Set(d.s || []), r: new Set(d.r || []) }; },
+  mark(i, ok) { const d = Dex.get(); d.s.add(i); if (ok) d.r.add(i); store.set('lulupia-dex', { s: [...d.s], r: [...d.r] }); },
+};
+function lookOf(c, over = {}) {
+  const x = Object.assign({}, c, over), col = SHOP.color.find(k => k[0] === x.color) || SHOP.color[0];
+  return { id: 'me', body: col[3], rim: col[4], hat: x.hat, eyes: 'two', mouth: 'cat', brows: 'none', back: x.back || undefined, stache: !!x.stache, spots: !!x.spots, stripes: !!x.stripes };
 }
+const myLook = () => lookOf(Closet.get());
+
+/* ---------- 문제 고르기 ---------- */
+const hashStr = s => { let h = 2166136261; for (const ch of s) { h ^= ch.charCodeAt(0); h = Math.imul(h, 16777619); } return h >>> 0; };
+const today = () => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; };
+const todayLabel = () => { const d = new Date(); return `${d.getMonth() + 1}월 ${d.getDate()}일`; };
+/* 난이도 d 에서 한 문제. used = 이번 판에 나온 것, recent = 바로 앞 분야들, seen = 다 돌 때까지 다시 안 낼 것(없으면 무시) */
+function pickOne(d, used, recent, R, seen) {
+  let pool = QS.map((q, i) => i).filter(i => QS[i][1] === d && !used.has(i) && !(seen && seen.has(i)));
+  if (pool.length < 4 && seen) { QS.forEach((q, i) => { if (q[1] === d) seen.delete(i); }); pool = QS.map((q, i) => i).filter(i => QS[i][1] === d && !used.has(i)); }
+  if (!pool.length) pool = QS.map((q, i) => i).filter(i => QS[i][1] === d);
+  for (let k = pool.length - 1; k > 0; k--) { const j = Math.floor(R() * (k + 1)); [pool[k], pool[j]] = [pool[j], pool[k]]; }
+  const i = pool.find(j => !recent.includes(CATS[QS[j][0]])) ?? pool[0];
+  used.add(i); if (seen) seen.add(i);
+  const [c, dd, a, q, e] = QS[i];
+  return { i, c: CATS[c], d: dd, a: a ? 'O' : 'X', q, e };
+}
+const setOf = (plan, used, R, seen) => { const out = []; plan.forEach(d => out.push(pickOne(d, used, out.slice(-2).map(q => q.c), R, seen))); return out; };
+/* 오늘의 10문제 : 날짜로 정해서 누구나 같은 문제 */
+const dailySet = () => setOf(PLAN, new Set(), rng(hashStr('lulupia-' + today())), null);
+const withSeen = fn => { const seen = new Set(store.get('lulupia-seen', [])); const out = fn(seen); store.set('lulupia-seen', [...seen]); return out; };
+const TOWER_PLAN = s => (s === 1 ? PLAN : s === 2 ? [1, 2, 2, 2, 2, 3, 3, 3, 3, 3] : [2, 2, 2, 3, 3, 3, 3, 3, 3, 3]);
+const TOWER_TIME = s => (window.__LULU_FAST ? 3 : [10, 9, 8, 7, 6][Math.min(s, 5) - 1]);
+const REVIVE_TIME = window.__LULU_FAST ? 3 : 7;
 
 class Game {
   constructor(root) {
-    this.root = root; this.ripples = []; this.drops = []; this.anims = []; this.t0 = performance.now(); this.token = 0;
+    this.root = root; this.ripples = []; this.drops = []; this.anims = []; this.t0 = performance.now(); this.token = 0; this.artSeq = 0;
     root.innerHTML = `<canvas class="world" aria-hidden="true"></canvas><canvas class="water" aria-hidden="true"></canvas>
       <div class="motes">${Array.from({ length: 9 }, (_, i) => `<i style="left:${4 + i * 10.8}%;top:calc(var(--u)*${118 - (i % 3) * 18});--t:${8 + i % 4 * 2}s;--dl:${-i * 1.7}s;--dx:calc(var(--u)*${i % 2 ? 6 : -7})"></i>`).join('')}</div>
       ${padHTML('O', 25)}${padHTML('X', 75)}
       <div class="crowd"></div><div class="fx"></div>
-      <div class="hud"><span class="chip lv"><b class="lvn">1단</b><span class="pips">${'<i></i>'.repeat(ROUNDS)}</span></span><span class="chip alive">${MINI}<b class="aliven">10</b></span><button class="chip snd" type="button" aria-label="소리 켜고 끄기">${SPEAKER}</button></div>
+      <div class="hud">
+        <span class="chip lv"><b class="lvn">1단</b><span class="pips">${'<i></i>'.repeat(ROUNDS)}</span></span>
+        <span class="chip sc">${STAR}<b class="scn">0</b></span>
+        <button class="chip tbtn" type="button" data-act="closet">${HANGER}<span>꾸미기</span></button>
+        <button class="chip tbtn" type="button" data-act="dex">${BOOK}<span>도감</span></button>
+        <span class="chip acorn" title="도토리">${ACORN}<b class="acn">0</b></span>
+        <span class="chip alive">${MINI}<b class="aliven">10</b></span>
+        <button class="chip snd" type="button" aria-label="소리 켜고 끄기">${SPEAKER}</button>
+      </div>
       <div class="sign"><h1 class="logo">루루피아</h1><p class="ribbon" aria-label="숲속 OX 대탈출">숲속<i class="glyph o"></i><i class="glyph x"></i>대탈출</p>
-        <ul class="how"><li><b>1</b>10초 안에 O 잎이나 X 잎으로 폴짝</li><li><b>2</b>틀린 쪽 잎은 꺾여서 연못에 퐁당</li><li><b>3</b>10단까지 오르면 민들레 타고 탈출</li></ul></div>
-      <div class="recs" aria-label="내 기록"></div>
-      <button class="startbtn" type="button">시작하기</button>
+        <ul class="how"><li><b>1</b>10초 안에 O 잎이나 X 잎으로 폴짝</li><li><b>2</b>빨리 맞힐수록, 연속으로 맞힐수록 점수 쑥쑥</li><li><b>3</b>점수로 도토리를 모아 내 슬라임을 꾸며요</li></ul></div>
+      <div class="modes">
+        <button class="mode m-daily" type="button" data-mode="daily"><b>오늘의<br>10문제</b><small class="ms-daily"></small></button>
+        <button class="mode m-free" type="button" data-mode="free"><b>자유<br>도전</b><small class="ms-free"></small></button>
+        <button class="mode m-tower" type="button" data-mode="tower"><b>끝없는<br>탑</b><small class="ms-tower"></small></button>
+      </div>
       <div class="card" hidden aria-live="polite"><div class="c-row"><span class="tag"></span><span class="qn"></span><span class="clock"><b>${TIME}</b></span></div><p class="q"></p><div class="bar"><i></i></div><div class="ans" hidden><b></b><span class="ex"></span></div><span class="stamp" hidden><i class="glyph"></i></span></div>
       <p class="toast" hidden></p>
+      <button class="chip hintbtn" type="button" data-act="hint" hidden>${OWL}<span>부엉 귀띔</span><b class="hn">0</b></button>
       <div class="btns" hidden><button class="ob" type="button" aria-label="O 맞다"><i class="glyph o"></i></button><button class="xb" type="button" aria-label="X 틀리다"><i class="glyph x"></i></button></div>
       <div class="watchbar" hidden><span>구경 중이에요</span><button class="cta sub" type="button" data-act="result">결과 보기</button></div>
-      <div class="banner" hidden><p class="b-title">퐁당!</p><p class="b-sub"></p><div class="b-btns"><button class="cta sub" type="button" data-act="result">결과 보기</button><button class="cta" type="button" data-act="watch">끝까지 보기</button></div></div>
-      <div class="result" hidden><div class="r-card"><p class="r-title"></p><div class="r-hero"><svg class="pt npc" viewBox="0 0 100 100" aria-hidden="true"></svg><i class="ring"></i></div><p class="r-new" hidden>최고 기록!</p>
-        <div class="r-stats"><div><b class="rs1"></b><span>맞힌 문제</span></div><div><b class="rs2"></b><span>올라간 높이</span></div><div><b class="rs3"></b><span class="rs3l"></span></div></div>
+      <div class="banner" hidden><p class="b-title">퐁당!</p><p class="b-sub"></p><div class="b-btns"><button class="cta gold" type="button" data-act="revive">패자부활전</button><button class="cta sub" type="button" data-act="result">결과 보기</button><button class="cta blue" type="button" data-act="watch">끝까지 보기</button></div><p class="b-tip" hidden>한 문제를 맞히면 다시 잎 위로 올라가요</p></div>
+      <div class="result" hidden><div class="r-card"><p class="r-title"></p><div class="r-hero"><svg class="pt npc" viewBox="0 0 100 100" aria-hidden="true"></svg><i class="ring"></i></div>
+        <div class="r-badges"><span class="r-new" hidden>최고 기록!</span><span class="r-acorn">${ACORN}<b></b></span></div>
+        <div class="r-stats"><div><b class="rs1"></b><span>맞힌 문제</span></div><div><b class="rs2"></b><span class="rs2l">올라간 높이</span></div><div><b class="rs3"></b><span>점수</span></div></div>
+        <p class="r-note" hidden></p>
+        <div class="r-share" hidden><pre></pre><div class="r-share-b"><button class="cta sub" type="button" data-act="copy">결과 복사</button><button class="cta" type="button" data-act="share" hidden>공유하기</button></div></div>
         <details class="r-list"><summary>이번 판 문제 다시 보기</summary><ol></ol></details>
-        <div class="r-btns"><button class="cta" type="button" data-act="again">다시 하기</button><button class="cta sub" type="button" data-act="home">처음 화면</button></div></div></div>`;
+        <div class="r-btns"><button class="cta" type="button" data-act="again">다시 하기</button><button class="cta sub" type="button" data-act="home">처음 화면</button></div></div></div>
+      <div class="panel closet" hidden><div class="p-card" role="dialog" aria-label="꾸미기"><div class="p-head"><h2>꾸미기</h2><span class="chip acorn">${ACORN}<b class="acn2">0</b></span><button class="p-close" type="button" data-act="close" aria-label="닫기">${CLOSE}</button></div><div class="p-body"></div></div></div>
+      <div class="panel dex" hidden><div class="p-card" role="dialog" aria-label="문제 도감"><div class="p-head"><h2>문제 도감</h2><button class="p-close" type="button" data-act="close" aria-label="닫기">${CLOSE}</button></div><div class="p-body"></div></div></div>`;
     const $ = s => root.querySelector(s);
     Object.assign(this, {
       world: $('.world'), water: $('.water'), crowd: $('.crowd'), fx: $('.fx'),
       pads: { O: $('.pad[data-side="O"]'), X: $('.pad[data-side="X"]') },
       card: $('.card'), tag: $('.tag'), qn: $('.qn'), clock: $('.clock'), qEl: $('.q'), bar: $('.bar i'), ans: $('.ans'), stamp: $('.stamp'),
-      sign: $('.sign'), recs: $('.recs'), startBtn: $('.startbtn'), btns: $('.btns'), ob: $('.ob'), xb: $('.xb'), watchbar: $('.watchbar'),
-      toastEl: $('.toast'), banner: $('.banner'), result: $('.result'), lvn: $('.lvn'), pips: [...root.querySelectorAll('.pips i')], aliven: $('.aliven'),
+      sign: $('.sign'), modes: $('.modes'), btns: $('.btns'), ob: $('.ob'), xb: $('.xb'), watchbar: $('.watchbar'), hintBtn: $('.hintbtn'), hn: $('.hn'),
+      toastEl: $('.toast'), banner: $('.banner'), result: $('.result'), lvn: $('.lvn'), pips: [...root.querySelectorAll('.pips i')], aliven: $('.aliven'), scn: $('.scn'), acn: $('.acn'),
+      closetEl: $('.closet'), dexEl: $('.dex'),
     });
-    this.level = 0;
+    this.level = 0; this.mode = 'free';
     const tap = S => e => { e.preventDefault(); this.choose(S); };
     this.ob.addEventListener('click', tap('O')); this.xb.addEventListener('click', tap('X'));
     this.pads.O.addEventListener('click', tap('O')); this.pads.X.addEventListener('click', tap('X'));
     $('.snd').addEventListener('click', () => Sfx.toggle());
-    this.startBtn.addEventListener('click', () => { Sfx.unlock(); this.start(); });
     root.addEventListener('click', e => {
+      const m = e.target.closest('button.mode');
+      if (m) { Sfx.unlock(); this.start(m.dataset.mode); return; }
       const b = e.target.closest('[data-act]'); if (!b) return;
       Sfx.unlock();
-      ({ result: () => this.showResult(), watch: () => this.watch(), again: () => { this.toTitle(); this.start(); }, home: () => this.toTitle() })[b.dataset.act]();
+      const acts = {
+        result: () => this.showResult(), watch: () => this.watch(), revive: () => this.revive(), hint: () => this.useHint(),
+        again: () => { const md = this.mode; this.toTitle(); this.start(md); }, home: () => this.toTitle(),
+        closet: () => this.openCloset(), dex: () => this.openDex(), close: () => this.closePanel(), copy: () => this.copyShare(), share: () => this.shareResult(),
+      };
+      if (acts[b.dataset.act]) acts[b.dataset.act]();
     });
+    this.closetEl.addEventListener('click', e => this.closetClick(e));
+    this.dexEl.addEventListener('click', e => this.dexClick(e));
+    this.closetEl.addEventListener('click', e => { if (e.target === this.closetEl) this.closePanel(); });
+    this.dexEl.addEventListener('click', e => { if (e.target === this.dexEl) this.closePanel(); });
     root.addEventListener('pointerdown', () => Sfx.unlock(), { passive: true });
     addEventListener('keydown', e => {
       if (e.repeat || e.metaKey || e.ctrlKey || e.altKey) return;
+      if (e.key === 'Escape' && (!this.closetEl.hidden || !this.dexEl.hidden)) { this.closePanel(); return; }
       const k = e.key.toLowerCase();
       if (this.state === 'play' && (k === 'o' || k === 'arrowleft')) { e.preventDefault(); this.choose('O'); }
       if (this.state === 'play' && (k === 'x' || k === 'arrowright')) { e.preventDefault(); this.choose('X'); }
@@ -1101,10 +1298,8 @@ class Game {
     document.addEventListener('visibilitychange', () => { if (!document.hidden) this.loop(); });
     document.fonts && document.fonts.ready.then(() => { this.key = ''; this.paint(); });
     this.paint();
-    this.artSeq = 0;
     this.toTitle();
   }
-  /* 그림 */
   /* 화면 크기가 바뀌면 단위, 잎 사이, 숲 그림, 슬라임 자리를 새로 잡는다 */
   paint() {
     const W = this.root.clientWidth, H = this.root.clientHeight; if (!W || !H) return;
@@ -1175,102 +1370,133 @@ class Game {
       if (el.textContent !== String(n)) { el.textContent = n; el.classList.add('bump'); setTimeout(() => el.classList.remove('bump'), 200); }
     }
     this.aliven.textContent = this.slimes.filter(s => s.alive).length;
-    const me = this.me, mine = this.state === 'play' && me.alive;
-    this.ob.classList.toggle('on', mine && me.side === 'O'); this.xb.classList.toggle('on', mine && me.side === 'X');
+    const me = this.me, mine = this.state === 'play' && me.alive && !this.reviving;
+    this.ob.classList.toggle('on', mine ? me.side === 'O' : this.reviving && this.revPick === 'O');
+    this.xb.classList.toggle('on', mine ? me.side === 'X' : this.reviving && this.revPick === 'X');
     this.pads.O.classList.toggle('mine', mine && me.side === 'O'); this.pads.X.classList.toggle('mine', mine && me.side === 'X');
   }
+  floor() { return (this.stage - 1) * ROUNDS + this.level + 1; }
   hud() {
-    this.lvn.textContent = this.level >= ROUNDS ? '탈출' : `${this.level + 1}단`;
+    this.lvn.textContent = this.mode === 'tower' ? `${this.floor()}층` : this.level >= ROUNDS ? '탈출' : `${this.level + 1}단`;
     this.pips.forEach((p, i) => { p.classList.toggle('on', i < this.level); p.classList.toggle('now', i === this.level && this.state !== 'title'); });
+    this.scn.textContent = fmt(this.score || 0);
+    this.acn.textContent = fmt(Wallet.get());
   }
   toast(text, ms = 2000) {
     const el = this.toastEl; el.textContent = text; el.hidden = false; el.classList.remove('show'); void el.offsetWidth; el.classList.add('show');
     clearTimeout(this.toastT); this.toastT = setTimeout(() => { el.hidden = true; }, ms);
+  }
+  timeLimit() { return this.reviving ? REVIVE_TIME : this.watching ? WATCH_TIME : this.mode === 'tower' ? TOWER_TIME(this.stage) : TIME; }
+  /* 슬라임 하나 만들기 */
+  makeSlime(r, me, i) {
+    const el = document.createElement('div'); el.className = 'sl';
+    el.innerHTML = `<svg class="pt npc" data-face="idle" viewBox="0 0 100 100" style="--d:${(-i * .37).toFixed(2)}s" aria-hidden="true">${rivalArt(r)}</svg>${me ? '<span class="me-tag">나</span>' : ''}`;
+    this.crowd.appendChild(el);
+    const p = me ? 0 : Math.min(.96, .6 + r.stars * .07 + rand(-.03, .03));
+    return { r, me: !!me, el, svg: el.firstElementChild, p, alive: true, side: null };
   }
   /* 함께할 슬라임 아홉 : 별 1~5 가 고루 섞이게 */
   cast() {
     this.crowd.innerHTML = '';
     const byStar = [1, 2, 3, 4, 5].map(st => shuffle(RIVALS.filter(r => r.stars === st)));
     const pick = [...byStar[0].slice(0, 2), ...byStar[1].slice(0, 2), ...byStar[2].slice(0, 2), ...byStar[3].slice(0, 2), byStar[4][0]];
-    this.slimes = [{ r: ME, me: true }, ...shuffle(pick).map(r => ({ r }))].map((s, i) => {
-      const el = document.createElement('div'); el.className = 'sl';
-      el.innerHTML = `<svg class="pt npc" data-face="idle" viewBox="0 0 100 100" style="--d:${(-i * .37).toFixed(2)}s" aria-hidden="true">${rivalArt(s.r)}</svg>${s.me ? '<span class="me-tag">나</span>' : ''}`;
-      this.crowd.appendChild(el);
-      const p = s.me ? 0 : Math.min(.96, .6 + s.r.stars * .07 + rand(-.03, .03));
-      return Object.assign(s, { el, svg: el.firstElementChild, p, alive: true, side: null });
-    });
+    this.slimes = [this.makeSlime(myLook(), true, 0), ...shuffle(pick).map((r, i) => this.makeSlime(r, false, i + 1))];
     this.me = this.slimes[0];
   }
   clear() {
     this.token++;
     clearInterval(this.ticker); clearTimeout(this.endT); clearTimeout(this.toastT);
     this.anims.forEach(a => a.cancel()); this.anims = [];
-    this.fx.innerHTML = ''; this.root.querySelectorAll('.bob').forEach(e => e.remove());
+    this.fx.innerHTML = ''; this.root.querySelectorAll('.bob,.flash').forEach(e => e.remove());
     for (const S of ['O', 'X']) { const p = this.pads[S]; p.getAnimations().forEach(a => a.cancel()); p.classList.remove('broken'); }
     this.world.style.transition = 'none'; this.world.style.transform = 'translateY(0)'; void this.world.offsetWidth; this.world.style.transition = '';
     this.toastEl.hidden = true; this.banner.hidden = true; this.banner.classList.remove('in'); this.result.hidden = true;
+    this.closetEl.hidden = true; this.dexEl.hidden = true;
   }
   toTitle() {
     this.clear();
-    this.state = 'title'; this.root.dataset.state = 'title'; this.level = 0;
+    this.state = 'title'; this.root.dataset.state = 'title'; this.level = 0; this.stage = 1; this.score = 0; this.reviving = false; this.watching = false;
     this.cast();
     this.occ = { O: Array(10).fill(null), X: Array(10).fill(null) };
     const sides = shuffle(['O', 'O', 'O', 'O', 'X', 'X', 'X', 'X', 'X']);
     this.slimes.forEach((s, i) => { const [x, y] = this.take(s, i === 0 ? 'O' : sides[i - 1]); this.set(s, x, y); });
-    this.sign.hidden = false; this.recs.hidden = false; this.startBtn.hidden = false;
+    this.sign.hidden = false; this.modes.hidden = false;
     this.root.querySelectorAll('.cnt').forEach(c => { c.style.visibility = ''; });
-    this.card.hidden = true; this.btns.hidden = true; this.watchbar.hidden = true;
+    this.card.hidden = true; this.btns.hidden = true; this.watchbar.hidden = true; this.hintBtn.hidden = true;
     if (this.signA) { this.signA.cancel(); this.signA = null; }
     this.sign.getAnimations().forEach(a => a.cancel());
-    const rec = store.get('lulupia-rec', null);
-    this.recs.innerHTML = rec && rec.games ? [
-      `최고 <b>${rec.best >= ROUNDS ? '탈출' : (rec.best + 1) + '단'}</b>`, `탈출 <b>${rec.escapes}</b>번`, `<b>${rec.games}</b>판`, `정답률 <b>${Math.round(rec.right / Math.max(1, rec.asked) * 100)}%</b>`,
-    ].map(t => `<span>${t}</span>`).join('') : '<span>처음 오셨네요! 한 판 해 볼까요?</span>';
-    this.hud(); this.counts();
+    this.titleSubs(); this.hud(); this.counts();
   }
-  start() {
+  titleSubs() {
+    const d = store.get('lulupia-daily', null), rec = store.get('lulupia-rec', null), tw = store.get('lulupia-tower', null);
+    this.root.querySelector('.ms-daily').textContent = d && d.date === today() ? `오늘 ${d.res}` : todayLabel();
+    this.root.querySelector('.m-daily').classList.toggle('done', !!(d && d.date === today()));
+    this.root.querySelector('.ms-free').textContent = rec && rec.games ? `최고 ${rec.best >= ROUNDS ? '탈출' : (rec.best + 1) + '단'}` : '랜덤 10단';
+    this.root.querySelector('.ms-tower').textContent = tw && tw.games ? `최고 ${tw.best}층` : '어디까지?';
+  }
+  start(mode) {
     if (this.state !== 'title') return;
-    this.state = 'play'; this.root.dataset.state = 'play';
-    this.qs = pickQuestions(); this.round = 0; this.level = 0; this.log = []; this.correct = 0; this.answered = 0; this.recorded = false; this.soloSaid = false; this.watching = false; this.fellAt = -1;
-    this.recs.hidden = true; this.startBtn.hidden = true;
+    this.closePanel();
+    this.mode = mode; this.state = 'play'; this.root.dataset.state = 'play'; this.root.dataset.mode = mode;
+    this.stage = 1; this.round = 0; this.level = 0; this.log = []; this.correct = 0; this.answered = 0; this.recorded = false; this.soloSaid = false; this.watching = false; this.fellAt = -1;
+    this.score = 0; this.streak = 0; this.maxStreak = 0; this.hints = 0; this.tubeUsed = false; this.revived = false; this.reviving = false; this.meEscaped = false; this.escaped = 0; this.newBest = false; this.earned = 0;
+    this.used = new Set();
+    this.dailyFirst = mode === 'daily' && !((store.get('lulupia-daily', null) || {}).date === today());
+    this.qs = mode === 'daily' ? dailySet() : withSeen(seen => setOf(mode === 'tower' ? TOWER_PLAN(1) : PLAN, this.used, Math.random, seen));
+    this.modes.hidden = true;
     const g = this.token;
     this.signA = this.sign.animate([{ transform: 'none', opacity: 1 }, { transform: `translateY(${P(-60)})`, opacity: 1 }], { duration: reduce ? 1 : 420, easing: 'ease-in', fill: 'forwards' });
     this.signA.finished.then(() => {
       if (g !== this.token) return;
       this.sign.hidden = true; this.btns.hidden = false; this.ob.disabled = this.xb.disabled = true;
       this.showQ(); Sfx.play('start');
+      if (this.mode === 'daily') this.toast(this.dailyFirst ? `오늘의 10문제 · ${todayLabel()}` : '오늘 기록은 첫 판만 남아요', 1800);
+      if (this.mode === 'tower') this.toast('10층마다 더 빨라져요!', 1800);
       setTimeout(() => { if (g === this.token) this.ask(); }, reduce ? 50 : 650);
     });
     this.hud(); this.counts();
   }
-  showQ() {
-    const q = this.q = this.qs[this.round];
+  showQ(rq) {
+    const q = rq || (this.q = this.qs[this.round]);
     this.card.hidden = false;
-    this.tag.textContent = q.c; this.qn.textContent = `${this.round + 1}단 문제`; this.qEl.textContent = q.q; this.qEl.classList.toggle('long', q.q.length > 30);
+    this.tag.textContent = rq ? '패자부활전' : q.c; this.tag.classList.toggle('rev', !!rq);
+    this.qn.textContent = rq ? '맞히면 다시 올라가요' : this.mode === 'tower' ? `${this.floor()}층 문제` : `${this.round + 1}단 문제`;
+    this.qEl.textContent = q.q; this.qEl.classList.toggle('long', q.q.length > 30);
     this.ans.hidden = true; this.stamp.hidden = true; this.bar.parentNode.hidden = false;
-    this.clock.classList.remove('hurry'); this.clock.firstChild.textContent = this.watching ? WATCH_TIME : TIME;
+    this.clock.classList.remove('hurry'); this.clock.firstChild.textContent = this.timeLimit();
     this.bar.style.transition = 'none'; this.bar.style.transform = 'scaleX(1)';
     this.card.getAnimations().forEach(a => a.cancel());
     this.card.animate([{ transform: `translateY(${P(-46)}) rotate(-5deg)` }, { transform: `translateY(${P(2.4)}) rotate(2.4deg)`, offset: .55 }, { transform: `translateY(${P(-1)}) rotate(-1.2deg)`, offset: .78 }, { transform: 'none' }], { duration: reduce ? 1 : 760, easing: 'ease-out' });
   }
   choose(S) {
     Sfx.unlock();
-    if (this.state === 'play' && this.asking && this.me.alive) this.hop(this.me, S);
+    if (this.reviving && this.asking) { this.revPick = S; Sfx.play('hop'); this.counts(); return; }
+    if (!(this.state === 'play' && this.asking && this.me.alive)) return;
+    this.tapAt = performance.now();
+    if (this.me.side === S) { this.me.el.animate([{ scale: '1' }, { scale: '1.12 .9' }, { scale: '1' }], { duration: 220 }); Sfx.play('hop'); }
+    else this.hop(this.me, S);
   }
-  ask() {
-    const tk = this.token, q = this.q, T = this.watching ? WATCH_TIME : TIME, k = T / 8;
-    this.asking = true; this.ob.disabled = this.xb.disabled = !this.me.alive || this.watching;
+  /* 시계 : 남은 초, 마지막 3초 똑딱 */
+  runClock(T, done) {
+    const tk = this.token;
     void this.bar.offsetWidth; this.bar.style.transition = `transform ${T}s linear`; this.bar.style.transform = 'scaleX(0)';
-    const end = performance.now() + T * 1000; let shown = T;
+    this.askStart = performance.now(); this.askEnd = this.askStart + T * 1000; let shown = T;
     this.ticker = setInterval(() => {
-      const left = Math.max(0, Math.ceil((end - performance.now()) / 1000));
+      const left = Math.max(0, Math.ceil((this.askEnd - performance.now()) / 1000));
       if (left !== shown) { shown = left; this.clock.firstChild.textContent = left; if (left <= 3 && left > 0) { this.clock.classList.add('hurry'); if (!this.watching) Sfx.play('tick'); } }
     }, 100);
-    this.endT = setTimeout(() => { if (tk === this.token) this.reveal(); }, T * 1000);
-    /* 컴퓨터 슬라임 : 별이 많을수록 잘 알고, 어려운 문제일수록 덜 안다. 몇은 우르르 따라가거나 막판에 바꾼다. */
+    this.endT = setTimeout(() => { if (tk === this.token) done(); }, T * 1000);
+  }
+  ask() {
+    const tk = this.token, q = this.q, T = this.timeLimit(), k = T / 8;
+    this.asking = true; this.tapAt = 0; this.hintUsed = false;
+    this.ob.disabled = this.xb.disabled = !this.me.alive || this.watching;
+    this.runClock(T, () => this.reveal());
+    this.updateHint();
+    /* 컴퓨터 슬라임 : 별이 많을수록 잘 알고, 어려운 문제일수록 덜 안다. 탑은 위로 갈수록 똑똑해진다. 몇은 우르르 따라가거나 막판에 바꾼다. */
     const bots = this.slimes.filter(s => !s.me && s.alive), other = q.a === 'O' ? 'X' : 'O';
-    const mult = q.d === 1 ? 1.06 : q.d === 2 ? .97 : .86;
-    bots.forEach(s => { s.final = Math.random() < Math.min(.97, s.p * mult) ? q.a : other; });
+    const mult = q.d === 1 ? 1.06 : q.d === 2 ? .97 : .86, boost = this.mode === 'tower' ? (this.stage - 1) * .04 : 0;
+    bots.forEach(s => { s.final = Math.random() < Math.min(.97, s.p * mult + boost) ? q.a : other; });
     const wrong = bots.filter(s => s.final !== q.a);
     if (!wrong.length && bots.length >= 4 && Math.random() < .7) bots.slice().sort((a, b) => a.p - b.p)[0].final = other;
     bots.forEach(s => {
@@ -1282,27 +1508,65 @@ class Game {
       if (Math.random() < .4) { s.svg.dataset.face = 'think'; setTimeout(() => { if (tk === this.token && s.alive && s.svg.dataset.face === 'think') s.svg.dataset.face = 'idle'; }, rand(2500, 6000) * k); }
     });
   }
+  /* 부엉 귀띔 : 3연속 정답마다 하나(판에 둘까지) + 가방에 산 것 */
+  updateHint() {
+    const total = (this.hints || 0) + Bag.get().hint;
+    this.hintBtn.hidden = !(this.state === 'play' && this.me.alive && !this.watching && !this.reviving);
+    this.hintBtn.disabled = !this.asking || this.hintUsed || total <= 0;
+    this.hn.textContent = total;
+  }
+  useHint() {
+    if (!this.asking || this.hintUsed || !this.me.alive || this.reviving) return;
+    if (this.hints > 0) this.hints--; else { const b = Bag.get(); if (b.hint <= 0) return; b.hint--; Bag.set(b); }
+    this.hintUsed = true;
+    const q = this.q, acc = q.d === 1 ? .92 : q.d === 2 ? .85 : .75, side = Math.random() < acc ? q.a : (q.a === 'O' ? 'X' : 'O');
+    const o = document.createElement('div'); o.className = 'owl';
+    o.style.left = P(this.padX[side]); o.style.top = P(STAND - 20);
+    o.innerHTML = `${OWL}<i>${side} 쪽!</i>`;
+    this.fx.appendChild(o);
+    Sfx.play('ding');
+    this.updateHint();
+  }
+  gainAt(s, pts, label) {
+    const g = document.createElement('div'); g.className = 'gain';
+    g.style.left = P(s.x); g.style.top = P(s.y - 15);
+    g.innerHTML = `+${fmt(pts)}${label ? `<small>${label}</small>` : ''}`;
+    this.fx.appendChild(g); setTimeout(() => g.remove(), 1500);
+  }
   async reveal() {
     const tk = this.token, q = this.q, me = this.me;
     this.asking = false; clearInterval(this.ticker);
     this.ob.disabled = this.xb.disabled = true; this.clock.classList.remove('hurry'); this.clock.firstChild.textContent = 0;
+    this.updateHint();
     Sfx.play('end');
     this.slimes.forEach(s => { if (s.alive && s.svg.dataset.face === 'think') s.svg.dataset.face = 'idle'; });
     const meIn = me.alive && !this.watching, meOk = meIn && me.side === q.a;
-    if (meIn) { this.answered++; if (meOk) this.correct++; this.log.push({ ...q, pick: me.side }); }
-    else this.log.push({ ...q, pick: null });
+    let pts = 0;
+    if (meIn) {
+      this.answered++; Dex.mark(q.i, meOk);
+      if (meOk) {
+        this.correct++; this.streak++; this.maxStreak = Math.max(this.maxStreak, this.streak);
+        const frac = this.tapAt ? Math.max(0, Math.min(1, (this.askEnd - this.tapAt) / (this.timeLimit() * 1000))) : 0;
+        pts = Math.round((100 + Math.round(50 * frac)) * (1 + .1 * Math.min(this.streak - 1, 10)));
+        this.score += pts;
+      } else this.streak = 0;
+      this.log.push({ ...q, pick: me.side });
+    } else this.log.push({ ...q, pick: null });
     this.counts();
     await wait(450); if (tk !== this.token) return;
+    this.fx.querySelectorAll('.owl').forEach(o => o.remove());
     const wrongS = q.a === 'O' ? 'X' : 'O';
     this.bar.parentNode.hidden = true; this.ans.hidden = false;
     this.ans.firstChild.textContent = `정답 ${q.a}`; this.ans.lastChild.textContent = q.e;
     this.stamp.hidden = false; this.stamp.className = `stamp ${q.a.toLowerCase()} pop`; this.stamp.firstChild.className = `glyph ${q.a.toLowerCase()}`;
     if (meIn) Sfx.play(meOk ? 'ding' : 'buzz');
+    if (pts) { this.gainAt(me, pts, this.streak >= 2 ? `${this.streak}연속!` : ''); this.hud(); }
+    if (meOk && this.streak % 3 === 0 && this.hints < 2) { this.hints++; setTimeout(() => { if (tk === this.token) this.toast('3연속! 귀띔 하나 얻었어요', 1800); }, 600); }
     await wait(650); if (tk !== this.token) return;
     const alive = this.slimes.filter(s => s.alive), losers = alive.filter(s => s.side === wrongS);
     /* 다 같이 틀리면 이번만 봐준다(둘 이상 남았을 때) */
     if (losers.length && losers.length === alive.length && alive.length >= 2) {
-      this.toast('모두 틀렸어요! 이번만 다 같이 올라가요', 2200); Sfx.play('saved');
+      this.toast('모두 틀려서 이번만 봐줄게요', 2200); Sfx.play('saved');
       alive.forEach(s => { s.svg.dataset.face = 'grin'; });
       await wait(1700); if (tk !== this.token) return;
       return this.next(null);
@@ -1326,20 +1590,86 @@ class Game {
     this.slimes.filter(s => s.alive).forEach(s => { s.svg.dataset.face = 'laugh'; });
     await wait(1500); if (tk !== this.token) return;
     if (meIn && !meOk) {
-      this.fellAt = this.round; this.record(false);
+      this.fellAt = this.round; this.fellFloor = this.floor(); this.lastRight = q.a; this.lastWrong = wrongS;
+      /* 구명 튜브가 있으면 한 번 건져 준다 */
+      const bag = Bag.get();
+      if (!this.tubeUsed && bag.tube > 0) {
+        this.tubeUsed = true; bag.tube--; Bag.set(bag);
+        await this.rescue(q.a, '튜브가 건져 줬어요!'); if (tk !== this.token) return;
+        this.fellAt = -1;
+        return this.next(wrongS);
+      }
       Sfx.play('fail');
-      const bots = this.slimes.filter(s => s.alive).length;
-      this.banner.querySelector('.b-sub').textContent = `${this.round + 1}단에서 연못에 빠졌어요`;
-      this.banner.querySelector('[data-act="watch"]').hidden = !bots || this.round === ROUNDS - 1;
-      this.banner.hidden = false; void this.banner.offsetWidth; this.banner.classList.add('in');
-      this.btns.hidden = true; this.state = 'fell'; this.root.dataset.state = 'over';
+      this.fallBanner();
       return;
     }
     await wait(400); if (tk !== this.token) return;
     this.next(wrongS);
   }
+  fallBanner() {
+    const bots = this.slimes.filter(s => s.alive && !s.me).length;
+    this.banner.querySelector('.b-sub').textContent = this.mode === 'tower' ? `${this.fellFloor}층에서 연못에 빠졌어요` : `${this.fellAt + 1}단에서 연못에 빠졌어요`;
+    this.banner.querySelector('[data-act="revive"]').hidden = this.revived;
+    this.banner.querySelector('.b-tip').hidden = this.revived;
+    this.banner.querySelector('[data-act="watch"]').hidden = this.mode === 'tower' || !bots || this.fellAt === ROUNDS - 1;
+    this.banner.hidden = false; this.banner.classList.remove('in'); void this.banner.offsetWidth; this.banner.classList.add('in');
+    this.btns.hidden = true; this.hintBtn.hidden = true; this.state = 'fell'; this.root.dataset.state = 'over';
+  }
+  /* 빠진 나를 잎 위로 다시 올린다(튜브, 패자부활전) */
+  async rescue(side, msg) {
+    const me = this.me, b = me.bob, x0 = b ? +b.dataset.x : this.padX[side];
+    if (b) b.remove(); me.bob = null;
+    me.el.getAnimations().forEach(a => a.cancel());
+    me.alive = true; me.side = null; me.el.style.visibility = ''; me.svg.dataset.face = 'laugh';
+    const [x1, y1] = this.take(me, side);
+    this.set(me, x1, y1); me.el.style.zIndex = 2000;
+    Sfx.play('saved'); this.toast(msg, 1800);
+    this.splash(x0, .6);
+    await me.el.animate([
+      { transform: this.tf(x0, SURF_Y + 4) + ' scale(.9,1.1)', easing: 'ease-out' },
+      { transform: this.tf((x0 + x1) / 2, Math.min(y1, SURF_Y) - 22) + ' rotate(-200deg)', offset: .55, easing: 'ease-in' },
+      { transform: this.tf(x1, y1) + ' scale(1.2,.8)', offset: .88 },
+      { transform: this.tf(x1, y1) },
+    ], { duration: reduce ? 200 : 950 }).finished.catch(() => {});
+    me.el.style.zIndex = Math.round(y1 * 10);
+    this.counts();
+    await wait(600);
+  }
+  /* 패자부활전 : 판마다 한 번, 한 문제를 맞히면 다시 올라간다 */
+  revive() {
+    if (this.revived || this.state !== 'fell') return;
+    this.revived = true; this.reviving = true; this.revPick = null;
+    this.banner.hidden = true; this.banner.classList.remove('in');
+    this.state = 'play'; this.root.dataset.state = 'play';
+    this.rq = withSeen(seen => pickOne(Math.random() < .5 ? 1 : 2, this.used, [], Math.random, seen));
+    this.showQ(this.rq);
+    this.btns.hidden = false; this.ob.disabled = this.xb.disabled = false; this.counts();
+    Sfx.play('start');
+    this.asking = true;
+    this.runClock(REVIVE_TIME, () => this.reviveReveal());
+  }
+  async reviveReveal() {
+    const tk = this.token, q = this.rq, ok = this.revPick === q.a;
+    this.asking = false; clearInterval(this.ticker);
+    this.ob.disabled = this.xb.disabled = true; this.clock.classList.remove('hurry'); this.clock.firstChild.textContent = 0;
+    if (this.revPick) { Dex.mark(q.i, ok); this.answered++; if (ok) this.correct++; }
+    this.log.push({ ...q, pick: this.revPick, revive: true });
+    this.bar.parentNode.hidden = true; this.ans.hidden = false;
+    this.ans.firstChild.textContent = `정답 ${q.a}`; this.ans.lastChild.textContent = q.e;
+    this.stamp.hidden = false; this.stamp.className = `stamp ${q.a.toLowerCase()} pop`; this.stamp.firstChild.className = `glyph ${q.a.toLowerCase()}`;
+    Sfx.play(ok ? 'ding' : 'buzz');
+    await wait(1200); if (tk !== this.token) return;
+    this.reviving = false; this.counts();
+    if (ok) {
+      this.fellAt = -1;
+      await this.rescue(this.lastRight, '부활 성공!'); if (tk !== this.token) return;
+      return this.next(this.lastWrong);
+    }
+    Sfx.play('fail');
+    this.fallBanner();
+  }
   fall(s, i, S, tx) {
-    s.alive = false; this.occ[s.side][s.slot] = null; s.hopA && s.hopA.cancel();
+    s.alive = false; this.occ[s.side][s.slot] = null; s.side = null; s.hopA && s.hopA.cancel();
     const lean = S === 'O' ? -1 : 1, x0 = s.x, y0 = s.y, x1 = tx + rand(-1, 1), y1 = SURF_Y + 12;
     s.el.style.zIndex = 1500;
     const a = s.el.animate([
@@ -1350,25 +1680,31 @@ class Game {
     this.anims.push(a);
     setTimeout(() => this.splash(x1, .8), (reduce ? 260 : 600) + i * 120);
     a.finished.then(() => {
+      if (s.alive) return;
       s.el.style.visibility = 'hidden';
       const b = document.createElement('div'); b.className = 'bob';
       b.dataset.x = x1; b.style.cssText = `left:${P(x1 - 6)};top:${P(SURF_Y - 8.4)}`;
       const line = s.me ? MY_LINES.fall[Math.floor(Math.random() * MY_LINES.fall.length)] : s.r.lose;
       b.innerHTML = `<div class="bob-in" style="animation-delay:${-i * .3}s"><svg class="pt npc" data-face="cry" viewBox="0 0 100 100" aria-hidden="true">${rivalArt({ ...s.r, id: 'bob' + (++this.artSeq) })}</svg><i class="ring"></i></div>${i < 3 || s.me ? `<span class="say" style="animation-delay:${i * .25}s;bottom:${i % 2 ? 132 : 104}%">${line}</span>` : ''}`;
-      this.root.appendChild(b);
+      this.root.appendChild(b); s.bob = b;
       b.animate([{ transform: `translateY(${P(4)})`, opacity: 0 }, { transform: 'translateY(0)', opacity: 1 }], { duration: 380, easing: 'ease-out' });
       if (!s.me) setTimeout(() => { b.classList.add('sink'); setTimeout(() => b.remove(), 1200); }, 2800 + i * 200);
     }).catch(() => {});
     this.counts();
+  }
+  restorePad() {
+    const el = Object.values(this.pads).find(p => p.classList.contains('broken'));
+    if (!el) return;
+    el.getAnimations().forEach(a => a.cancel()); el.classList.remove('broken');
+    el.animate([{ scale: '.1', opacity: 0 }, { scale: '1.08', opacity: 1, offset: .7 }, { scale: '1', opacity: 1 }], { duration: 700, easing: 'cubic-bezier(.3,1.4,.5,1)' });
   }
   /* 다음 단으로 */
   async next(wrongS) {
     const tk = this.token, survivors = this.slimes.filter(s => s.alive);
     survivors.forEach(s => { s.svg.dataset.face = 'idle'; });
     if (!survivors.length) return this.showResult();
-    if (this.round === ROUNDS - 1) return this.escape(survivors);
-    if (this.watching && !survivors.length) return this.showResult();
-    if (this.me.alive && survivors.length === 1 && !this.soloSaid) { this.soloSaid = true; this.toast('혼자 남았어요! 끝까지 가 봐요', 2000); }
+    if (this.round === ROUNDS - 1) return this.mode === 'tower' ? this.stageClear() : this.escape(survivors);
+    if (this.me.alive && survivors.length === 1 && !this.soloSaid) { this.soloSaid = true; this.toast('혼자 남았어요!', 1800); }
     Sfx.play('whoosh'); Sfx.play('up');
     survivors.forEach((s, i) => {
       s.el.animate([{ translate: '0 0' }, { translate: `0 ${P(-9)}`, offset: .4, easing: 'ease-in' }, { translate: '0 0', offset: .75 }, { translate: `0 ${P(-1.4)}`, offset: .88 }, { translate: '0 0' }], { duration: reduce ? 1 : 900, delay: i * 40, easing: 'ease-out' });
@@ -1377,11 +1713,7 @@ class Game {
     this.world.style.transform = `translateY(${P(this.level * STEP)})`;
     this.hud();
     await wait(500); if (tk !== this.token) return;
-    const el = Object.values(this.pads).find(p => p.classList.contains('broken'));
-    if (el) {
-      el.getAnimations().forEach(a => a.cancel()); el.classList.remove('broken');
-      el.animate([{ scale: '.1', opacity: 0 }, { scale: '1.08', opacity: 1, offset: .7 }, { scale: '1', opacity: 1 }], { duration: 700, easing: 'cubic-bezier(.3,1.4,.5,1)' });
-    }
+    this.restorePad();
     await wait(900); if (tk !== this.token) return;
     await this.card.animate([{ transform: 'none' }, { transform: `translateY(${P(-50)}) rotate(4deg)` }], { duration: reduce ? 1 : 380, easing: 'ease-in', fill: 'forwards' }).finished.catch(() => {});
     if (tk !== this.token) return;
@@ -1391,11 +1723,45 @@ class Game {
     if (!this.watching) Sfx.play('start');
     this.ask();
   }
+  /* 끝없는 탑 : 10층마다 스테이지 돌파, 숲이 처음부터 다시, 빈자리에 더 센 슬라임이 들어온다 */
+  async stageClear() {
+    const tk = this.token, bonus = 300 * this.stage;
+    if (this.me.alive) { this.score += bonus; this.gainAt(this.me, bonus, `${this.stage}스테이지 돌파`); this.hud(); }
+    Sfx.play('fanfare'); this.toast(`${this.stage}스테이지 돌파!`, 2000);
+    await wait(1500); if (tk !== this.token) return;
+    const f = document.createElement('div'); f.className = 'flash'; this.root.appendChild(f); setTimeout(() => f.remove(), 1000);
+    await wait(380); if (tk !== this.token) return;
+    this.stage++; this.level = 0; this.round = 0;
+    this.world.style.transition = 'none'; this.world.style.transform = 'translateY(0)'; void this.world.offsetWidth; this.world.style.transition = '';
+    this.restorePad();
+    this.refill();
+    this.qs = withSeen(seen => setOf(TOWER_PLAN(this.stage), this.used, Math.random, seen));
+    this.hud(); this.counts();
+    await wait(600); if (tk !== this.token) return;
+    this.showQ();
+    await wait(reduce ? 50 : 650); if (tk !== this.token) return;
+    Sfx.play('start');
+    this.ask();
+  }
+  refill() {
+    this.slimes.filter(s => !s.alive && !s.me).forEach(s => s.el.remove());
+    this.slimes = this.slimes.filter(s => s.alive || s.me);
+    const need = 9 - this.slimes.filter(s => !s.me).length; if (need <= 0) return;
+    const names = new Set(this.slimes.map(s => s.r.name)), minStar = Math.min(5, 1 + Math.floor(this.stage / 2));
+    const pool = shuffle(RIVALS.filter(r => r.stars >= minStar && !names.has(r.name)));
+    for (let k = 0; k < need; k++) {
+      const r = pool[k % pool.length] || RIVALS[k], s = this.makeSlime(r, false, this.slimes.length + k);
+      this.slimes.push(s);
+      const [x, y] = this.take(s, Math.random() < .5 ? 'O' : 'X'); this.set(s, x, y);
+      s.el.animate([{ translate: `0 ${P(-80)}`, opacity: 0 }, { translate: `0 ${P(4)}`, opacity: 1, offset: .75 }, { translate: '0 0', opacity: 1 }], { duration: reduce ? 1 : 700, delay: k * 90, easing: 'ease-in', fill: 'backwards' });
+    }
+    this.toast(`새 친구 ${need}마리 합류!`, 1600);
+  }
   async escape(survivors) {
     const tk = this.token;
     this.level = ROUNDS; this.hud();
     this.root.querySelectorAll('.cnt').forEach(c => { c.style.visibility = 'hidden'; });
-    if (this.me.alive) this.record(true);
+    if (this.me.alive) { this.meEscaped = true; this.finishMe(); }
     Sfx.play('fanfare');
     survivors.forEach((s, i) => {
       const seed = document.createElement('div'); seed.className = 'seed'; seed.innerHTML = SEED;
@@ -1408,43 +1774,182 @@ class Game {
     this.showResult();
   }
   watch() {
+    this.finishMe();
     this.banner.hidden = true; this.banner.classList.remove('in');
     this.watching = true; this.state = 'play'; this.root.dataset.state = 'watch';
-    this.btns.hidden = true; this.watchbar.hidden = false;
-    this.next(null);
+    this.btns.hidden = true; this.hintBtn.hidden = true; this.watchbar.hidden = false;
+    this.next(this.lastWrong);
   }
-  /* 기록 : 내가 떨어지거나 탈출한 순간 한 번 */
-  record(escaped) {
+  /* 기록, 도토리 : 내가 탈출하거나 끝내 빠진 순간 한 번 */
+  finishMe() {
     if (this.recorded) return; this.recorded = true;
-    const rec = store.get('lulupia-rec', { games: 0, escapes: 0, best: -1, right: 0, asked: 0 });
-    const cleared = escaped ? ROUNDS : this.round;
-    this.newBest = rec.games > 0 && cleared > rec.best;
-    rec.games++; if (escaped) rec.escapes++; rec.best = Math.max(rec.best, cleared); rec.right += this.correct; rec.asked += this.answered;
-    store.set('lulupia-rec', rec);
+    const escaped = this.meEscaped;
+    if (this.mode === 'tower') {
+      const t = store.get('lulupia-tower', { games: 0, best: 0, score: 0 }), floors = this.fellFloor || this.floor();
+      this.newBest = t.games > 0 && floors > t.best;
+      t.games++; t.best = Math.max(t.best, floors); t.score = Math.max(t.score, this.score); store.set('lulupia-tower', t);
+    } else if (this.mode === 'free') {
+      const rec = store.get('lulupia-rec', { games: 0, escapes: 0, best: -1, right: 0, asked: 0 }), cleared = escaped ? ROUNDS : this.fellAt;
+      this.newBest = rec.games > 0 && cleared > rec.best;
+      rec.games++; if (escaped) rec.escapes++; rec.best = Math.max(rec.best, cleared); rec.right += this.correct; rec.asked += this.answered;
+      store.set('lulupia-rec', rec);
+    }
+    const bs = store.get('lulupia-best', {});
+    if (bs[this.mode] != null && this.score > bs[this.mode]) this.newBest = true;
+    bs[this.mode] = Math.max(bs[this.mode] || 0, this.score); store.set('lulupia-best', bs);
+    let earn = Math.round(this.score / 100) + (escaped ? 5 : 0);
+    if (this.mode === 'tower') earn += Math.floor(((this.fellFloor || this.floor()) - 1) / 10) * 5;
+    if (this.dailyFirst) { earn += 3; this.dailyLine = this.shareLine(); store.set('lulupia-daily', { date: today(), line: this.dailyLine, res: escaped ? '탈출' : `${this.fellAt + 1}단` }); }
+    this.earned = earn; Wallet.add(earn);
+  }
+  shareLine() {
+    const marks = this.log.filter(l => !l.revive).map(l => (l.pick == null ? '⚪' : l.pick === l.a ? '🟢' : '🔴'));
+    while (marks.length < ROUNDS) marks.push('⚪');
+    const res = this.meEscaped ? '탈출 성공!' : `${this.fellAt + 1}단에서 퐁당`;
+    return `루루피아 오늘의 10문제 · ${todayLabel()}\n${marks.slice(0, ROUNDS).join('')}\n${res} · ${fmt(this.score)}점\n${PUBLIC_URL}`;
   }
   showResult() {
     if (!this.result.hidden) return;
+    this.finishMe();
     this.token++; clearInterval(this.ticker); clearTimeout(this.endT);
-    this.banner.hidden = true; this.watchbar.hidden = true; this.btns.hidden = true;
+    this.banner.hidden = true; this.watchbar.hidden = true; this.btns.hidden = true; this.hintBtn.hidden = true;
     this.state = 'over'; this.root.dataset.state = 'over';
-    const won = this.recorded && this.fellAt < 0, card = this.result.querySelector('.r-card');
+    const won = this.meEscaped, card = this.result.querySelector('.r-card'), tower = this.mode === 'tower';
     card.dataset.k = won ? 'win' : 'fail';
-    card.querySelector('.r-title').textContent = won ? '탈출 성공!' : `${this.fellAt + 1}단에서 퐁당!`;
-    const hero = card.querySelector('.r-hero svg'); hero.innerHTML = rivalArt({ ...ME, id: 'hero' + (++this.artSeq) }); hero.dataset.face = won ? 'laugh' : 'cry';
+    card.querySelector('.r-title').textContent = won ? '탈출 성공!' : tower ? `${this.fellFloor}층에서 퐁당!` : `${this.fellAt + 1}단에서 퐁당!`;
+    const hero = card.querySelector('.r-hero svg'); hero.innerHTML = rivalArt({ ...myLook(), id: 'hero' + (++this.artSeq) }); hero.dataset.face = won ? 'laugh' : 'cry';
     card.querySelector('.r-new').hidden = !this.newBest;
+    card.querySelector('.r-acorn b').textContent = `도토리 +${this.earned}`;
     card.querySelector('.rs1').textContent = `${this.correct}/${this.answered}`;
-    card.querySelector('.rs2').textContent = won ? '탈출' : `${this.fellAt + 1}단`;
-    const left = this.slimes.filter(s => !s.me && s.alive).length;
-    const done = this.level >= ROUNDS;
-    card.querySelector('.rs3').textContent = done ? `${this.escaped || 0}` : `${left}`;
-    card.querySelector('.rs3l').textContent = done ? (won ? '함께 탈출' : '탈출한 친구') : '남은 친구';
+    card.querySelector('.rs2').textContent = won ? '탈출' : tower ? `${this.fellFloor}층` : `${this.fellAt + 1}단`;
+    card.querySelector('.rs2l').textContent = tower ? '올라간 층' : '올라간 높이';
+    card.querySelector('.rs3').textContent = fmt(this.score);
+    const done = this.level >= ROUNDS, left = this.slimes.filter(s => !s.me && s.alive).length;
+    const note = [];
+    if (this.maxStreak >= 3) note.push(`최고 ${this.maxStreak}연속 정답`);
+    if (!tower) note.push(done ? `탈출한 친구 ${this.escaped || 0}마리` : `남은 친구 ${left}마리`);
+    if (this.mode === 'daily' && !this.dailyFirst) note.push('오늘 기록은 첫 판만 남아요');
+    const nt = card.querySelector('.r-note'); nt.textContent = note.join(' · '); nt.hidden = !note.length;
+    const sh = card.querySelector('.r-share');
+    sh.hidden = this.mode !== 'daily';
+    if (this.mode === 'daily') {
+      this.shareText = this.dailyFirst ? this.dailyLine : ((store.get('lulupia-daily', null) || {}).line || this.shareLine());
+      sh.querySelector('pre').textContent = this.shareText;
+      sh.querySelector('[data-act="share"]').hidden = !navigator.share;
+      sh.querySelector('[data-act="copy"]').textContent = '결과 복사';
+    }
     card.querySelector('ol').innerHTML = this.log.map(l => {
       const miss = l.pick && l.pick !== l.a;
-      return `<li class="${miss ? 'miss' : ''}"><span class="mk ${l.a.toLowerCase()}" aria-label="정답 ${l.a}"><i class="glyph ${l.a.toLowerCase()}"></i></span><div><p>${l.q}</p><small>${miss ? `<em>내 답 ${l.pick}</em> · ` : ''}${l.e}</small></div></li>`;
+      return `<li class="${miss ? 'miss' : ''}"><span class="mk ${l.a.toLowerCase()}" aria-label="정답 ${l.a}"><i class="glyph ${l.a.toLowerCase()}"></i></span><div><p>${l.revive ? '<em class="rv">패자부활전</em> ' : ''}${l.q}</p><small>${miss ? `<em>내 답 ${l.pick}</em> · ` : ''}${l.e}</small></div></li>`;
     }).join('');
-    card.querySelector('details').open = !won;
+    card.querySelector('details').open = !won && this.mode !== 'daily';
     this.result.hidden = false; card.scrollTop = 0;
+    this.hud();
     if (won) Sfx.play('saved');
+  }
+  async copyShare() {
+    const btn = this.result.querySelector('[data-act="copy"]');
+    try { await navigator.clipboard.writeText(this.shareText); btn.textContent = '복사했어요!'; }
+    catch (e) {
+      const pre = this.result.querySelector('.r-share pre'), r = document.createRange(); r.selectNodeContents(pre);
+      const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r); btn.textContent = '글을 눌러 복사해 주세요';
+    }
+  }
+  async shareResult() { if (!navigator.share) return this.copyShare(); try { await navigator.share({ text: this.shareText }); } catch (e) {} }
+  closePanel() {
+    if (!this.closetEl.hidden) { this.closetEl.hidden = true; this.refreshMe(); }
+    this.dexEl.hidden = true;
+    this.hud();
+  }
+  refreshMe() {
+    if (!this.me || this.state !== 'title') return;
+    this.me.r = myLook(); this.me.svg.innerHTML = rivalArt(this.me.r);
+  }
+  /* ---------- 꾸미기 창 ---------- */
+  openCloset() { if (this.state !== 'title') return; this.clTab = this.clTab || 'hat'; this.clSel = null; this.clMsg = ''; this.renderCloset(); this.closetEl.hidden = false; }
+  overFor(kind, key) {
+    if (kind === 'hat') return { hat: key };
+    if (kind === 'color') return { color: key };
+    const d = SHOP.deco.find(x => x[0] === key);
+    return d[3] === 'back' ? { back: key } : { [d[3]]: true };
+  }
+  wearing(c, kind, key) {
+    if (kind === 'hat') return c.hat === key;
+    if (kind === 'color') return c.color === key;
+    const d = SHOP.deco.find(x => x[0] === key);
+    return d[3] === 'back' ? c.back === key : !!c[d[3]];
+  }
+  renderCloset() {
+    const c = Closet.get(), acorn = Wallet.get(), bag = Bag.get(), sel = this.clSel, tab = this.clTab;
+    const prev = lookOf(c, sel ? this.overFor(sel.kind, sel.key) : {});
+    this.closetEl.querySelector('.acn2').textContent = fmt(acorn);
+    const art = (look) => `<svg class="pt npc" viewBox="0 0 100 100" aria-hidden="true">${rivalArt({ ...look, id: 'cl' + (++this.artSeq) })}</svg>`;
+    let grid = '';
+    if (tab === 'tool') {
+      grid = `<div class="tools">${TOOLS.map(([key, name, price, max, icon, desc]) => `<div class="tool"><span class="t-ic">${icon}</span><div class="t-tx"><b>${name} <small>가진 것 ${bag[key]}개</small></b><span>${desc}</span></div><button class="cta${acorn < price || bag[key] >= max ? ' off' : ''}" type="button" data-buytool="${key}">${ACORN}${price}</button></div>`).join('')}</div>`;
+    } else {
+      grid = `<div class="items">${SHOP[tab].map(([key, name, price]) => {
+        const own = owns(c, tab, key), on = this.wearing(c, tab, key), picked = sel && sel.kind === tab && sel.key === key;
+        const look = lookOf(c, this.overFor(tab, key));
+        return `<button class="item${on ? ' on' : ''}${picked ? ' picked' : ''}" type="button" data-kind="${tab}" data-key="${key}">${art(look)}<b>${name}</b><small>${on ? '입는 중' : own ? '가진 것' : `${ACORN}${price}`}</small></button>`;
+      }).join('')}</div>`;
+    }
+    let bar = '';
+    if (sel) {
+      const item = SHOP[sel.kind].find(x => x[0] === sel.key), price = item[2];
+      bar = acorn >= price ? `<div class="buybar"><span>${item[1]} · 도토리 ${price}개로 살까요?</span><button class="cta" type="button" data-buy="1">사기</button></div>` : `<div class="buybar poor"><span>${item[1]} · 도토리가 ${price - acorn}개 모자라요</span></div>`;
+    } else if (this.clMsg) bar = `<div class="buybar ok"><span>${this.clMsg}</span></div>`;
+    this.closetEl.querySelector('.p-body').innerHTML = `<div class="cl-top"><div class="cl-hero">${art(prev).replace('class="pt npc"', 'class="pt npc" data-face="laugh"')}</div>
+      <div class="tabs" role="tablist">${[['hat', '모자'], ['color', '색'], ['deco', '장식'], ['tool', '도구']].map(([k, l]) => `<button class="tab" type="button" role="tab" aria-selected="${k === tab}" data-tab="${k}">${l}</button>`).join('')}</div></div>
+      ${grid}${bar}`;
+  }
+  closetClick(e) {
+    const t = e.target.closest('[data-tab],[data-kind],[data-buy],[data-buytool]'); if (!t) return;
+    const c = Closet.get();
+    if (t.dataset.tab) { this.clTab = t.dataset.tab; this.clSel = null; this.clMsg = ''; }
+    else if (t.dataset.buytool) {
+      const [key, name, price, max] = TOOLS.find(x => x[0] === t.dataset.buytool), bag = Bag.get();
+      if (Wallet.get() >= price && bag[key] < max) { Wallet.add(-price); bag[key]++; Bag.set(bag); Sfx.play('saved'); }
+      else Sfx.play('buzz');
+    } else if (t.dataset.buy) {
+      const { kind, key } = this.clSel, item = SHOP[kind].find(x => x[0] === key);
+      if (Wallet.get() < item[2]) return;
+      Wallet.add(-item[2]); c.owned.push(`${kind}:${key}`); this.equip(c, kind, key); Closet.set(c);
+      this.clSel = null; this.clMsg = `${item[1]}을(를) 샀어요!`; Sfx.play('fanfare');
+    } else {
+      const kind = t.dataset.kind, key = t.dataset.key;
+      if (owns(c, kind, key)) { this.equip(c, kind, key); Closet.set(c); this.clSel = null; this.clMsg = ''; Sfx.play('hop'); }
+      else { this.clSel = { kind, key }; this.clMsg = ''; Sfx.play('hop'); }
+    }
+    const scroll = this.closetEl.querySelector('.p-body').scrollTop;
+    this.renderCloset(); this.closetEl.querySelector('.p-body').scrollTop = scroll;
+    this.hud();
+  }
+  equip(c, kind, key) {
+    if (kind === 'hat') c.hat = key;
+    else if (kind === 'color') c.color = key;
+    else { const d = SHOP.deco.find(x => x[0] === key); if (d[3] === 'back') c.back = c.back === key ? null : key; else c[d[3]] = !c[d[3]]; }
+  }
+  /* ---------- 문제 도감 ---------- */
+  openDex() { if (this.state !== 'title') return; this.dexCat = null; this.renderDex(); this.dexEl.hidden = false; }
+  renderDex() {
+    const d = Dex.get(), body = this.dexEl.querySelector('.p-body');
+    const idxOf = ci => QS.map((q, i) => (q[0] === ci ? i : -1)).filter(i => i >= 0);
+    if (this.dexCat == null) {
+      body.innerHTML = `<p class="dx-sum">맞힌 문제 <b>${d.r.size}</b> / ${QS.length}<span>본 문제 ${d.s.size}개</span></p><div class="dx-grid">${CATS.map((c, ci) => {
+        const idx = idxOf(ci), r = idx.filter(i => d.r.has(i)).length, pct = Math.round(r / idx.length * 100);
+        return `<button class="dx-cat${pct === 100 ? ' full' : ''}" type="button" data-cat="${ci}"><b>${c}</b><span class="dx-bar"><i style="width:${pct}%"></i></span><small>${r} / ${idx.length}${pct === 100 ? ' · 정복!' : ''}</small></button>`;
+      }).join('')}</div>`;
+    } else {
+      const ci = this.dexCat, idx = idxOf(ci), rights = idx.filter(i => d.r.has(i)), wrongs = idx.filter(i => d.s.has(i) && !d.r.has(i)), unseen = idx.length - rights.length - wrongs.length;
+      const item = (i, ok) => { const [, , a, q, e] = QS[i], A = a ? 'O' : 'X'; return ok ? `<li><span class="mk ${A.toLowerCase()}"><i class="glyph ${A.toLowerCase()}"></i></span><div><p>${q}</p><small>${e}</small></div></li>` : `<li class="miss"><span class="mk q">?</span><div><p>${q}</p><small>아직 못 맞혔어요</small></div></li>`; };
+      body.innerHTML = `<button class="dx-back" type="button" data-dexback="1">← 분야 목록</button><h3 class="dx-title">${CATS[ci]} <small>${rights.length} / ${idx.length}</small></h3><ol class="dx-list">${rights.map(i => item(i, true)).join('')}${wrongs.map(i => item(i, false)).join('')}</ol>${unseen ? `<p class="dx-unseen">아직 못 본 문제 ${unseen}개</p>` : ''}`;
+    }
+    body.scrollTop = 0;
+  }
+  dexClick(e) {
+    const t = e.target.closest('[data-cat],[data-dexback]'); if (!t) return;
+    this.dexCat = t.dataset.dexback ? null : +t.dataset.cat; Sfx.play('hop'); this.renderDex();
   }
 }
 
