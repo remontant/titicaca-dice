@@ -1096,6 +1096,9 @@ const Game = (() => {
     let on = false, db = null, roomRef = null, logRef = null, roomId = '', seat = '', token = '', first = 'a', n = 1, foeName = '친구', foeHere = true;
     let replay = [], inbox = [], waiter = null, known = new Set(), feeding = false, guideNext = null, onGo = null, onCancel = null;
     const saveKey = () => `titicaca-room-${roomId}`;
+    /* 링크엔 6자리만 보이고, DB 엔 규칙(10자리)에 맞게 뒤에 'room' 을 붙여 둔다. 옛 10자리 방은 ?room= 그대로. */
+    const keyOf = code => `${code}room`;
+    const linkFor = id => `${location.origin}${location.pathname}${id.endsWith('room') ? `#${id.slice(0, 6)}` : `?room=${id}`}`;
     const goSolo = () => { location.href = location.pathname; };
 
     /* 초대 창 */
@@ -1146,11 +1149,16 @@ const Game = (() => {
       goBtn.disabled = true;
       try {
         await connect();
-        roomId = makeId(); seat = 'a'; token = makeId().slice(0, 12); first = Math.random() < .5 ? 'a' : 'b';
-        roomRef = db.ref(`rooms/${roomId}`);
-        await roomRef.set({ createdAt: Date.now(), first, players: { a: { name, token, online: true } } });
+        seat = 'a'; token = makeId().slice(0, 12); first = Math.random() < .5 ? 'a' : 'b';
+        const data = { createdAt: Date.now(), first, players: { a: { name, token, online: true } } };
+        for (let i = 0; ; i++) {
+          roomId = keyOf(makeId().slice(0, 6));
+          roomRef = db.ref(`rooms/${roomId}`);
+          if ((await roomRef.transaction(cur => (cur === null ? data : undefined))).committed) break;
+          if (i >= 4) throw new Error('방 코드가 계속 겹침');
+        }
         remember();
-        try { history.replaceState(null, '', `?room=${roomId}`); } catch {}
+        try { history.replaceState(null, '', linkFor(roomId)); } catch {}
         await attach();
       } catch { noLine(); }
     }
@@ -1196,7 +1204,7 @@ const Game = (() => {
       roomRef.child(`players/${other(seat)}`).on('value', s => onFoe(s.val()));
     }
     function waiting() {
-      show({ head: '친구를 기다리는 중이에요', body: '이 링크를 친구에게 보내 주세요.', link: `${location.origin}${location.pathname}?room=${roomId}`, go: '링크 복사', cancel: '취소' }, copyLink, () => { store.del(saveKey()); const f = goSolo; db.ref('.info/connected').off(); roomRef.child(`players/${seat}/online`).onDisconnect().cancel().then(() => roomRef.remove()).then(f, f); });
+      show({ head: '친구를 기다리는 중이에요', body: '이 링크를 친구에게 보내 주세요.', link: linkFor(roomId), go: '링크 복사', cancel: '취소' }, copyLink, () => { store.del(saveKey()); const f = goSolo; db.ref('.info/connected').off(); roomRef.child(`players/${seat}/online`).onDisconnect().cancel().then(() => roomRef.remove()).then(f, f); });
     }
     function paintAway() {
       if (!on) return;
@@ -1346,8 +1354,11 @@ const Game = (() => {
       if (!DB_URL) return false;
       inviteBtn.hidden = false;
       inviteBtn.addEventListener('click', clickInvite);
-      const id = new URLSearchParams(location.search).get('room');
-      if (!id || !/^[a-z0-9]{10}$/.test(id)) return false;
+      /* 열어 둔 화면 주소창에 다른 초대 링크를 붙여 넣으면 # 만 바뀌어 새로 열리지 않으니 직접 다시 연다 */
+      addEventListener('hashchange', () => { if (/^#[a-z0-9]{6}$/.test(location.hash)) location.reload(); });
+      const code = location.hash.slice(1), old = new URLSearchParams(location.search).get('room');
+      const id = /^[a-z0-9]{6}$/.test(code) ? keyOf(code) : /^[a-z0-9]{10}$/.test(old || '') ? old : '';
+      if (!id) return false;
       enter(id);
       return true;
     }
