@@ -1196,7 +1196,7 @@ const Game = (() => {
       roomRef.child(`players/${other(seat)}`).on('value', s => onFoe(s.val()));
     }
     function waiting() {
-      show({ head: '친구를 기다리는 중이에요', body: '이 링크를 친구에게 보내 주세요.', link: `${location.origin}${location.pathname}?room=${roomId}`, go: '링크 복사', cancel: '취소' }, copyLink, () => { store.del(saveKey()); const f = goSolo; roomRef.remove().then(f, f); });
+      show({ head: '친구를 기다리는 중이에요', body: '이 링크를 친구에게 보내 주세요.', link: `${location.origin}${location.pathname}?room=${roomId}`, go: '링크 복사', cancel: '취소' }, copyLink, () => { store.del(saveKey()); const f = goSolo; db.ref('.info/connected').off(); roomRef.child(`players/${seat}/online`).onDisconnect().cancel().then(() => roomRef.remove()).then(f, f); });
     }
     function paintAway() {
       if (!on) return;
