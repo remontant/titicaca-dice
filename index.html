@@ -308,6 +308,26 @@ body[data-layout="side"] .board{grid-template-columns:calc(var(--u)*86) calc(var
 .b-info{display:grid;justify-items:center;gap:calc(var(--u)*2.4);width:100%;min-width:0}
 .r-msg{margin:0;font:400 max(15px,calc(var(--u)*7.4))/1.2 var(--display);color:var(--leaf-deep);text-align:center;text-wrap:balance}
 .board[data-k="lose"] .r-msg{color:var(--pink-deep)}.board[data-k="draw"] .r-msg{color:var(--ink-soft)}.board[data-k="gold"] .r-msg{color:#C2700A}
+/* 대기 줄 : 판 위 풀밭에 줄 선 슬라임들이 차례로 통통, 맨 앞은 '다음!' 깃발 */
+.lineup{position:absolute;z-index:4;left:0;right:0;top:100%;display:flex;justify-content:center;align-items:flex-end;gap:7px;padding-bottom:4px;pointer-events:none;--ls:30px}
+.lineup .ln-sign{position:relative;align-self:flex-end;margin:0 2px 14px 0;padding:3px 7px 4px;border-radius:5px;background:linear-gradient(#C98B4E,#A0652C);box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.35),0 2px 0 #6E4220;color:#FFF6E2;font:400 13px/1 var(--display)}
+.lineup .ln-sign::after{content:"";position:absolute;left:50%;top:100%;width:4px;height:12px;translate:-50% 0;background:#8A5A2B;border-radius:0 0 2px 2px}
+.lineup .ln{position:relative;display:grid;justify-items:center;gap:1px}
+.lineup .ln svg{width:var(--ls);height:var(--ls);overflow:visible;transform-origin:50% 100%;animation:ln-bob 1.4s ease-in-out infinite;animation-delay:calc(var(--i)*-.23s)}
+.lineup .ln i{max-width:58px;padding:1px 5px;border-radius:99px;background:rgba(255,255,255,.85);box-shadow:0 1px 0 rgba(30,80,45,.25);color:#2E5A3A;font:800 10px/1.15 var(--ui);font-style:normal;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lineup .ln.mine i{background:#FF7AA8;color:#fff}
+.lineup .ln.first svg{animation:ln-hop .9s ease-in-out infinite}
+.lineup .ln-flag{position:absolute;left:50%;top:-15px;translate:-50% 0;padding:2px 6px 3px;border-radius:6px;background:#FFE27A;box-shadow:0 1px 0 #C7780A;color:#8A4F0E;font:400 11px/1 var(--display);white-space:nowrap}
+.lineup .ln.zz svg{filter:grayscale(1);opacity:.6;animation:none}
+.lineup .ln.zz::after{content:"z z";position:absolute;right:-5px;top:-4px;color:#6E7F99;font:800 10px/1 var(--ui)}
+.lineup[data-size="small"]{gap:4px;padding-bottom:2px}
+.lineup[data-size="small"] .ln i,.lineup[data-size="small"] .ln-sign{display:none}
+.lineup[data-size="small"] .ln-flag{top:-11px;padding:1px 4px 2px;font-size:9px}
+@keyframes ln-bob{0%,100%{transform:translateY(0) scale(1.04,.96)}50%{transform:translateY(-3px) scale(.97,1.03)}}
+@keyframes ln-hop{0%,100%{transform:translateY(0) scale(1.08,.92)}40%{transform:translateY(-7px) scale(.94,1.08)}}
+/* 연승 : 챔피언 이름표 위 왕관 배지 */
+.tag[data-streak]::before{content:attr(data-streak);position:absolute;z-index:2;left:50%;top:calc(var(--u)*-5.2);translate:-50% 0;padding:calc(var(--u)*.7) calc(var(--u)*2.6) calc(var(--u)*.9) calc(var(--u)*7.2);border-radius:99px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 30'%3E%3Cpath d='M5 26L3 7l10 8 7-12 7 12 10-8-2 19z' fill='%23FFD23F' stroke='%23B8860B' stroke-width='2.6' stroke-linejoin='round'/%3E%3C/svg%3E") calc(var(--u)*1.8) 50%/calc(var(--u)*4.6) auto no-repeat,linear-gradient(#FFF6B0,#FFC531);box-shadow:inset 0 0 0 calc(var(--u)*.6) #fff,0 calc(var(--u)*.7) 0 #D9900F;color:#7A4508;font:400 max(10px,calc(var(--u)*4.3))/1 var(--display);white-space:nowrap}
+@media (prefers-reduced-motion:reduce){.lineup .ln svg{animation:none}}
 /* 구경 중 : 판 · 손 · 걸기 버튼을 누를 수 없고 걸기 줄은 숨긴다 */
 body[data-watch] #table,body[data-watch] #hand,body[data-watch] #bets{pointer-events:none}
 body[data-watch] #bets,body[data-watch] #pot,body[data-watch] #rerollBtn{visibility:hidden}
@@ -518,6 +538,7 @@ body[data-tip="place"] .gain{animation:tile-pulse .8s ease-in-out infinite}
           <div class="vs"><svg viewBox="0 0 104 104" aria-hidden="true"><path d="M52 4l12 24 26-6-10 25 22 15-26 6 2 27-24-14-24 14 2-27-26-6 22-15-10-25 26 6z" fill="url(#vsG)" stroke="#fff" stroke-width="4" stroke-linejoin="round"/><path d="M52 4l12 24 26-6-10 25 22 15-26 6 2 27-24-14-24 14 2-27-26-6 22-15-10-25 26 6z" fill="none" stroke="#C7780A" stroke-width="2" stroke-linejoin="round" transform="translate(0 1)" opacity=".5"/></svg><b id="vsText">VS</b></div>
           <div class="quest" id="quest" role="img" hidden></div>
           <div class="quest h2h" id="h2h" hidden></div>
+          <div class="lineup" id="lineup" role="img" hidden></div>
           <div class="cap foe" id="capFoe"><svg class="pt npc" id="npc" data-face="idle" viewBox="0 0 100 100" aria-hidden="true"></svg><span class="mini" id="comReroll" title="상대에게 남은 다시 굴리기"></span><span class="tag"><span class="name" id="nameCom"></span><span class="stars" id="foeStars" role="img"></span></span><span class="dots" id="dotsCom" role="img"><i></i><i></i><i></i></span></div>
           <div class="bubble" id="bubble" aria-hidden="true"></div>
           <button class="chip invite" id="inviteBtn" type="button" hidden>친구 초대</button>
@@ -832,7 +853,7 @@ const Game = (() => {
     '판을 많이 할수록 가끔 별 하나 더 센 슬라임이 나와요. 20판부터 조금, 50판부터는 더 자주 나와요.',
     '주사위 눈 1은 빨간 버섯으로 그려져 있어요.',
     '친구 대결 방에는 7명까지 들어올 수 있어요. 이긴 사람이 자리에 남고 진 사람은 줄 맨 뒤로 가요. 비기면 자리를 지키던 사람이 남아요.',
-    '줄을 선 동안에는 지금 판을 구경해요. 차례가 오면 10초 안에 준비를 눌러야 하고, 못 누르면 줄 맨 뒤로 가요.',
+    '줄을 선 동안에는 지금 판을 구경해요. 차례가 오면 10초 안에 준비를 눌러야 해요. 못 누르면 그 판만 다음 사람이 먼저 하고, 줄 순서는 그대로예요.',
     '키보드로는 1, 2, 3으로 내 줄, 4, 5, 6으로 상대 줄이나 알까기, R로 다시 굴리기, H로 홀드해요.',
   ];
 
@@ -1142,7 +1163,8 @@ const Game = (() => {
   /* 친구 대결 : Firebase 실시간 DB 에 행동 기록을 쌓고 화면들이 같은 기록을 따라 둔다. 새로고침하면 기록을 빠르게 다시 돌려 이어서 한다.
      방 하나에 대결 2명 + 줄 5명. 이긴 사람이 남고 진 사람은 줄 맨 뒤로, 줄 맨 앞 사람이 10초 안에 준비를 누르면 다음 판.
      줄 선 사람은 기록을 따라 읽으며 지금 판을 구경한다. 줄이 비어 있으면 둘이 '한 판 더 / 다음에'.
-     DB : rooms/id = { host, people/pid = {name, online, left}, table = {n, a, b, line[], first, champ, streak, call{at, who}, away{}, fresh}, games/n, again/n, score/n = {a, b, w} } */
+     줄 순서는 고정 : 차례에 준비를 못 누르거나 접속이 잠깐 끊긴 사람은 그 판만 건너뛰고(skip) 줄 자리는 그대로. 줄 맨 뒤로 가는 건 진 사람뿐.
+     DB : rooms/id = { host, people/pid = {name, online, left}, table = {n, a, b, line[], first, champ, streak, call{at, who, from}, skip{pid: n}, fresh}, games/n, again/n, quit/n, score/n = {a, b, w} } */
   const DB_URL = 'https://titicaca-dice-default-rtdb.asia-southeast1.firebasedatabase.app';
   const FRIEND = { id: 'fr', body: ['#FFF6EC', '#FFC98A', '#F0913A'], rim: '#C46A1E', hat: 'leaf', eyes: 'two', mouth: 'smile', brows: 'soft', stars: 0, hi: '', win: '', lose: '' };
   const Online = (() => {
@@ -1167,11 +1189,20 @@ const Game = (() => {
     const gone = id => !id || !people[id] || !!people[id].left;
     const nameOf = id => (id === me ? '나' : clean(people[id]?.name) || '친구');
     const realName = id => clean(people[id]?.name) || '친구';
+    /* 사람마다 슬라임 색 : 줄에 서 있을 때와 대결하러 나왔을 때 같은 색 */
+    const COATS = [['#FFF6EC', '#FFC98A', '#F0913A', '#C46A1E'], ['#FFF0F5', '#FFB3CF', '#F2709F', '#C2457A'], ['#FFFBE0', '#FFE47A', '#F5B820', '#B98410'], ['#F6F0FF', '#C9B3FF', '#8E6CE0', '#6A4BB8'], ['#EEF8FF', '#9ED8FF', '#4AA8E8', '#2A7FBF'], ['#F0FFF2', '#B5EDA0', '#5CC46A', '#2E8F4A']];
+    /* 들어올 때 아직 아무도 안 쓴 색을 골라 people/pid/coat 에 적어 둔다(옛 사람은 아이디로 정한 색) */
+    const coatOf = id => { const c = people[id]?.coat; if (Number.isInteger(c) && COATS[c]) return COATS[c]; let h = 0; for (const ch of String(id)) h = (h * 31 + ch.charCodeAt(0)) >>> 0; return COATS[h % COATS.length]; };
+    const freeCoat = ppl => { const used = new Set(Object.values(ppl || {}).filter(p => p && !p.left).map(p => p.coat)); const i = COATS.findIndex((_, k) => !used.has(k)); return i < 0 ? Math.floor(Math.random() * COATS.length) : i; };
+    const slimeOf = id => (id === me ? ME : { ...FRIEND, id: `q${id}`, body: coatOf(id).slice(0, 3), rim: coatOf(id)[3] });
+    const QUIT_MS = 20000;
+    let quitRef = null, gameOver = false, offSince = {}, quitTimer = 0;
     /* DB 의 table 을 늘 같은 모양으로 (빈 배열 · 빈 값은 Firebase 가 지운다) */
     const T = raw => {
-      const t = { n: 1, a: '', b: '', first: 'a', champ: '', streak: 0, call: null, away: {}, fresh: false, ...(raw || {}) };
+      const t = { n: 1, a: '', b: '', first: 'a', champ: '', streak: 0, call: null, fresh: false, ...(raw || {}) };
       t.line = raw?.line ? Object.values(raw.line).filter(Boolean) : [];
-      t.away = { ...(raw?.away || {}) };
+      t.skip = { ...(raw?.skip || {}) };
+      delete t.away;
       return t;
     };
 
@@ -1230,7 +1261,7 @@ const Game = (() => {
       try {
         await connect();
         me = makeId().slice(0, 12);
-        const data = { createdAt: Date.now(), host: me, people: { [me]: { name, online: true } }, table: { n: 1, a: me, first: Math.random() < .5 ? 'a' : 'b', champ: me, streak: 0, fresh: true } };
+        const data = { createdAt: Date.now(), host: me, people: { [me]: { name, online: true, coat: 0 } }, table: { n: 1, a: me, first: Math.random() < .5 ? 'a' : 'b', champ: me, streak: 0, fresh: true } };
         for (let i = 0; ; i++) {
           roomId = keyOf(makeId().slice(0, 6));
           roomRef = db.ref(`rooms/${roomId}`);
@@ -1266,7 +1297,8 @@ const Game = (() => {
         show({ head: '들어가는 중이에요', cancel: '' });
         try {
           const pid = makeId().slice(0, 12);
-          await roomRef.child(`people/${pid}`).set({ name, online: true });
+          const coat = freeCoat((await roomRef.child('people').once('value')).val());
+          await roomRef.child(`people/${pid}`).set({ name, online: true, coat });
           let isFull = false;
           const r = await roomRef.child('table').transaction(cur => {
             if (!cur) return cur;
@@ -1302,21 +1334,22 @@ const Game = (() => {
       if (!raw) { if (me) { session++; ended(); } return; }
       table = T(raw);
       const t = table, mine = mySeatIn(t);
-      paintTally();
+      paintTally(); paintLine(); paintChamp();
       if (!t.b) { stopCall(); if (mine === 'a') { waiting(); maybeCallNext(); } else paintWatch(); return; }
       if (t.call) { showCall(); return; }
       stopCall();
       if (running !== t.n || seat !== (mine || 'a') || watching !== !mine) {
         seat = mine || 'a'; watching = !mine; n = t.n; running = t.n;
         if (!on) { on = true; inviteBtn.textContent = '방 나가기'; }
-        hide();
+        if (dlg.dataset.kind !== 'away') hide();  /* 건너뛴 사람 안내는 돌아와서 볼 수 있게 남긴다 */
         startGame();
       }
       paintWatch();
       maybeAdvance();
+      checkGone();
     }
     function onPeople() {
-      paintTally();
+      paintTally(); paintLine(); paintChamp(); checkGone();
       if (!table || !on) return;
       const t = table, mine = mySeatIn(t);
       if (mine) {
@@ -1326,6 +1359,7 @@ const Game = (() => {
         /* 상대가 나갔는데 줄이 비어 있으면 그 자리를 비워 새 친구를 기다린다 */
         if (foePid && gone(foePid) && !t.line.some(id => !gone(id))) vacate(foePid);
       }
+      if (mine === 'a' && !t.b) maybeCallNext();
       paintWatch();
     }
 
@@ -1360,13 +1394,14 @@ const Game = (() => {
     }
 
     /* 다음 사람 부르기 : 10초 안에 준비를 누르면 시작, 아니면 자리 비움으로 줄 맨 뒤 */
-    const freeInLine = t => t.line.filter(id => !gone(id) && !t.away[id] && people[id]?.online !== false);
+    const freeInLine = t => t.line.filter(id => !gone(id) && t.skip[id] !== t.n && people[id]?.online !== false);
     function callInto(t, pid, newMatch) {
+      const from = Math.max(0, t.line.indexOf(pid));
       t.line = t.line.filter(id => id !== pid);
       t.b = pid;
-      if (newMatch) { t.n += 1; t.first = 'b'; }
+      if (newMatch) { t.n += 1; t.first = 'b'; t.skip = {}; }
       t.fresh = false;
-      t.call = { at: now(), who: pid };
+      t.call = { at: now(), who: pid, from };
       return t;
     }
     function maybeCallNext() {
@@ -1423,22 +1458,21 @@ const Game = (() => {
         if (!cur) return cur;
         const t = T(cur);
         if (!t.call || t.call.at !== at) return;
-        const who = t.call.who;
-        t.away[who] = true;
+        const who = t.call.who, from = t.call.from || 0;
+        t.skip[who] = t.n;
         t.b = '';
         t.call = null;
-        if (!gone(who)) t.line.push(who);
+        if (!gone(who)) t.line.splice(Math.min(from, t.line.length), 0, who);
         const next = freeInLine(t)[0];
         return next ? callInto(t, next, false) : t;
       });
     }
-    /* 자리 비움에서 돌아오기 */
+    /* 건너뛴 차례에서 돌아오기 : 자리가 비어 있으면 바로 불러 달라 */
     function rejoin() {
-      awayShown = '';
       roomRef.child('table').transaction(cur => {
         if (!cur) return cur;
         const t = T(cur);
-        delete t.away[me];
+        delete t.skip[me];
         if (t.a && !t.b && t.line.includes(me)) return callInto(t, me, true);
         return t;
       });
@@ -1450,6 +1484,7 @@ const Game = (() => {
         if (!cur) return cur;
         const t = T(cur);
         if (t.n !== gameN || t.call || !t.a || !t.b) return;
+        t.skip = {};  /* 한 판이 끝났으니 지난번 건너뜀은 풀고 줄 맨 앞부터 다시 */
         const next = freeInLine(t)[0];
         if (!next) return;
         const winner = w === 'd' ? (t.champ === t.b ? t.b : t.a) : t[w];
@@ -1482,7 +1517,7 @@ const Game = (() => {
       store.del(saveKey());
       try {
         const t = table, mine = t ? mySeatIn(t) : '';
-        if (mine && running === t.n && !scores?.[t.n] && logRef) await logRef.push({ t: 'forfeit', s: mine });
+        if (mine && running === t.n && !scores?.[t.n] && logRef) await logRef.push({ t: 'forfeit', s: mine, i: known.size });
         db.ref('.info/connected').off();
         await roomRef.child(`people/${me}/online`).onDisconnect().cancel();
         await roomRef.child(`people/${me}`).update({ left: true, online: false });
@@ -1490,7 +1525,7 @@ const Game = (() => {
           if (!cur) return cur;
           const x = T(cur);
           x.line = x.line.filter(id => id !== me);
-          delete x.away[me];
+          delete x.skip[me];
           const s = mySeatIn(x);
           if (s && !(x.n === running && mine && !scores?.[x.n])) {
             if (s === 'a') x.a = x.b;
@@ -1507,7 +1542,7 @@ const Game = (() => {
     function lineText() {
       const t = table;
       if (!t) return '';
-      if (t.away[me]) return '자리 비움';
+      if (t.skip[me] === t.n) return '이번 판은 건너뜀';
       const i = t.line.indexOf(me);
       if (i < 0) return '';
       return i === 0 ? '다음이 내 차례예요' : `내 차례까지 ${i}명`;
@@ -1517,17 +1552,18 @@ const Game = (() => {
       document.body.toggleAttribute('data-watch', on && watching);
       if (!t) return;
       if (on && watching) statusEl.textContent = `구경 중 · ${realName(t.a)} vs ${realName(t.b)}${lineText() ? ` · ${lineText()}` : ''}`;
-      if (t.away[me] && awayShown !== String(t.call?.at || 'x')) {
-        awayShown = String(t.call?.at || 'x');
-        show({ head: '자리를 비워서 줄 맨 뒤로 갔어요', body: '10초 안에 준비를 누르지 않았어요. 다시 줄을 서면 차례가 오면 불러 줘요.', go: '다시 줄 서기', cancel: '구경만 할래요', kind: 'away' }, () => { hide(); rejoin(); });
+      if (t.skip[me] === t.n && awayShown !== `${t.n}`) {
+        awayShown = `${t.n}`;
+        show({ head: '이번 차례는 건너뛰었어요', body: `10초 안에 준비를 누르지 않아서 다음 사람이 먼저 해요. 줄 순서는 그대로라 다음 판에 다시 불러요.`, go: t.b ? '' : '지금 할래요', cancel: '알겠어요', kind: 'away' }, () => { hide(); rejoin(); });
       }
     }
     /* 판 끝(구경하는 사람) */
-    function watchEnd(out, quitter) {
+    function watchEnd(out, quitter, gone) {
+      gameOver = true; checkGone();
       const t = table;
       const w = quitter ? other(quitter) : out.winner === 'me' ? 'a' : out.winner === 'com' ? 'b' : 'd';
       const head = w === 'd' ? '비겼어요!' : `${ga(realName(t[w]))} 이겼어요!`;
-      show({ head, body: `${quitter ? `${ga(realName(t[quitter]))} 기권했어요. ` : ''}${lineText() || '다음 판을 기다려요.'}`, cancel: '닫기', kind: 'over' });
+      show({ head, body: `${quitter ? `${ga(realName(match[quitter]))} ${gone ? '나가서 끝났어요' : '기권했어요'}. ` : ''}${lineText() || '다음 판을 기다려요.'}`, cancel: '닫기', kind: 'over' });
     }
 
     /* 친구 말풍선 : 'ask' = 한 판 더 신청(분홍 반짝 버튼 + '다음에' 버튼 + 소리), 'no' = 내 신청을 거절, '' = 없음 */
@@ -1588,6 +1624,7 @@ const Game = (() => {
     /* 전적 : 둘만 있으면 상대와 n승 n패, 줄이 있으면 줄 수 · 연승과 방 순위 */
     function score(k) {
       if (!on || watching || !roomRef || !table) return;
+      gameOver = true; checkGone();
       const w = k === 'win' ? seat : k === 'lose' ? other(seat) : 'd';
       roomRef.child(`score/${n}`).set({ a: match.a, b: match.b, w });
       const queue = freeInLine(table).length > 0;
@@ -1617,7 +1654,6 @@ const Game = (() => {
         const wins = {};
         for (const x of list) if (x.w === 'a' || x.w === 'b') wins[x[x.w]] = (wins[x[x.w]] || 0) + 1;
         const top = Object.entries(wins).sort((p, q) => q[1] - p[1]).slice(0, 3);
-        pill = [`줄 ${t.line.length}명`, t.streak > 0 && t.champ ? `${realName(t.champ)} ${t.streak}연승` : '이긴 사람이 남아요'];
         row = top.length ? ['순위', top.map(([id, w], i) => `${i + 1}. ${nameOf(id)} ${w}승`).join('  ')] : null;
       } else if (!watching) {
         const foePid = seat === 'a' ? t.b : t.a;
@@ -1646,15 +1682,24 @@ const Game = (() => {
       return e;
     }
     async function startGame() {
+      /* 혼자 하던 판(또는 지난 판)이 남아 있으면 먼저 끊는다 : 기록을 불러오는 틈에 그 판에서 누른 수가 친구 판 기록에 섞이지 않게 */
+      session++; resolveHuman = null; inHand = null;
       if (logRef) logRef.off();
       replay = []; inbox = []; waiter = null; known = new Set();
       foeSays(''); againReady(); again.hidden = false;
       match = { a: table.a, b: table.b };  /* 이 판을 두는 두 사람 : 판이 끝난 뒤 자리가 먼저 넘어가도 기록은 이 둘로 */
+      gameOver = false; offSince = {};
+      if (quitRef) quitRef.off();
+      quitRef = roomRef.child(`quit/${n}`);
       logRef = roomRef.child(`games/${n}`);
       const gameN = n;
       const snap = await logRef.once('value');
       if (gameN !== n) return;
-      snap.forEach(c => { known.add(c.key); const e = valid(c.val()); if (e) replay.push(e); });
+      /* 기록 키는 화면 시계로 정해져 접속 직후 서버 시각 보정이 바뀌면 순서가 뒤집힐 수 있다 : 행동마다 적은 순번(i)으로 줄 세운다 */
+      const got = [];
+      snap.forEach(c => { known.add(c.key); const e = valid(c.val()); if (e) got.push([c.key, e]); });
+      got.sort((x, y) => (Number.isInteger(x[1].i) ? x[1].i : 1e9) - (Number.isInteger(y[1].i) ? y[1].i : 1e9) || (x[0] < y[0] ? -1 : 1));
+      replay = got.map(x => x[1]);
       logRef.on('child_added', c => {
         if (known.has(c.key)) return;
         known.add(c.key);
@@ -1663,6 +1708,51 @@ const Game = (() => {
         if (waiter) { const w = waiter; waiter = null; w(e); } else inbox.push(e);
       });
       run();
+      quitRef.on('value', s => { const q = s.val(); if ((q === 'a' || q === 'b') && gameN === n) endByQuit(q); });
+      checkGone();
+    }
+    /* 판 도중 접속이 끊긴 사람 : 앉은 상대는 20초, 구경하는 사람은 25초 기다린 뒤 quit/n 에 그 자리를 적는다(먼저 적은 하나만) */
+    function checkGone() {
+      clearTimeout(quitTimer); quitTimer = 0;
+      if (!on || !table) return;
+      const live = !gameOver && running === table.n && !table.call;
+      const t0 = Date.now();
+      let soonest = Infinity;
+      for (const s of ['a', 'b']) {
+        const pid = match[s];
+        if (!pid || pid === me) continue;
+        if (people[pid]?.online === false) {
+          if (offSince[pid] == null) {
+            offSince[pid] = t0;
+            /* 카톡을 잠깐 보는 정도는 기다려 준다 : 앉은 상대에게만 알림 */
+            if (live && !watching) say(`${ga(realName(pid))} 잠깐 자리를 비웠어요. ${QUIT_MS / 1000}초 안에 안 돌아오면 기권이에요.`);
+          }
+          if (!live) continue;
+          const wait = (watching ? QUIT_MS + 5000 : QUIT_MS) - (t0 - offSince[pid]);
+          if (wait <= 0) { quitRef.transaction(cur => (cur ? undefined : s)); continue; }
+          soonest = Math.min(soonest, wait);
+        } else delete offSince[pid];
+      }
+      paintAway();
+      if (soonest < Infinity) quitTimer = setTimeout(checkGone, Math.min(soonest, 1000));
+    }
+    function endByQuit(s) {
+      if (gameOver) return;
+      gameOver = true;
+      clearTimeout(quitTimer);
+      const w = other(s);
+      roomRef.child(`score/${n}`).set({ a: match.a, b: match.b, w });
+      advance(n, w);
+      if (watching) { session++; endRound(); watchEnd(null, s, true); return; }
+      if (s === seat) { feeding = true; forfeitBtn.disabled = false; forfeitBtn.classList.add('armed'); forfeitBtn.click(); feeding = false; return; }
+      session++;
+      resolveHuman = null; inHand = null;
+      paintPick(); clearHints();
+      const gain = stake() + streakBonus(Record.read().s + 1), info = settle('w', gain);
+      endRound();
+      say(`${ga(foeName)} 나가서 이겼어요. ${pointText(gain)}`);
+      showResult(Game.outcome(state), gain, 'foeForfeit', info);
+      paintAway();
     }
     function next() {
       if (replay.length && (watching || replay[0].s !== seat)) return Promise.resolve(replay.shift());
@@ -1670,7 +1760,11 @@ const Game = (() => {
       return new Promise(r => { waiter = r; });
     }
     const bail = () => { session++; show({ head: '대결을 이어 갈 수 없어요', body: '화면들의 기록이 달라졌어요.', go: '혼자 하기', cancel: '' }, goSolo); };
-    function send(e) { if (on && !watching && !feeding) logRef.push({ ...e, s: seat }); }
+    function send(e) {
+      if (!on || watching || feeding) return;
+      const r = logRef.push({ ...e, s: seat, i: known.size });
+      if (r && r.key) known.add(r.key);
+    }
     async function rollFor(p, g) {
       if (!on) return rollValue();
       if (watching) {
@@ -1773,25 +1867,78 @@ const Game = (() => {
       }
     }
     function paintAway() {
-      if (!on || watching) return;
-      set($('#nameCom'), foeHere ? foeName : '연결 끊김');
-      $('#capFoe').classList.toggle('away', !foeHere);
+      if (!on || !table) return;
+      const cards = watching ? [['#nameMe', '#capMe', match.a], ['#nameCom', '#capFoe', match.b]] : [['#nameCom', '#capFoe', seat === 'a' ? match.b : match.a]];
+      for (const [nm, cap, pid] of cards) {
+        if (!pid) continue;
+        const off = people[pid]?.online === false;
+        const left = off && offSince[pid] ? Math.max(0, Math.ceil((offSince[pid] + QUIT_MS - Date.now()) / 1000)) : 0;
+        set($(nm), !off ? realName(pid) : gameOver || !left ? '자리 비움' : `자리 비움 ${left}`);
+        $(cap).classList.toggle('away', off);
+      }
+    }
+    /* 줄 선 사람 슬라임 */
+    function fitLine() {
+      const box = $('#lineup');
+      if (box.hidden) return;
+      const top = $('.top').getBoundingClientRect().bottom, tb = $('#table').getBoundingClientRect().top, ct = $('.ctrl').getBoundingClientRect().top;
+      const band = Math.max(0, Math.min(tb, ct > top ? ct : Infinity) - top);
+      box.style.height = `${band}px`;
+      box.dataset.size = band >= 56 ? 'big' : 'small';
+      box.style.setProperty('--ls', `${Math.round(Math.max(18, Math.min(band >= 56 ? 44 : 26, band - (band >= 56 ? 24 : 6))))}px`);
+    }
+    function paintLine() {
+      const box = $('#lineup'), t = table;
+      const shown = !!(on && t && t.line.length);
+      box.hidden = !shown;
+      if (!shown) return;
+      fitLine();
+      const first = t.line.find(id => t.skip[id] !== t.n && !gone(id) && people[id]?.online !== false);
+      const key = JSON.stringify([t.line, t.skip, t.n, first, t.line.map(id => [people[id]?.name, people[id]?.online])]);
+      if (box.dataset.key === key) return;
+      box.dataset.key = key;
+      const sign = document.createElement('span');
+      sign.className = 'ln-sign'; sign.textContent = '대기';
+      box.replaceChildren(sign, ...t.line.map((id, i) => {
+        const el = document.createElement('span');
+        const zz = t.skip[id] === t.n || people[id]?.online === false;
+        el.className = `ln${id === first ? ' first' : ''}${zz ? ' zz' : ''}${id === me ? ' mine' : ''}`;
+        el.style.setProperty('--i', i);
+        el.innerHTML = `<svg class="pt npc" data-face="${id === first ? 'grin' : 'idle'}" viewBox="0 0 100 100" aria-hidden="true">${rivalArt(slimeOf(id))}</svg>`;
+        const nm = document.createElement('i');
+        nm.textContent = id === me ? '나' : realName(id);
+        el.append(nm);
+        if (id === first) { const f = document.createElement('b'); f.className = 'ln-flag'; f.textContent = '다음!'; el.append(f); }
+        return el;
+      }));
+      box.setAttribute('aria-label', `대기 줄 : ${t.line.map(id => (id === me ? '나' : realName(id))).join(', ')}`);
+    }
+    /* 연승 : 챔피언 이름표 위 왕관 배지(여럿일 때만) */
+    function paintChamp() {
+      for (const tag of document.querySelectorAll('.cap .tag')) tag.removeAttribute('data-streak');
+      const t = table;
+      if (!on || !t || !t.line.length || !(t.streak > 0) || !t.champ) return;
+      const left = watching ? match.a : me, right = watching ? match.b : seat === 'a' ? match.b : match.a;
+      const cap = t.champ === left ? '#capMe' : t.champ === right ? '#capFoe' : '';
+      if (cap) $(`${cap} .tag`).dataset.streak = `${t.streak}연승`;
     }
     function dressFoe() {
       const t = table;
       const foePid = watching ? t.b : seat === 'a' ? t.b : t.a;
       foeName = realName(foePid);
       foeHere = people[foePid]?.online !== false;
-      foe = { ...FRIEND, name: foeName };
+      foe = { ...slimeOf(foePid), name: foeName };
       npc.innerHTML = rivalArt(foe);
       set($('#nameCom'), foeName);
-      if (watching) { set($('#nameMe'), realName(t.a)); set($('#lvMe'), ''); } else paintRecord();
+      if (watching) { $('#meArt').innerHTML = rivalArt(slimeOf(t.a)); set($('#nameMe'), realName(t.a)); set($('#lvMe'), ''); } else { $('#meArt').innerHTML = rivalArt(ME); paintRecord(); }
       const st = $('#foeStars');
       st.innerHTML = '';
       st.removeAttribute('aria-label');
       paintAway();
       paintTally();
       paintWatch();
+      paintLine();
+      paintChamp();
     }
     const firstSide = () => (table.first === seat ? 'me' : 'com');
     function alreadyPaid() {
@@ -1805,6 +1952,7 @@ const Game = (() => {
     function boot() {
       if (!DB_URL) return false;
       noBtn.addEventListener('click', declineAgain);
+      addEventListener('resize', fitLine);
       inviteBtn.hidden = false;
       inviteBtn.addEventListener('click', clickInvite);
       /* 열어 둔 화면 주소창에 다른 초대 링크를 붙여 넣으면 # 만 바뀌어 새로 열리지 않으니 직접 다시 연다 */
