@@ -79,6 +79,11 @@ body[data-turn="com"] .cap.foe .tag{background:#FFE6F0}
 .name{color:var(--ink);font:400 max(13px,calc(var(--u)*6.2))/1 var(--display);white-space:nowrap}
 .tag small{color:#8A7F96;font:400 max(11px,calc(var(--u)*4.4))/1 var(--display)}
 .tag small:empty{display:none}
+/* 칭호 '듀얼리스트' : 이름 위 금색 글자, 이름 앞 작은 주사위 */
+.tag .title{margin-bottom:calc(var(--u)*-.6);color:#C2700A;font:400 max(10px,calc(var(--u)*3.9))/1 var(--display);letter-spacing:.03em;text-shadow:0 1px 0 #fff}
+.tag .title[hidden]{display:none}
+.tag.duel .name::before,.lineup .ln.duel i::before{content:"";display:inline-block;width:.9em;height:.9em;margin-right:.2em;vertical-align:-.08em;background:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2020%2020%27%3E%3Crect%20x%3D%271.6%27%20y%3D%271.6%27%20width%3D%2716.8%27%20height%3D%2716.8%27%20rx%3D%274.6%27%20fill%3D%27%23fff%27%20stroke%3D%27%23C2700A%27%20stroke-width%3D%272%27%2F%3E%3Ccircle%20cx%3D%276.4%27%20cy%3D%276.4%27%20r%3D%271.9%27%20fill%3D%27%233B2F4A%27%2F%3E%3Ccircle%20cx%3D%2710%27%20cy%3D%2710%27%20r%3D%271.9%27%20fill%3D%27%23E2453C%27%2F%3E%3Ccircle%20cx%3D%2713.6%27%20cy%3D%2713.6%27%20r%3D%271.9%27%20fill%3D%27%233B2F4A%27%2F%3E%3C%2Fsvg%3E") center/contain no-repeat}
+.pill.duel::before{content:"";width:1.1em;height:1.1em;background:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2020%2020%27%3E%3Crect%20x%3D%271.6%27%20y%3D%271.6%27%20width%3D%2716.8%27%20height%3D%2716.8%27%20rx%3D%274.6%27%20fill%3D%27%23fff%27%20stroke%3D%27%23C2700A%27%20stroke-width%3D%272%27%2F%3E%3Ccircle%20cx%3D%276.4%27%20cy%3D%276.4%27%20r%3D%271.9%27%20fill%3D%27%233B2F4A%27%2F%3E%3Ccircle%20cx%3D%2710%27%20cy%3D%2710%27%20r%3D%271.9%27%20fill%3D%27%23E2453C%27%2F%3E%3Ccircle%20cx%3D%2713.6%27%20cy%3D%2713.6%27%20r%3D%271.9%27%20fill%3D%27%233B2F4A%27%2F%3E%3C%2Fsvg%3E") center/contain no-repeat}
 .stars{display:flex;gap:calc(var(--u)*.4);filter:drop-shadow(0 calc(var(--u)*.4) 0 #D08A1A)}
 .stars:empty{display:none}
 .stars i{width:calc(var(--u)*4.6);height:calc(var(--u)*4.6);background:linear-gradient(#FFE877,#FFB21E);clip-path:var(--star)}
@@ -544,12 +549,12 @@ body[data-tip="place"] .gain{animation:tile-pulse .8s ease-in-out infinite}
           <div class="chips"><div class="chip pair"><button class="snd" id="musicBtn" type="button" aria-pressed="true"></button><button class="snd" id="soundBtn" type="button" aria-pressed="true"></button></div><button class="chip" id="statsBtn" type="button"></button><button class="chip" id="rulesBtn" type="button"></button></div>
         </header>
         <div class="stage" id="stage">
-          <div class="cap me" id="capMe"><svg class="pt" id="meArt" viewBox="0 0 100 100" aria-hidden="true"></svg><span class="tag"><span class="name" id="nameMe"></span><small id="lvMe"></small></span><span class="dots" id="dotsMe" role="img"><i></i><i></i><i></i></span></div>
+          <div class="cap me" id="capMe"><svg class="pt" id="meArt" viewBox="0 0 100 100" aria-hidden="true"></svg><span class="tag"><small class="title" id="titleMe" hidden>듀얼리스트</small><span class="name" id="nameMe"></span><small id="lvMe"></small></span><span class="dots" id="dotsMe" role="img"><i></i><i></i><i></i></span></div>
           <div class="vs"><svg viewBox="0 0 104 104" aria-hidden="true"><path d="M52 4l12 24 26-6-10 25 22 15-26 6 2 27-24-14-24 14 2-27-26-6 22-15-10-25 26 6z" fill="url(#vsG)" stroke="#fff" stroke-width="4" stroke-linejoin="round"/><path d="M52 4l12 24 26-6-10 25 22 15-26 6 2 27-24-14-24 14 2-27-26-6 22-15-10-25 26 6z" fill="none" stroke="#C7780A" stroke-width="2" stroke-linejoin="round" transform="translate(0 1)" opacity=".5"/></svg><b id="vsText">VS</b></div>
           <div class="quest" id="quest" role="img" hidden></div>
           <div class="quest h2h" id="h2h" hidden></div>
           <div class="lineup" id="lineup" role="img" hidden></div>
-          <div class="cap foe" id="capFoe"><svg class="pt npc" id="npc" data-face="idle" viewBox="0 0 100 100" aria-hidden="true"></svg><span class="mini" id="comReroll" title="상대에게 남은 다시 굴리기"></span><span class="tag"><span class="name" id="nameCom"></span><span class="stars" id="foeStars" role="img"></span></span><span class="dots" id="dotsCom" role="img"><i></i><i></i><i></i></span></div>
+          <div class="cap foe" id="capFoe"><svg class="pt npc" id="npc" data-face="idle" viewBox="0 0 100 100" aria-hidden="true"></svg><span class="mini" id="comReroll" title="상대에게 남은 다시 굴리기"></span><span class="tag"><small class="title" id="titleCom" hidden>듀얼리스트</small><span class="name" id="nameCom"></span><span class="stars" id="foeStars" role="img"></span></span><span class="dots" id="dotsCom" role="img"><i></i><i></i><i></i></span></div>
           <div class="bubble" id="bubble" aria-hidden="true"></div>
           <div class="room-acts" id="roomActs"><button class="chip invite" id="moreBtn" type="button" hidden>초대</button><button class="chip invite" id="inviteBtn" type="button" hidden>친구 초대</button></div>
         </div>
@@ -862,6 +867,7 @@ const Game = (() => {
     '같은 별 슬라임은 다섯 명씩이고, 다섯 명을 다 만나기 전에는 같은 슬라임이 또 나오지 않아요.',
     '판을 많이 할수록 가끔 별 하나 더 센 슬라임이 나와요. 20판부터 조금, 50판부터는 더 자주 나와요.',
     '주사위 눈 1은 빨간 버섯으로 그려져 있어요.',
+    '10연승을 한 번이라도 하면 이름 앞에 주사위가 붙고 칭호 듀얼리스트를 얻어요.',
     '친구 대결 방에는 7명까지 들어올 수 있어요. 이긴 사람이 자리에 남고 진 사람은 줄 맨 뒤로 가요. 비기면 자리를 지키던 사람이 남아요.',
     '줄을 선 동안에는 지금 판을 구경해요. 차례가 오면 10초 안에 준비를 눌러야 해요. 못 누르면 그 판만 다음 사람이 먼저 하고, 줄 순서는 그대로예요.',
     '키보드로는 1, 2, 3으로 내 줄, 4, 5, 6으로 상대 줄이나 알까기, R로 다시 굴리기, H로 홀드해요.',
@@ -1271,7 +1277,7 @@ const Game = (() => {
       try {
         await connect();
         me = makeId().slice(0, 12);
-        const data = { createdAt: Date.now(), host: me, people: { [me]: { name, online: true, coat: 0 } }, table: { n: 1, a: me, first: Math.random() < .5 ? 'a' : 'b', champ: me, streak: 0, fresh: true } };
+        const data = { createdAt: Date.now(), host: me, people: { [me]: { name, online: true, coat: 0, duel: Record.read().c > 0 } }, table: { n: 1, a: me, first: Math.random() < .5 ? 'a' : 'b', champ: me, streak: 0, fresh: true } };
         for (let i = 0; ; i++) {
           roomId = keyOf(makeId().slice(0, 6));
           roomRef = db.ref(`rooms/${roomId}`);
@@ -1308,7 +1314,7 @@ const Game = (() => {
         try {
           const pid = makeId().slice(0, 12);
           const coat = freeCoat((await roomRef.child('people').once('value')).val());
-          await roomRef.child(`people/${pid}`).set({ name, online: true, coat });
+          await roomRef.child(`people/${pid}`).set({ name, online: true, coat, duel: Record.read().c > 0 });
           let isFull = false;
           const r = await roomRef.child('table').transaction(cur => {
             if (!cur) return cur;
@@ -1359,7 +1365,7 @@ const Game = (() => {
       checkGone();
     }
     function onPeople() {
-      paintTally(); paintLine(); paintChamp(); checkGone();
+      paintTally(); paintLine(); paintChamp(); checkGone(); paintTitles();
       if (!table || !on) return;
       const t = table, mine = mySeatIn(t);
       if (mine) {
@@ -1637,6 +1643,7 @@ const Game = (() => {
       gameOver = true; checkGone();
       const w = k === 'win' ? seat : k === 'lose' ? other(seat) : 'd';
       roomRef.child(`score/${n}`).set({ a: match.a, b: match.b, w });
+      if (Record.read().c > 0 && !people[me]?.duel) roomRef.child(`people/${me}/duel`).set(true);
       const queue = freeInLine(table).length > 0;
       again.hidden = queue;
       if (queue) { noBtn.hidden = true; $('#againAsk').hidden = true; }
@@ -1892,6 +1899,16 @@ const Game = (() => {
         $(cap).classList.toggle('away', off);
       }
     }
+    /* 칭호 : 상대(구경할 땐 양쪽) 이름표에 듀얼리스트 */
+    function paintTitles() {
+      if (!on || !table) return;
+      const pairs = watching ? [['#capMe', '#titleMe', match.a], ['#capFoe', '#titleCom', match.b]] : [['#capFoe', '#titleCom', seat === 'a' ? match.b : match.a]];
+      for (const [cap, title, pid] of pairs) {
+        const duel = !!people[pid]?.duel;
+        $(`${cap} .tag`).classList.toggle('duel', duel);
+        $(title).hidden = !duel;
+      }
+    }
     /* 줄 선 사람 슬라임 */
     function fitLine() {
       const box = $('#lineup');
@@ -1909,7 +1926,7 @@ const Game = (() => {
       if (!shown) return;
       fitLine();
       const first = t.line.find(id => t.skip[id] !== t.n && !gone(id) && people[id]?.online !== false);
-      const key = JSON.stringify([t.line, t.skip, t.n, first, t.line.map(id => [people[id]?.name, people[id]?.online])]);
+      const key = JSON.stringify([t.line, t.skip, t.n, first, t.line.map(id => [people[id]?.name, people[id]?.online, people[id]?.duel])]);
       if (box.dataset.key === key) return;
       box.dataset.key = key;
       const sign = document.createElement('span');
@@ -1917,7 +1934,7 @@ const Game = (() => {
       box.replaceChildren(sign, ...t.line.map((id, i) => {
         const el = document.createElement('span');
         const zz = t.skip[id] === t.n || people[id]?.online === false;
-        el.className = `ln${id === first ? ' first' : ''}${zz ? ' zz' : ''}${id === me ? ' mine' : ''}`;
+        el.className = `ln${id === first ? ' first' : ''}${zz ? ' zz' : ''}${id === me ? ' mine' : ''}${people[id]?.duel ? ' duel' : ''}`;
         el.style.setProperty('--i', i);
         el.innerHTML = `<svg class="pt npc" data-face="${id === first ? 'grin' : 'idle'}" viewBox="0 0 100 100" aria-hidden="true">${rivalArt(slimeOf(id))}</svg>`;
         const nm = document.createElement('i');
@@ -1946,6 +1963,7 @@ const Game = (() => {
       npc.innerHTML = rivalArt(foe);
       set($('#nameCom'), foeName);
       if (watching) { $('#meArt').innerHTML = rivalArt(slimeOf(t.a)); set($('#nameMe'), realName(t.a)); set($('#lvMe'), ''); } else { $('#meArt').innerHTML = rivalArt(ME); paintRecord(); }
+      paintTitles();
       const st = $('#foeStars');
       st.innerHTML = '';
       st.removeAttribute('aria-label');
@@ -1957,7 +1975,8 @@ const Game = (() => {
     }
     const firstSide = () => (table.first === seat ? 'me' : 'com');
     function alreadyPaid() {
-      if (!on || watching) return true;
+      if (!on) return false;      /* 혼자 할 때는 늘 기록 */
+      if (watching) return true;  /* 구경하는 사람은 도토리 · 연승을 받지 않음 */
       const k = `titicaca-paid-${roomId}-${n}`;
       if (store.get(k)) return true;
       store.set(k, 1);
@@ -2282,6 +2301,8 @@ const Game = (() => {
     $('#record').innerHTML = `${ACORN}<b>${r.pts.toLocaleString('ko-KR')}</b>`;
     set($('#nameMe'), '나');
     set($('#lvMe'), `Lv.${levelOf(r.pts)}`);
+    $('#capMe .tag').classList.toggle('duel', r.c > 0);
+    $('#titleMe').hidden = !(r.c > 0);
   }
   function settle(res, delta) {
     const r = Record.read(), before = levelOf(r.pts), prev = { s: r.s, pts: r.pts };
@@ -2296,7 +2317,7 @@ const Game = (() => {
   }
   function paintStats() {
     const r = Record.read(), n = r.w + r.l + r.d, left = toNext(r.pts);
-    const list = [['전체', `${n}판 ${r.w}승 ${r.l}패${r.d ? ` ${r.d}무` : ''}`], ['승률', n ? `${(r.w / n * 100).toFixed(1)}%` : '아직 없어요'], ['지금 연승', `${r.s}연승`], ['최고 연승', `${r.b}연승`], ['10연승 도전', r.c ? `${r.c}번 성공` : '아직 없어요']];
+    const list = [['전체', `${n}판 ${r.w}승 ${r.l}패${r.d ? ` ${r.d}무` : ''}`], ['승률', n ? `${(r.w / n * 100).toFixed(1)}%` : '아직 없어요'], ['지금 연승', `${r.s}연승`], ['최고 연승', `${r.b}연승`], ['10연승 도전', r.c ? `${r.c}번 성공` : '아직 없어요'], ['칭호', r.c ? '듀얼리스트' : '10연승 하면 듀얼리스트']];
     $('#statsBody').innerHTML = `<div class="stat-top">${ACORN}<div><b>Lv.${levelOf(r.pts)} 도토리 ${r.pts.toLocaleString('ko-KR')}개</b><span>${left ? `다음 레벨까지 ${left}개` : '최고 레벨이에요'}</span></div></div><dl class="stat-list">${list.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join('')}</dl>`;
   }
   const stake = () => (bet === 'done' ? STAKE.predicted : STAKE.base);
@@ -2757,6 +2778,7 @@ const Game = (() => {
     const bonus = k === 'win' && delta > 0 ? streakBonus(s) : 0;
     const pills = [`<span class="pill acorn${delta < 0 ? ' minus' : ''}">${ACORN}${delta ? `${delta > 0 ? '+' : ''}${won(delta)}개` : '그대로'}</span>`];
     if (info.up) pills.push('<span class="pill hot">레벨 업!</span>');
+    if (cleared && r.c === 1 && info.prev?.c !== 1) pills.push('<span class="pill gold duel">칭호 듀얼리스트 얻음!</span>');
     $('#resultGain').innerHTML = pills.join('');
     $('#resultNote').textContent = '';
     /* 연승 메달 : 이기면 숫자가 하나 올라가고, 지면 회색으로 식는다. */
