@@ -356,6 +356,7 @@ body[data-layout="side"] .board{grid-template-columns:calc(var(--u)*86) calc(var
 body[data-watch] #table,body[data-watch] #hand,body[data-watch] #bets{pointer-events:none}
 body[data-watch] #bets,body[data-watch] #pot,body[data-watch] #rerollBtn{visibility:hidden}
 body[data-watch] #lvMe{color:#C2335F}
+body[data-watch] #closetBtn{display:none}
 /* 이 방 상대 전적 : VS 아래 작은 판, 결과판 알약. 바뀌면 숫자가 톡 튄다 */
 .h2h{grid-auto-flow:column;align-items:baseline;gap:calc(var(--u)*1.6);padding-block:calc(var(--u)*1.2) calc(var(--u)*1.5)}
 body:not([data-short]) #h2h:not([hidden]) ~ .room-acts{translate:-50% calc(var(--u)*8)}
@@ -371,6 +372,41 @@ body[data-short] #h2h{display:none}
 .pill{display:inline-flex;align-items:center;gap:var(--u);padding:calc(var(--u)*1.4) calc(var(--u)*4.4);border-radius:99px;background:#EEF9F1;box-shadow:inset 0 0 0 calc(var(--u)*.8) #A6DDB0;color:var(--leaf-deep);font:400 max(13px,calc(var(--u)*6.2))/1.1 var(--display);white-space:nowrap}
 .pill svg{width:calc(var(--u)*7.4);height:calc(var(--u)*7.4)}
 .pill.acorn{color:#7A4A1E;background:#FFF6E2;box-shadow:inset 0 0 0 calc(var(--u)*.8) #F0C77A}
+/* 네포레스트 : 조약돌(티티카카 점수) 알약, 도토리 받은 알약 */
+.pill.stone{color:#3F5373;background:#EEF3FA;box-shadow:inset 0 0 0 calc(var(--u)*.8) #B9C8DE}
+.pill.nut{color:#7A4508;background:linear-gradient(#FFF6D8,#FFE59A);box-shadow:inset 0 0 0 calc(var(--u)*.8) #F0C77A,0 calc(var(--u)*.7) 0 #E0A84A}
+.cl-wins svg{width:1.3em;height:1.3em;margin-right:.2em;vertical-align:-.3em}
+.cl-help{margin:calc(var(--u)*-1) 0 0;font-size:.82em;color:#7A8F80;text-align:center}
+.cl-item small svg{width:1.15em;height:1.15em;margin-right:.1em;vertical-align:-.25em}
+.cl-wins svg,.cl-item small svg,.hello em svg{display:inline-block}
+.cl-bar.buy{display:flex;align-items:center;justify-content:space-between;gap:calc(var(--u)*3);background:#FFF6E2;color:#7A4A1E}
+.cl-buy{flex:none;padding:calc(var(--u)*2.2) calc(var(--u)*6);border:0;border-radius:99px;background:linear-gradient(#FFE27A,#F5A623);color:#fff;font:400 max(14px,calc(var(--u)*6.2))/1 var(--display);text-shadow:0 1px 0 #B8461A;box-shadow:inset 0 0 0 calc(var(--u)*.8) rgba(255,255,255,.7),0 calc(var(--u)*1.2) 0 #C2700A;cursor:pointer}
+.cl-buy:focus-visible{outline:calc(var(--u)*1.2) solid #FFB21E;outline-offset:calc(var(--u)*1)}
+/* 듀얼리스트 프사 : 결과판 · 전적 창 금빛 단추, 미리보기 창 */
+.duel-btn{display:inline-flex;align-items:center;justify-content:center;gap:calc(var(--u)*1.4);justify-self:center;padding:calc(var(--u)*2.4) calc(var(--u)*6) calc(var(--u)*2.6) calc(var(--u)*4.4);border:0;border-radius:99px;background:linear-gradient(#FFF6B0,#FFC531);color:#7A4508;font:400 max(14px,calc(var(--u)*6.2))/1.1 var(--display);box-shadow:inset 0 0 0 calc(var(--u)*.8) #fff,0 calc(var(--u)*1.2) 0 #D9900F,0 0 calc(var(--u)*5) rgba(255,200,40,.7);cursor:pointer;animation:duel-glow 2.2s ease-in-out infinite}
+.duel-btn::before{content:"";flex:none;width:1.2em;height:1.2em;background:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2020%2020%27%3E%3Crect%20x%3D%271.6%27%20y%3D%271.6%27%20width%3D%2716.8%27%20height%3D%2716.8%27%20rx%3D%274.6%27%20fill%3D%27%23fff%27%20stroke%3D%27%23C2700A%27%20stroke-width%3D%272%27%2F%3E%3Ccircle%20cx%3D%276.4%27%20cy%3D%276.4%27%20r%3D%271.9%27%20fill%3D%27%233B2F4A%27%2F%3E%3Ccircle%20cx%3D%2710%27%20cy%3D%2710%27%20r%3D%271.9%27%20fill%3D%27%23E2453C%27%2F%3E%3Ccircle%20cx%3D%2713.6%27%20cy%3D%2713.6%27%20r%3D%271.9%27%20fill%3D%27%233B2F4A%27%2F%3E%3C%2Fsvg%3E") center/contain no-repeat}
+@keyframes duel-glow{0%,100%{box-shadow:inset 0 0 0 calc(var(--u)*.8) #fff,0 calc(var(--u)*1.2) 0 #D9900F,0 0 calc(var(--u)*3) rgba(255,200,40,.5)}50%{box-shadow:inset 0 0 0 calc(var(--u)*.8) #fff,0 calc(var(--u)*1.2) 0 #D9900F,0 0 calc(var(--u)*8) calc(var(--u)*1.6) rgba(255,210,60,.95)}}
+@media (prefers-reduced-motion:reduce){.duel-btn{animation:none}}
+#duelCard{width:min(calc(var(--u)*190),calc(100vw - 32px));overflow-y:auto}
+.duel-box{gap:calc(var(--u)*4.4)}
+.duel-img{display:block;width:100%;max-width:340px;height:auto;aspect-ratio:1;justify-self:center;border-radius:calc(var(--u)*6);background:#EAF7EE;box-shadow:0 calc(var(--u)*1.4) calc(var(--u)*4) rgba(30,80,45,.25);-webkit-touch-callout:default;user-select:auto}
+.duel-hint{margin:calc(var(--u)*-2) 0 0;font-size:.86em;color:var(--ink-soft)}
+.duel-btns{display:flex;justify-content:flex-end;gap:calc(var(--u)*3)}
+#duelClose{--top:#FFFFFF;--bot:#EAF8EF;--edge:#9ACFA8;color:var(--ink);text-shadow:none}
+.stat-extra{display:flex;flex-wrap:wrap;justify-content:center;gap:calc(var(--u)*3);margin-top:calc(var(--u)*4)}
+.forest-link{display:inline-flex;align-items:center;gap:calc(var(--u)*1.2);padding:calc(var(--u)*2.2) calc(var(--u)*5) calc(var(--u)*2.4) calc(var(--u)*3.6);border-radius:99px;background:#EEF9F1;box-shadow:inset 0 0 0 calc(var(--u)*.8) #A6DDB0,0 calc(var(--u)*1) 0 #7FC08C;color:var(--leaf-deep);font:400 max(14px,calc(var(--u)*6))/1.1 var(--display);text-decoration:none}
+.forest-link svg{width:1.3em;height:1.3em}
+/* 처음 한 번 쪽지 : 위에서 톡 내려와 12초 뒤 사라짐 */
+.hello{position:fixed;z-index:30;left:50%;top:calc(env(safe-area-inset-top,0px) + 10px);translate:-50% 0;display:grid;gap:6px;width:min(360px,calc(100vw - 32px));padding:14px 18px 12px;border-radius:18px;background:#fff;box-shadow:inset 0 0 0 2px #F0C77A,0 4px 0 #E0A84A,0 10px 28px rgba(60,40,10,.25);color:var(--ink);font:500 14px/1.5 var(--ui);cursor:pointer;animation:hello-in .5s cubic-bezier(.3,1.5,.5,1)}
+.hello b{display:flex;align-items:center;gap:6px;font:400 17px/1.2 var(--display);color:#7A4508}
+.hello svg{width:22px;height:22px;flex:none}
+.hello em{font-style:normal;font-weight:800;color:#3F5373;white-space:nowrap}
+.hello em svg{width:17px;height:17px;margin-right:2px;vertical-align:-4px}
+.hello small{justify-self:end;color:#A08A6A;font-size:12px}
+.hello.out{animation:hello-out .3s ease-in forwards}
+@keyframes hello-in{0%{opacity:0;transform:translateY(-30px) scale(.9)}100%{opacity:1;transform:none}}
+@keyframes hello-out{to{opacity:0;transform:translateY(-20px)}}
+@media (prefers-reduced-motion:reduce){.hello,.hello.out{animation:none}}
 .pill.minus,.pill.gray{color:var(--ink-soft);background:#F3EEF6;box-shadow:inset 0 0 0 calc(var(--u)*.8) #D6CDE0}
 .pill.hot{color:#8A4F0E;background:linear-gradient(#FFF1A0,#FFC531);box-shadow:inset 0 0 0 calc(var(--u)*.8) rgba(255,255,255,.8),0 calc(var(--u)*.8) 0 #E09A12}
 .pill.gold{color:#7A4508;background:linear-gradient(#FFF6B0,#FFC531);box-shadow:inset 0 0 0 calc(var(--u)*.8) #fff,0 calc(var(--u)*.8) 0 #D9900F,0 0 calc(var(--u)*5) rgba(255,200,40,.8)}
@@ -574,6 +610,7 @@ body[data-tip="place"] .gain{animation:tile-pulse .8s ease-in-out infinite}
 <body>
 <svg class="defs" aria-hidden="true"><defs><radialGradient id="cloverG" cx=".4" cy=".35" r=".7"><stop offset="0" stop-color="#B8F59A"/><stop offset="1" stop-color="#3FAE52"/></radialGradient><linearGradient id="logoG" x1="0" y1="0" x2="0" y2="1"><stop offset=".15" stop-color="#FFFBD1"/><stop offset=".55" stop-color="#FFD23F"/><stop offset="1" stop-color="#FF9F1C"/></linearGradient><linearGradient id="vsG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFF6B0"/><stop offset="1" stop-color="#FFB21E"/></linearGradient><linearGradient id="crownG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFF3A0"/><stop offset="1" stop-color="#E9A21E"/></linearGradient></defs></svg>
 <div class="motes" id="embers" aria-hidden="true"></div>
+<div class="hello" id="hello" role="status" hidden></div>
 
 <div class="shell" id="shell">
   <main class="game">
@@ -641,6 +678,7 @@ body[data-tip="place"] .gain{animation:tile-pulse .8s ease-in-out infinite}
             <p class="r-h2h" id="resultH2H" hidden></p>
             <div class="r-streak" id="resultStreak" hidden></div>
             <div class="gain-row" id="resultGain"></div>
+            <button class="duel-btn" id="duelSave" type="button" hidden>듀얼리스트 프사 저장</button>
             <p class="r-note" id="resultNote"></p>
             <div class="r-lv" id="resultLv"></div>
             <div class="level" id="resultLevel"></div>
@@ -696,6 +734,16 @@ body[data-tip="place"] .gain{animation:tile-pulse .8s ease-in-out infinite}
     <h2 id="closetTitle" tabindex="-1" autofocus>꾸미기</h2>
     <div id="closetBody"></div>
     <button class="bet" id="closetClose" type="button">닫기</button>
+  </div>
+</dialog>
+
+<dialog id="duelCard">
+  <div class="rules duel-box">
+    <h2 tabindex="-1" autofocus>듀얼리스트 프사</h2>
+    <img class="duel-img" id="duelImg" alt="듀얼리스트 프사 미리보기" width="1080" height="1080">
+    <label class="room-field">닉네임<input id="duelName" maxlength="8" autocomplete="off" enterkeyhint="done" placeholder="나"></label>
+    <p class="duel-hint">저장이 안 되면 그림을 길게 눌러 저장하세요.</p>
+    <div class="duel-btns"><button class="bet" id="duelClose" type="button">닫기</button><button class="bet" id="duelSaveBtn" type="button">이미지 저장</button></div>
   </div>
 </dialog>
 
@@ -903,11 +951,12 @@ const Game = (() => {
     '다시 굴리기는 한 판에 한 번 쓸 수 있어요. 주사위를 다시 굴리면 처음과 다른 눈이 나오고, 처음 눈과 새 눈 중에 골라요.',
     '판이 꽉 찬 쪽은 차례를 건너뛰고, 양쪽 판이 다 차면 끝나요.',
     '줄마다 합이 높은 쪽이 그 줄을 가져가고, 두 줄 이상 가져가면 이겨요. 가져간 줄 수가 같으면 전체 합으로 가려요.',
-    '이기면 도토리 100개를 얻고 지면 100개를 잃어요.',
+    '판마다 조약돌 100개를 걸어요. 이기면 100개를 얻고 지면 100개를 잃어요. 조약돌이 쌓이면 레벨이 올라요.',
+    '이기면 네포레스트 도토리도 받아요. 20개에 2연승부터 연승마다 5개씩 더(최대 45개), 비기면 10개, 10연승을 이루면 100개를 더 받아요. 도토리로 꾸미기에서 옷을 사고, 루루피아와 같이 써요.',
     '2연승부터는 연승 수 × 20개를 더 얻어요. 3연승이면 160개, 10연승부터는 한 판에 300개예요.',
-    '주사위가 10개 놓이면 3턴 동안 승리 예측을 할 수 있어요. 내 차례에 눌러야 하고, 예측하면 이 판에 걸린 도토리가 150개가 돼요.',
+    '주사위가 10개 놓이면 3턴 동안 승리 예측을 할 수 있어요. 내 차례에 눌러야 하고, 예측하면 이 판에 걸린 조약돌이 150개가 돼요.',
     '홀드는 상대가 남은 칸을 아무리 잘 채워도 못 넘는 줄이 두 줄 이상일 때 켜져요. 누르면 지금 판 그대로 이기고 끝나요.',
-    '기권은 내 차례에 할 수 있어요. 걸린 도토리의 절반만 잃고 패로 남아요.',
+    '기권은 내 차례에 할 수 있어요. 걸린 조약돌의 절반만 잃고 패로 남아요.',
     '10연승 도전 : 이길수록 센 슬라임이 나와요. 1~3번째 판은 별 1개, 4~5번째는 별 2개, 6~7번째는 별 3개, 8~9번째는 별 4개, 10번째 판은 별 5개예요. 지면 1번째 판부터 다시 시작해요.',
     '같은 별 슬라임은 다섯 명씩이고, 다섯 명을 다 만나기 전에는 같은 슬라임이 또 나오지 않아요.',
     '판을 많이 할수록 가끔 별 하나 더 센 슬라임이 나와요. 20판부터 조금, 50판부터는 더 자주 나와요.',
@@ -999,6 +1048,10 @@ const Game = (() => {
   }
   const ACORN = '<svg viewBox="0 0 40 40" aria-hidden="true"><ellipse cx="20" cy="25" rx="11" ry="12" fill="#D08A45" stroke="#8A5424" stroke-width="1.6"/><ellipse cx="16" cy="22" rx="3" ry="5" fill="#E9B072" opacity=".8"/><path d="M6 16c2-9 26-9 28 0-4 3-24 3-28 0z" fill="#7B4A26" stroke="#5A3418" stroke-width="1.4"/><path d="M10 13l20 4M12 18l6-7M20 18l6-7M26 18l4-5" stroke="#5A3418" stroke-width="1.4"/><path d="M20 8l1-5" stroke="#5A3418" stroke-width="2.6" stroke-linecap="round"/></svg>';
   const acornAt = (x, y, s, r) => `<g transform="translate(${x} ${y}) rotate(${r}) scale(${s})"><ellipse cx="0" cy="6" rx="11" ry="12.5" fill="#D08A45" stroke="#8A5424" stroke-width="2"/><ellipse cx="-4" cy="3" rx="3" ry="5.4" fill="#EDB57A" opacity=".85"/><path d="M-14 -3c2-10 26-10 28 0-5 4-23 4-28 0z" fill="#7B4A26" stroke="#5A3418" stroke-width="2"/><path d="M-9 -7l18 4M-6 -1l7-8M3 -1l6-7" stroke="#5A3418" stroke-width="1.3"/><path d="M0 -10l1-5" stroke="#5A3418" stroke-width="2.6" stroke-linecap="round"/></g>`;
+  /* 조약돌 : 티티카카 판돈 · 레벨 점수. 도토리는 네포레스트 돈이라 따로 */
+  const PEBBLE = '<svg viewBox="0 0 40 40" aria-hidden="true"><path d="M5.5 25.5c-1-8.5 6.5-14 15.5-14s14.5 5 13.5 12.5-7.5 10.5-15.5 10.5S6.5 32 5.5 25.5z" fill="#AFC2DA" stroke="#5B6F8F" stroke-width="1.8"/><ellipse cx="25" cy="27.5" rx="7" ry="3.4" fill="#93A8C6" opacity=".6"/><path d="M10 23.5c1.2-5 6-8 12-8" fill="none" stroke="#F1F6FC" stroke-width="2.6" stroke-linecap="round"/><path d="M31.5 5l1 2.6 2.6 1-2.6 1-1 2.6-1-2.6-2.6-1 2.6-1z" fill="#FFF3B0" stroke="#E0A84A" stroke-width=".9" stroke-linejoin="round"/></svg>';
+  const PEBBLE_C = [['#AFC2DA', '#5B6F8F', '#93A8C6'], ['#C9BFE3', '#6A5E95', '#AFA2D2'], ['#B9D9CC', '#4F7F6D', '#9CC4B4'], ['#E3D2BD', '#86684A', '#CDB79C']];
+  const pebbleAt = (x, y, s, r, k = 0) => { const [f, e, d] = PEBBLE_C[k % PEBBLE_C.length]; return `<g transform="translate(${x} ${y}) rotate(${r}) scale(${s})"><path d="M-15 3c-1-8.5 6.5-13.5 15-13.5s14.5 5 13.5 12.5-7.5 10-14.5 10S-14 9.5-15 3z" fill="${f}" stroke="${e}" stroke-width="2"/><ellipse cx="4" cy="5.5" rx="7" ry="3.2" fill="${d}" opacity=".7"/><path d="M-10.5 1c1.2-5 6-8 11.5-8" fill="none" stroke="#F6F9FD" stroke-width="2.6" stroke-linecap="round"/></g>`; };
   const CLOVER = '<svg viewBox="0 0 80 80" aria-hidden="true"><g fill="url(#cloverG)" stroke="#2E8F4A" stroke-width="3"><path d="M40 38C28 34 16 22 24 12c6-7 14-2 16 6 2-8 10-13 16-6 8 10-4 22-16 26z"/><path d="M40 42C28 46 16 58 24 68c6 7 14 2 16-6 2 8 10 13 16 6 8-10-4-22-16-26z"/><path d="M38 40C34 28 22 16 12 24c-7 6-2 14 6 16-8 2-13 10-6 16 10 8 22-4 26-16z"/><path d="M42 40c4-12 16-24 26-16 7 6 2 14-6 16 8 2 13 10 6 16-10 8-22-4-26-16z"/></g><circle cx="40" cy="40" r="15" fill="#fff" stroke="#2E8F4A" stroke-width="3"/><g fill="none" stroke="#2E8F4A" stroke-width="3.2" stroke-linecap="round"><path d="M31.5 43A9 9 0 0 1 46.5 33.5"/><path d="M48.5 37A9 9 0 0 1 33.5 46.5"/></g><path d="M43.5 36.5L49.5 30.5L50 37ZM36.5 43.5L30.5 49.5L30 43Z" fill="#2E8F4A" stroke="#2E8F4A" stroke-width="1.2" stroke-linejoin="round"/></svg>';
   const VINE = '<svg viewBox="0 0 26 16" aria-hidden="true"><path d="M1 9c5-6 9-6 12 0s8 6 12 0" fill="none" stroke="#2E8F4A" stroke-width="4" stroke-linecap="round"/><path d="M1 9c5-6 9-6 12 0s8 6 12 0" fill="none" stroke="#7FD58A" stroke-width="2" stroke-linecap="round"/><path d="M13 9c-2-6 1-9 6-8-1 5-3 7-6 8z" fill="#5CCB78" stroke="#2E8F4A" stroke-width="1.2"/></svg>';
   const css = document.documentElement.style;
@@ -1048,23 +1101,23 @@ const Game = (() => {
     { name: '무지개 방울이', stars: 1, body: ['#FFFFFF', '#E6E9F7', '#A9B0D6'], rim: '#7E86B8', hat: 'rainbow', eyes: 'big', mouth: 'grin', brows: 'soft', hi: '비 온 뒤엔 내가 떠!', win: '알록달록 이겼다!', lose: '무지개가 사라졌어…' },
     { name: '딸기 콩콩이', stars: 1, body: ['#FFF6F8', '#FFCCD6', '#EE8AA0'], rim: '#C95F78', hat: 'berry', eyes: 'two', mouth: 'cat', brows: 'soft', hi: '딸기 하나 줄까?', win: '달콤하게 이겼다!', lose: '딸기가 시었나 봐…' },
     { name: '민들레 솜이', stars: 1, body: ['#FFFEF0', '#FFF29E', '#EBC93A'], rim: '#BF9B18', hat: 'puff', eyes: 'dot', mouth: 'o', brows: 'none', hi: '후~ 불면 날아가요.', win: '솜털처럼 가볍게!', lose: '바람에 날아갔다…' },
-    { name: '꽃잎 방울이', stars: 2, body: ['#FFF6F0', '#FFC6A8', '#F08A64'], rim: '#D0603C', hat: 'flowers', eyes: 'lash', mouth: 'cat', brows: 'soft', hi: '꽃향기 맡고 왔어?', win: '도토리는 내가 가질게.', lose: '다음엔 안 질 거야.' },
+    { name: '꽃잎 방울이', stars: 2, body: ['#FFF6F0', '#FFC6A8', '#F08A64'], rim: '#D0603C', hat: 'flowers', eyes: 'lash', mouth: 'cat', brows: 'soft', hi: '꽃향기 맡고 왔어?', win: '조약돌은 내가 가질게.', lose: '다음엔 안 질 거야.' },
     { name: '안대 몰랑이', stars: 2, body: ['#F0F7FF', '#A9C6E8', '#5F8DC4'], rim: '#3E6CA6', hat: 'none', eyes: 'patch', mouth: 'smirk', brows: 'angry', hi: '한쪽 눈이면 충분해.', win: '봤지? 한쪽으로도 보여.', lose: '눈이 하나 모자랐네.' },
     { name: '무당벌레 점박이', stars: 2, body: ['#FFF1EE', '#FF8F84', '#E2453C'], rim: '#A82A24', hat: 'bug', spots: true, eyes: 'two', mouth: 'smile', brows: 'soft', hi: '점 일곱 개는 행운이래!', win: '행운은 내 편!', lose: '점 하나가 모자랐네…' },
     { name: '달팽이 느림보', stars: 2, body: ['#FBFFF0', '#DCE3A6', '#9CA650'], rim: '#76803A', hat: 'shell', eyes: 'dot', mouth: 'smile', brows: 'soft', hi: '천천히… 그래도 이길 거야.', win: '느려도 이겼지?', lose: '다음엔 조금 빨리…' },
     { name: '연잎 개굴이', stars: 2, body: ['#F2FFE6', '#9CDE6A', '#4FA82E'], rim: '#3A7E22', hat: 'lily', eyes: 'big', mouth: 'tongue', brows: 'none', hi: '개굴! 한 판 할래?', win: '개굴개굴, 이겼다!', lose: '개굴… 물에 빠졌다.' },
-    { name: '버섯 몽글이', stars: 3, body: ['#FFF0F6', '#FF9EC4', '#DE4F88'], rim: '#B83A6E', hat: 'mushroom', eyes: 'two', mouth: 'smirk', brows: 'angry', hi: '한 판 붙자!', win: '도토리 잘 받을게!', lose: '버섯 모자가 울겠다…' },
+    { name: '버섯 몽글이', stars: 3, body: ['#FFF0F6', '#FF9EC4', '#DE4F88'], rim: '#B83A6E', hat: 'mushroom', eyes: 'two', mouth: 'smirk', brows: 'angry', hi: '한 판 붙자!', win: '조약돌 잘 받을게!', lose: '버섯 모자가 울겠다…' },
     { name: '바람 포롱이', stars: 3, body: ['#F0FBFF', '#9FDDF7', '#3FAEDF'], rim: '#2A8BBE', hat: 'pinwheel', eyes: 'two', mouth: 'grin', brows: 'soft', hi: '바람처럼 끝내 줄게!', win: '바람은 내 편이야.', lose: '바람이 바뀌었나 봐.' },
     { name: '꿀벌 붕붕이', stars: 3, body: ['#FFFBE8', '#FFD45A', '#F0A51E'], rim: '#B97A0C', hat: 'bug', back: 'wings', stripes: true, eyes: 'dot', mouth: 'grin', brows: 'soft', hi: '붕붕! 한 판 하자.', win: '붕~ 꿀맛 같은 승리!', lose: '침을 아껴 둘걸…' },
     { name: '깡총 토순이', stars: 3, body: ['#FFFFFF', '#F4ECF4', '#D3BCD3'], rim: '#A584A5', hat: 'none', back: 'ears', eyes: 'big', mouth: 'cat', brows: 'soft', hi: '깡총! 빨리 끝내자.', win: '깡총깡총, 이겼다!', lose: '귀가 축 처졌어…' },
     { name: '고슴도치 따끔이', stars: 3, body: ['#FFF6EE', '#DDB89C', '#A87E5E'], rim: '#7A5238', hat: 'none', back: 'spikes', eyes: 'dot', mouth: 'smirk', brows: 'angry', hi: '가까이 오면 따끔해!', win: '따끔하게 이겼지?', lose: '가시가 다 빠졌다…' },
     { name: '부엉 박사', stars: 4, body: ['#FFF6E6', '#F2C98A', '#C98A3E'], rim: '#9A6224', hat: 'scholar', eyes: 'two', mouth: 'flat', brows: 'angry', hi: '계산은 이미 끝났지.', win: '예상대로군.', lose: '흠, 다시 계산해 봐야겠군.' },
-    { name: '꿀단지 여왕', stars: 4, body: ['#FFFBE0', '#FFDB6E', '#F0A82A'], rim: '#C07A12', hat: 'crown', eyes: 'lash', mouth: 'smile', brows: 'arch', hi: '내 앞에서는 공손하렴.', win: '도토리, 고맙게 받을게.', lose: '이번 한 번만 봐줄게.' },
+    { name: '꿀단지 여왕', stars: 4, body: ['#FFFBE0', '#FFDB6E', '#F0A82A'], rim: '#C07A12', hat: 'crown', eyes: 'lash', mouth: 'smile', brows: 'arch', hi: '내 앞에서는 공손하렴.', win: '조약돌, 고맙게 받을게.', lose: '이번 한 번만 봐줄게.' },
     { name: '버들 마법사', stars: 4, body: ['#F0F3FF', '#AEBBF5', '#5A6CD2'], rim: '#3E4AA8', hat: 'wizard', eyes: 'two', mouth: 'smirk', brows: 'arch', hi: '네 주사위가 다 보인단다.', win: '마법처럼 이겼지.', lose: '주문을 잘못 외웠군…' },
     { name: '솔잎 기사', stars: 4, body: ['#F0FFF6', '#94DDB4', '#3FA66C'], rim: '#2A7E50', hat: 'helmet', eyes: 'two', mouth: 'flat', brows: 'angry', hi: '정정당당하게 겨루자!', win: '기사의 승리다!', lose: '훌륭한 승부였다.' },
     { name: '수염 정원사', stars: 4, body: ['#FFF6EC', '#F2BC86', '#CC7A3A'], rim: '#9A5422', hat: 'straw', stache: true, eyes: 'smile', mouth: 'smile', brows: 'soft', hi: '허허, 천천히 키워 보세.', win: '수확이 쏠쏠하구먼.', lose: '허허, 올해는 흉년이로구나.' },
     { name: '반딧불 유령', stars: 5, ghost: true, body: ['#F2FFFC', '#A6F2E0', '#3FC2A4'], rim: '#2A9A82', hat: 'antenna', eyes: 'glow', mouth: 'flat', brows: 'none', hi: '…숲이 너를 부르고 있어.', win: '…너도 이제 숲의 일부야.', lose: '…다시 돌아올게.' },
-    { name: '숲의 왕 솔방울', stars: 5, body: ['#E8F8DC', '#6CC46A', '#2E8B3E'], rim: '#1E6A2C', hat: 'pinecone', eyes: 'two', mouth: 'fang', brows: 'angry', hi: '숲의 주인은 나다!', win: '도토리는 잘 받겠다!', lose: '다음엔 안 봐준다.' },
+    { name: '숲의 왕 솔방울', stars: 5, body: ['#E8F8DC', '#6CC46A', '#2E8B3E'], rim: '#1E6A2C', hat: 'pinecone', eyes: 'two', mouth: 'fang', brows: 'angry', hi: '숲의 주인은 나다!', win: '조약돌은 잘 받겠다!', lose: '다음엔 안 봐준다.' },
     { name: '천둥 구름이', stars: 5, body: ['#F2F3FA', '#BAC0DC', '#6C74A6'], rim: '#474F86', hat: 'cloud', eyes: 'two', mouth: 'smirk', brows: 'angry', hi: '우르르 쾅! 각오해.', win: '번개처럼 끝냈다!', lose: '비가 그쳤네…' },
     { name: '서리 공주', stars: 5, body: ['#FFFFFF', '#D4F1FF', '#7CC4EC'], rim: '#3F92C8', hat: 'frost', eyes: 'lash', mouth: 'smile', brows: 'arch', hi: '꽁꽁 얼려 줄게.', win: '차갑게 이겼네.', lose: '녹아 버렸어…' },
     { name: '불꽃 활활이', stars: 5, body: ['#FFF4EA', '#FFA266', '#E8572A'], rim: '#B23A14', hat: 'flame', eyes: 'two', mouth: 'grin', brows: 'angry', hi: '활활 타오른다!', win: '뜨겁게 이겼다!', lose: '불씨가 꺼졌어…' },
@@ -1221,7 +1274,7 @@ const Game = (() => {
     if (bumped) return `${s + 1}번째 판, 센 상대 등장! 별 ${foe.stars}개 ${foe.name}!`;
     return `${s + 1}번째 판, ${foe.name} 등장!`;
   }
-  /* 꾸미기 : 루루피아와 같은 아이템 목록(SHOP). 티티카카에서는 이긴 횟수로 열린다(값 ÷ 5 승).
+  /* 꾸미기 : 루루피아와 같은 아이템 목록(SHOP). 네포레스트 도토리로 사거나, 이긴 횟수로 열린다(값 ÷ 5 승).
      입은 모습은 slime-closet 에 두어서 같은 주소의 루루피아와 함께 쓴다. 거기서 산 것도 여기서 입을 수 있다. */
   const SHOP = {
     hat: [
@@ -1254,6 +1307,19 @@ const Game = (() => {
     return { id: 'me', body: col[3], rim: col[4], hat: x.hat, eyes: 'two', mouth: 'cat', brows: 'none', back: x.back || undefined, stache: !!x.stache, spots: !!x.spots, stripes: !!x.stripes };
   };
   Object.assign(ME, lookOf(Closet.get()));
+  /* 친구 대결에 보낼 내 모습, 받은 모습은 아는 것만 골라 그린다 */
+  const wornLook = () => { const c = Closet.get(); return { hat: c.hat, color: c.color, back: c.back || null, stache: !!c.stache, spots: !!c.spots, stripes: !!c.stripes }; };
+  const lookFrom = l => lookOf({ hat: SHOP.hat.some(h => h[0] === l.hat) ? l.hat : 'acorn', color: l.color, back: SHOP.deco.some(d => d[0] === l.back && d[3] === 'back') ? l.back : null, stache: !!l.stache, spots: !!l.spots, stripes: !!l.stripes });
+  /* 숲 주민 도감 : 혼자 할 때 만난 판 · 이긴 판을 이름으로 적어 둔다(neforest-dex[이름].dice, 숲 지도에서 본다) */
+  function meetRival(res) {
+    if (!foe || !foe.name) return;
+    let d = {};
+    try { d = JSON.parse(localStorage.getItem('neforest-dex')) || {}; } catch {}
+    const x = d[foe.name] || {}, s = x.dice || { m: 0, w: 0 };
+    s.m++; if (res === 'w') s.w++;
+    d[foe.name] = { ...x, dice: s };
+    try { localStorage.setItem('neforest-dex', JSON.stringify(d)); } catch {}
+  }
   const winsNeed = price => Math.ceil(price / 5);
   const myWins = () => { try { return (JSON.parse(localStorage.getItem('samsepan-record')) || {}).w || 0; } catch { return 0; } };
   const itemOf = (kind, key) => SHOP[kind].find(x => x[0] === key);
@@ -1273,12 +1339,17 @@ const Game = (() => {
     const prev = lookOf(c, clSel ? overFor(clSel.kind, clSel.key) : {});
     const items = SHOP[clTab].map(([key, name, price]) => {
       const own = hasItem(c, clTab, key), on = wearing(c, clTab, key), picked = clSel && clSel.kind === clTab && clSel.key === key;
-      return `<button class="cl-item${on ? ' on' : ''}${picked ? ' picked' : ''}${own ? '' : ' locked'}" type="button" data-kind="${clTab}" data-key="${key}">${art(lookOf(c, overFor(clTab, key)))}<b>${name}</b><small>${on ? '입는 중' : own ? '입기' : `${winsNeed(price)}승`}</small></button>`;
+      return `<button class="cl-item${on ? ' on' : ''}${picked ? ' picked' : ''}${own ? '' : ' locked'}" type="button" data-kind="${clTab}" data-key="${key}">${art(lookOf(c, overFor(clTab, key)))}<b>${name}</b><small>${on ? '입는 중' : own ? '입기' : `${ACORN}${price}`}</small></button>`;
     }).join('');
     let bar = '';
-    if (clSel) { const it = itemOf(clSel.kind, clSel.key), need = winsNeed(it[2]); bar = `<p class="cl-bar">${it[1]} · ${need}승 하면 열려요. 지금 ${w}승, ${need - w}번 더 이기면 돼요.</p>`; }
+    if (clSel) {
+      const it = itemOf(clSel.kind, clSel.key), need = winsNeed(it[2]), have = acorns();
+      bar = have >= it[2]
+        ? `<div class="cl-bar buy"><span>${it[1]} · 도토리 ${it[2]}개로 살까요?</span><button class="cl-buy" type="button" data-buy="1">사기</button></div>`
+        : `<p class="cl-bar">${it[1]} · 도토리가 ${it[2] - have}개 모자라요. ${need}승을 채워도 열려요(지금 ${w}승).</p>`;
+    }
     else if (clMsg) bar = `<p class="cl-bar ok">${clMsg}</p>`;
-    closetBody.innerHTML = `<div class="cl-top"><div class="cl-hero">${art(prev).replace('class="pt npc"', 'class="pt npc" data-face="laugh"')}</div><p class="cl-wins">이긴 판 <b>${w}</b> · 이길수록 새 꾸미기가 열려요</p></div>
+    closetBody.innerHTML = `<div class="cl-top"><div class="cl-hero">${art(prev).replace('class="pt npc"', 'class="pt npc" data-face="laugh"')}</div><p class="cl-wins">${ACORN}도토리 <b>${acorns().toLocaleString('ko-KR')}</b>개 · 이긴 판 <b>${w}</b></p><p class="cl-help">도토리로 사거나, 값의 5분의 1만큼 이기면 열려요</p></div>
       <div class="cl-tabs" role="tablist">${[['hat', '모자'], ['color', '색'], ['deco', '장식']].map(([k, l]) => `<button class="cl-tab" type="button" role="tab" aria-selected="${k === clTab}" data-tab="${k}">${l}</button>`).join('')}</div>
       <div class="cl-items">${items}</div>${bar}`;
   }
@@ -1290,15 +1361,27 @@ const Game = (() => {
     if (!closetDlg.open) closetDlg.showModal();
   }
   closetBody.addEventListener('click', e => {
-    const t = e.target.closest('[data-tab],[data-kind]'); if (!t) return;
+    const t = e.target.closest('[data-tab],[data-kind],[data-buy]'); if (!t) return;
     const c = Closet.get();
-    if (t.dataset.tab) { clTab = t.dataset.tab; clSel = null; clMsg = ''; }
+    if (t.dataset.buy) {
+      if (!clSel) return;
+      const { kind, key } = clSel, it = itemOf(kind, key);
+      if (acorns() < it[2]) return;
+      acorns(-it[2]);
+      if (!c.owned.includes(`${kind}:${key}`)) c.owned.push(`${kind}:${key}`);
+      if (kind === 'hat') c.hat = key; else if (kind === 'color') c.color = key;
+      else { const d = itemOf('deco', key); if (d[3] === 'back') c.back = key; else c[d[3]] = true; }
+      Closet.set(c); Object.assign(ME, lookOf(c)); paintMe(); paintRecord(); Online.dress();
+      clSel = null; clMsg = `${it[1]} 샀어요! 바로 입었어요.`;
+      sfx('bet');
+    }
+    else if (t.dataset.tab) { clTab = t.dataset.tab; clSel = null; clMsg = ''; }
     else {
       const kind = t.dataset.kind, key = t.dataset.key;
       if (hasItem(c, kind, key)) {
         if (kind === 'hat') c.hat = key; else if (kind === 'color') c.color = key;
         else { const d = itemOf('deco', key); if (d[3] === 'back') c.back = c.back === key ? null : key; else c[d[3]] = !c[d[3]]; }
-        Closet.set(c); Object.assign(ME, lookOf(c)); paintMe(); clSel = null; clMsg = `${itemOf(kind, key)[1]} ${wearing(c, kind, key) ? '입었어요!' : '벗었어요'}`;
+        Closet.set(c); Object.assign(ME, lookOf(c)); paintMe(); Online.dress(); clSel = null; clMsg = `${itemOf(kind, key)[1]} ${wearing(c, kind, key) ? '입었어요!' : '벗었어요'}`;
         sfx('hop');
       } else { clSel = { kind, key }; clMsg = ''; sfx('place'); }
     }
@@ -1309,6 +1392,137 @@ const Game = (() => {
   closetDlg.addEventListener('close', () => { clSel = null; paintMe(); });
   setTimeout(() => { const w0 = Record.write; Record.write = r => { w0(r); paintClosetDot(); }; paintClosetDot(); });
   paintMe();
+  /* 다른 창(루루피아)에서 도토리 · 옷이 바뀌면 윗줄 알약과 내 슬라임을 다시 그린다 */
+  addEventListener('storage', e => {
+    if (e.key === 'lulupia-acorn') paintRecord();
+    if (e.key === 'slime-closet') { Object.assign(ME, lookOf(Closet.get())); if (!Online.watching) paintMe(); }
+  });
+  /* 처음 한 번 : 도토리가 조약돌로 바뀐 것을 알리고, 그동안 이긴 판 × 5 도토리(최대 300)를 선물.
+     자동 시험 브라우저에서는 띄우지 않는다(window.__helloTest 면 띄움). 기록 · 그림이 다 준비된 뒤에 */
+  setTimeout(() => {
+    let seen = true, rec = null;
+    try { seen = !!localStorage.getItem('neforest-hello'); rec = JSON.parse(localStorage.getItem('samsepan-record')); } catch {}
+    if (seen || (navigator.webdriver && !window.__helloTest)) return;
+    try { localStorage.setItem('neforest-hello', '1'); } catch {}
+    if (!rec || !(rec.w + rec.l + rec.d > 0)) return;
+    const gift = Math.min(300, (rec.w || 0) * 5);
+    if (gift) acorns(gift);
+    paintRecord();
+    const el = $('#hello');
+    el.innerHTML = `<b>${ACORN}네포레스트 소식</b><span>그동안 모은 도토리는 이제 <em>${PEBBLE}조약돌</em>이에요. 레벨은 그대로예요.</span><span>도토리는 숲 돈이 됐어요. 꾸미기에서 옷을 사고 루루피아와 같이 써요.${gift ? ` 이긴 판만큼 <em>도토리 ${gift}개</em>를 선물로 넣었어요.` : ''}</span><small>눌러서 닫기</small>`;
+    el.hidden = false;
+    const close = () => { el.classList.add('out'); setTimeout(() => { el.hidden = true; }, 300); };
+    el.addEventListener('click', close, { once: true });
+    setTimeout(close, 12000);
+  });
+  /* 듀얼리스트 프사 : 10연승을 이룬 사람이 닉네임 · 내 슬라임 · 칭호가 들어간 1080 × 1080 그림을 저장한다.
+     결과판(10연승 판)과 전적 창에서 연다. 폰은 공유 창(사진에 저장), PC 는 내려받기, 안 되면 그림을 길게 눌러 저장. */
+  const DUEL_DICE = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'><rect x='1.6' y='1.6' width='16.8' height='16.8' rx='4.6' fill='#fff' stroke='#C2700A' stroke-width='2'/><circle cx='6.4' cy='6.4' r='1.9' fill='#3B2F4A'/><circle cx='10' cy='10' r='1.9' fill='#E2453C'/><circle cx='13.6' cy='13.6' r='1.9' fill='#3B2F4A'/></svg>`;
+  const cleanName = v => String(v || '').replace(/\s+/g, ' ').trim().slice(0, 8);
+  const svgImage = s => new Promise((ok, no) => { const im = new Image(); im.onload = () => ok(im); im.onerror = no; im.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(s); });
+  const roundRect = (g, x, y, w, h, r) => { g.beginPath(); g.moveTo(x + r, y); g.arcTo(x + w, y, x + w, y + h, r); g.arcTo(x + w, y + h, x, y + h, r); g.arcTo(x, y + h, x, y, r); g.arcTo(x, y, x + w, y, r); g.closePath(); };
+  function slimeSvg() {
+    const defs = document.querySelector('svg.defs defs')?.innerHTML || '';
+    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="-16 -26 132 132" width="720" height="720"><defs>${defs}</defs><style>.lid,.e-idle,.e-shock,.e-cry,.m-closed,.m-shock,.m-cry,.b-scowl,.tears{display:none}</style>${rivalArt({ ...ME, id: 'card' })}</svg>`;
+  }
+  async function drawDuelCard(name) {
+    const S = 1080, cv = document.createElement('canvas');
+    cv.width = cv.height = S;
+    const g = cv.getContext('2d');
+    try { await Promise.all([document.fonts.load('400 100px "Do Hyeon"'), document.fonts.load('800 34px "Gothic A1"')]); } catch {}
+    let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+    /* 하늘 · 먼 나무 · 풀밭 */
+    const sky = g.createLinearGradient(0, 0, 0, S);
+    sky.addColorStop(0, '#8ED8FF'); sky.addColorStop(.44, '#D6F4FF'); sky.addColorStop(.445, '#A9E58C'); sky.addColorStop(1, '#6FBF5E');
+    g.fillStyle = sky; g.fillRect(0, 0, S, S);
+    for (const [y0, fill, edge, r0, r1, step] of [[455, '#6CC46A', '#4FA552', 46, 70, 52], [485, '#58B85A', '#3E9C45', 40, 60, 46]]) {
+      g.fillStyle = fill; g.strokeStyle = edge; g.lineWidth = 5;
+      for (let x = -60; x < S + 60; x += step) { g.beginPath(); g.arc(x, y0 + rnd() * 24, r0 + rnd() * (r1 - r0), 0, Math.PI * 2); g.fill(); g.stroke(); }
+    }
+    g.fillStyle = '#A9E58C'; g.fillRect(0, 500, S, 30);
+    for (let i = 0; i < 46; i++) {
+      const x = rnd() * S, y = 560 + rnd() * 500, c = ['#fff', '#FFE27A', '#FFC2DA', '#D9C8FF'][Math.floor(rnd() * 4)];
+      g.fillStyle = c; for (const [dx, dy] of [[0, -7], [7, 0], [0, 7], [-7, 0]]) { g.beginPath(); g.arc(x + dx, y + dy, 6.5, 0, Math.PI * 2); g.fill(); }
+      g.fillStyle = '#F5B820'; g.beginPath(); g.arc(x, y, 4, 0, Math.PI * 2); g.fill();
+    }
+    /* 슬라임 뒤 금빛 햇살 */
+    const cx = S / 2, cy = 560;
+    g.save(); g.translate(cx, cy);
+    for (let i = 0; i < 28; i++) { g.rotate(Math.PI * 2 / 28); g.beginPath(); g.moveTo(0, 0); g.lineTo(-44, -820); g.lineTo(44, -820); g.closePath(); g.fillStyle = i % 2 ? 'rgba(255,214,90,.34)' : 'rgba(255,255,255,.2)'; g.fill(); }
+    g.restore();
+    const glow = g.createRadialGradient(cx, cy, 30, cx, cy, 420);
+    glow.addColorStop(0, 'rgba(255,248,205,.95)'); glow.addColorStop(1, 'rgba(255,248,205,0)');
+    g.fillStyle = glow; g.fillRect(0, 0, S, S);
+    /* 슬라임 + 그림자 */
+    g.fillStyle = 'rgba(40,110,60,.22)'; g.beginPath(); g.ellipse(cx, 812, 230, 34, 0, 0, Math.PI * 2); g.fill();
+    const [slime, dice] = await Promise.all([svgImage(slimeSvg()), svgImage(DUEL_DICE)]);
+    g.drawImage(slime, cx - 380, 140, 760, 760);
+    /* 위 : 금빛 칭호 띠 */
+    g.font = '400 92px "Do Hyeon", "Jua", sans-serif';
+    const tw = g.measureText('듀얼리스트').width, bw = tw + 230, bx = cx - bw / 2;
+    g.fillStyle = '#C7880A'; roundRect(g, bx, 74, bw, 136, 68); g.fill();
+    const band = g.createLinearGradient(0, 62, 0, 196); band.addColorStop(0, '#FFF6B0'); band.addColorStop(1, '#FFC531');
+    g.fillStyle = band; roundRect(g, bx, 60, bw, 136, 68); g.fill();
+    g.lineWidth = 6; g.strokeStyle = '#fff'; roundRect(g, bx + 9, 69, bw - 18, 118, 59); g.stroke();
+    g.drawImage(dice, bx + 52, 92, 72, 72);
+    g.textBaseline = 'middle'; g.textAlign = 'left';
+    g.lineJoin = 'round'; g.lineWidth = 16; g.strokeStyle = '#B8461A'; g.strokeText('듀얼리스트', bx + 146, 132);
+    g.fillStyle = '#fff'; g.fillText('듀얼리스트', bx + 146, 132);
+    /* 아래 : 이름표(게임 안 이름표처럼 칭호 + 주사위 + 닉네임) */
+    g.font = '400 104px "Do Hyeon", "Jua", sans-serif';
+    const nw = g.measureText(name).width, pw = Math.max(520, nw + 230), px = cx - pw / 2, py = 820, ph = 190;
+    g.fillStyle = '#5CC4A8'; roundRect(g, px, py + 14, pw, ph, 44); g.fill();
+    g.fillStyle = '#fff'; roundRect(g, px, py, pw, ph, 44); g.fill();
+    g.lineWidth = 10; g.strokeStyle = '#7FE3C8'; roundRect(g, px + 5, py + 5, pw - 10, ph - 10, 40); g.stroke();
+    g.font = '400 44px "Do Hyeon", "Jua", sans-serif'; g.textAlign = 'center'; g.fillStyle = '#C2700A';
+    g.fillText('듀얼리스트', cx, py + 50);
+    g.font = '400 104px "Do Hyeon", "Jua", sans-serif';
+    const lx = cx - (nw + 92) / 2;
+    g.drawImage(dice, lx, py + 86, 78, 78);
+    g.textAlign = 'left'; g.fillStyle = '#3B2F4A'; g.fillText(name, lx + 92, py + 128);
+    /* 맨 아래 한 줄 */
+    const r = Record.read(), d = new Date(), date = `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, '0')}.${String(d.getDate()).padStart(2, '0')}`;
+    g.font = '800 32px "Gothic A1", sans-serif'; g.textAlign = 'center';
+    const foot = `티티카카 10연승${r.c > 1 ? ` ${r.c}번` : ''} 달성 · ${date}`;
+    g.lineWidth = 8; g.strokeStyle = 'rgba(30,90,45,.55)'; g.strokeText(foot, cx, 1050);
+    g.fillStyle = '#fff'; g.fillText(foot, cx, 1050);
+    return cv;
+  }
+  let duelURL = '', duelBlob = null, duelSeq = 0, duelTimer = 0;
+  async function paintDuelCard() {
+    const my = ++duelSeq;
+    const cv = await drawDuelCard(cleanName($('#duelName').value) || '나');
+    if (my !== duelSeq) return;
+    const blob = await new Promise(ok => cv.toBlob(ok, 'image/png'));
+    if (my !== duelSeq || !blob) return;
+    if (duelURL) URL.revokeObjectURL(duelURL);
+    duelBlob = blob; duelURL = URL.createObjectURL(blob);
+    $('#duelImg').src = duelURL;
+  }
+  function openDuelCard() {
+    let saved = '';
+    try { saved = JSON.parse(localStorage.getItem('titicaca-name')) || ''; } catch {}
+    $('#duelName').value = cleanName(saved);
+    $('#duelImg').removeAttribute('src');
+    paintDuelCard();
+    if (!$('#duelCard').open) $('#duelCard').showModal();
+  }
+  $('#duelName').addEventListener('input', () => { clearTimeout(duelTimer); duelTimer = setTimeout(paintDuelCard, 250); });
+  $('#duelSaveBtn').addEventListener('click', async () => {
+    if (!duelBlob) return;
+    const name = cleanName($('#duelName').value);
+    if (name) try { localStorage.setItem('titicaca-name', JSON.stringify(name)); } catch {}
+    const file = new File([duelBlob], 'titicaca-duelist.png', { type: 'image/png' });
+    if (matchMedia('(pointer: coarse)').matches && navigator.canShare?.({ files: [file] })) {
+      try { await navigator.share({ files: [file], title: '듀얼리스트' }); return; } catch (e) { if (e.name === 'AbortError') return; }
+    }
+    const a = document.createElement('a');
+    a.href = duelURL; a.download = 'titicaca-duelist.png';
+    document.body.append(a); a.click(); a.remove();
+  });
+  $('#duelClose').addEventListener('click', () => $('#duelCard').close());
+  $('#duelSave').addEventListener('click', openDuelCard);
+  $('#statsBody').addEventListener('click', e => { if (e.target.closest('#statsDuel')) { $('#stats').close(); openDuelCard(); } });
   /* 친구 대결 : Firebase 실시간 DB 에 행동 기록을 쌓고 화면들이 같은 기록을 따라 둔다. 새로고침하면 기록을 빠르게 다시 돌려 이어서 한다.
      방 하나에 대결 2명 + 줄 5명. 이긴 사람이 남고 진 사람은 줄 맨 뒤로, 줄 맨 앞 사람이 10초 안에 준비를 누르면 다음 판.
      줄 선 사람은 기록을 따라 읽으며 지금 판을 구경한다. 줄이 비어 있으면 둘이 '한 판 더 / 다음에'.
@@ -1343,7 +1557,15 @@ const Game = (() => {
     /* 들어올 때 아직 아무도 안 쓴 색을 골라 people/pid/coat 에 적어 둔다(옛 사람은 아이디로 정한 색) */
     const coatOf = id => { const c = people[id]?.coat; if (Number.isInteger(c) && COATS[c]) return COATS[c]; let h = 0; for (const ch of String(id)) h = (h * 31 + ch.charCodeAt(0)) >>> 0; return COATS[h % COATS.length]; };
     const freeCoat = ppl => { const used = new Set(Object.values(ppl || {}).filter(p => p && !p.left).map(p => p.coat)); const i = COATS.findIndex((_, k) => !used.has(k)); return i < 0 ? Math.floor(Math.random() * COATS.length) : i; };
-    const slimeOf = id => (id === me ? ME : { ...FRIEND, id: `q${id}`, body: coatOf(id).slice(0, 3), rim: coatOf(id)[3] });
+    /* 꾸민 모습(people/pid/look)이 있으면 그대로, 옛 화면에서 들어온 사람은 정해 준 색 */
+    const slimeOf = id => {
+      if (id === me) return ME;
+      const lk = people[id]?.look;
+      if (!lk) return { ...FRIEND, id: `q${id}`, body: coatOf(id).slice(0, 3), rim: coatOf(id)[3] };
+      const s = { ...lookFrom(lk), id: `q${id}` };
+      if (!lk.color || lk.color === 'mint') { s.body = coatOf(id).slice(0, 3); s.rim = coatOf(id)[3]; }
+      return s;
+    };
     const QUIT_MS = 20000;
     let quitRef = null, gameOver = false, offSince = {}, quitTimer = 0;
     /* DB 의 table 을 늘 같은 모양으로 (빈 배열 · 빈 값은 Firebase 가 지운다) */
@@ -1410,7 +1632,7 @@ const Game = (() => {
       try {
         await connect();
         me = makeId().slice(0, 12);
-        const data = { createdAt: Date.now(), host: me, people: { [me]: { name, online: true, coat: 0, duel: Record.read().c > 0 } }, table: { n: 1, a: me, first: Math.random() < .5 ? 'a' : 'b', champ: me, streak: 0, fresh: true } };
+        const data = { createdAt: Date.now(), host: me, people: { [me]: { name, online: true, coat: 0, duel: Record.read().c > 0, look: wornLook() } }, table: { n: 1, a: me, first: Math.random() < .5 ? 'a' : 'b', champ: me, streak: 0, fresh: true } };
         for (let i = 0; ; i++) {
           roomId = keyOf(makeId().slice(0, 6));
           roomRef = db.ref(`rooms/${roomId}`);
@@ -1447,7 +1669,7 @@ const Game = (() => {
         try {
           const pid = makeId().slice(0, 12);
           const coat = freeCoat((await roomRef.child('people').once('value')).val());
-          await roomRef.child(`people/${pid}`).set({ name, online: true, coat, duel: Record.read().c > 0 });
+          await roomRef.child(`people/${pid}`).set({ name, online: true, coat, duel: Record.read().c > 0, look: wornLook() });
           let isFull = false;
           const r = await roomRef.child('table').transaction(cur => {
             if (!cur) return cur;
@@ -1497,8 +1719,16 @@ const Game = (() => {
       maybeAdvance();
       checkGone();
     }
+    let lastLooks = '';
+    /* 꾸미기에서 바꾸면 방 사람들에게 알린다 */
+    function dress() {
+      if (!roomRef || !me || !people[me]) return;
+      roomRef.child(`people/${me}/look`).set(wornLook());
+    }
     function onPeople() {
       paintTally(); paintLine(); paintChamp(); checkGone(); paintTitles();
+      const looks = JSON.stringify(Object.keys(people).sort().map(k => [k, people[k]?.look || null]));
+      if (looks !== lastLooks) { const first = !lastLooks; lastLooks = looks; if (!first && on && table?.b) dressFoe(); }
       if (!table || !on) return;
       const t = table, mine = mySeatIn(t);
       if (mine) {
@@ -2061,7 +2291,7 @@ const Game = (() => {
       if (!shown) return;
       fitLine();
       const first = t.line.find(id => t.skip[id] !== t.n && !gone(id) && people[id]?.online !== false);
-      const key = JSON.stringify([t.line, t.skip, t.n, first, t.line.map(id => [people[id]?.name, people[id]?.online, people[id]?.duel])]);
+      const key = JSON.stringify([t.line, t.skip, t.n, first, t.line.map(id => [people[id]?.name, people[id]?.online, people[id]?.duel, people[id]?.look])]);
       if (box.dataset.key === key) return;
       box.dataset.key = key;
       const sign = document.createElement('span');
@@ -2133,7 +2363,7 @@ const Game = (() => {
       enter(id);
       return true;
     }
-    return { get on() { return on; }, get watching() { return on && watching; }, fast: () => replay.length > 0, send, rollFor, foeTurn, watchTurn, watchEnd, feedMine, firstSide, dressFoe, alreadyPaid, askAgain, afterGuide, boot, score };
+    return { get on() { return on; }, get watching() { return on && watching; }, fast: () => replay.length > 0, send, rollFor, foeTurn, watchTurn, watchEnd, feedMine, firstSide, dressFoe, alreadyPaid, askAgain, afterGuide, boot, score, dress };
   })();
   /* 소리 : 파일 없이 Web Audio 로 그때그때 만든다. 스피커 버튼은 소리 전체, 음표 버튼은 배경음악만 끄고 켜며, 끈 것은 기억한다. 첫 터치 뒤에만 소리가 난다. */
   const Sfx = (() => {
@@ -2432,9 +2662,17 @@ const Game = (() => {
   };
   const levelOf = pts => Math.min(10, Math.max(1, Math.floor((pts - 500) / 500)));
   const toNext = pts => { const lv = levelOf(pts); return lv >= 10 ? 0 : (lv + 1) * 500 + 500 - pts; };
+  /* 네포레스트 도토리 : 두 게임이 같이 쓰는 돈. 루루피아 지갑 키(lulupia-acorn)를 그대로 써서 거기서 번 것도 여기 모인다 */
+  function acorns(add = 0) {
+    let v = 0;
+    try { v = Math.max(0, Math.floor(+JSON.parse(localStorage.getItem('lulupia-acorn')) || 0)); } catch {}
+    if (add) { v = Math.max(0, v + add); try { localStorage.setItem('lulupia-acorn', JSON.stringify(v)); } catch {} }
+    return v;
+  }
   function paintRecord() {
     const r = Record.read();
-    $('#record').innerHTML = `${ACORN}<b>${r.pts.toLocaleString('ko-KR')}</b>`;
+    $('#record').innerHTML = `${ACORN}<b>${acorns().toLocaleString('ko-KR')}</b>`;
+    $('#record').title = '네포레스트 도토리';
     set($('#nameMe'), '나');
     set($('#lvMe'), `Lv.${levelOf(r.pts)}`);
     $('#capMe .tag').classList.toggle('duel', r.c > 0);
@@ -2448,18 +2686,22 @@ const Game = (() => {
     if (res === 'w') { r.s++; r.b = Math.max(r.b, r.s); if (r.s === GOAL) r.c = (r.c || 0) + 1; }
     else if (res === 'l') r.s = 0;
     Record.write(r);
+    /* 네포레스트 도토리 : 이기면 20개(2연승부터 연승마다 5개 더, 최대 45), 비기면 10개, 10연승 달성 100개 더. 지면 없음 */
+    const nut = res === 'w' ? 20 + Math.min(25, 5 * (r.s - 1)) + (r.s === GOAL ? 100 : 0) : res === 'd' ? 10 : 0;
+    if (nut) acorns(nut);
+    if (!Online.on) meetRival(res);
     paintRecord();
-    return { r, up: levelOf(r.pts) > before, prev };
+    return { r, up: levelOf(r.pts) > before, prev, nut };
   }
   function paintStats() {
     const r = Record.read(), n = r.w + r.l + r.d, left = toNext(r.pts);
-    const list = [['전체', `${n}판 ${r.w}승 ${r.l}패${r.d ? ` ${r.d}무` : ''}`], ['승률', n ? `${(r.w / n * 100).toFixed(1)}%` : '아직 없어요'], ['지금 연승', `${r.s}연승`], ['최고 연승', `${r.b}연승`], ['10연승 도전', r.c ? `${r.c}번 성공` : '아직 없어요'], ['칭호', r.c ? '듀얼리스트' : '10연승 하면 듀얼리스트']];
-    $('#statsBody').innerHTML = `<div class="stat-top">${ACORN}<div><b>Lv.${levelOf(r.pts)} 도토리 ${r.pts.toLocaleString('ko-KR')}개</b><span>${left ? `다음 레벨까지 ${left}개` : '최고 레벨이에요'}</span></div></div><dl class="stat-list">${list.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join('')}</dl>`;
+    const list = [['전체', `${n}판 ${r.w}승 ${r.l}패${r.d ? ` ${r.d}무` : ''}`], ['승률', n ? `${(r.w / n * 100).toFixed(1)}%` : '아직 없어요'], ['지금 연승', `${r.s}연승`], ['최고 연승', `${r.b}연승`], ['10연승 도전', r.c ? `${r.c}번 성공` : '아직 없어요'], ['칭호', r.c ? '듀얼리스트' : '10연승 하면 듀얼리스트'], ['도토리', `${acorns().toLocaleString('ko-KR')}개 · 꾸미기에서 써요`]];
+    $('#statsBody').innerHTML = `<div class="stat-top">${PEBBLE}<div><b>Lv.${levelOf(r.pts)} 조약돌 ${r.pts.toLocaleString('ko-KR')}개</b><span>${left ? `다음 레벨까지 조약돌 ${left}개` : '최고 레벨이에요'}</span></div></div><dl class="stat-list">${list.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join('')}</dl><div class="stat-extra">${r.c ? '<button class="duel-btn" id="statsDuel" type="button">듀얼리스트 프사 만들기</button>' : ''}<a class="forest-link" href="neforest/">${ACORN}네포레스트 숲 지도</a></div>`;
   }
   const stake = () => (bet === 'done' ? STAKE.predicted : STAKE.base);
   /* 연승 보너스 : 2연승부터 연승 수 × 20개, 10연승에서 멈춘다(그때 한 판 300개). */
   const streakBonus = s => (s >= 2 ? 20 * Math.min(s, 10) : 0);
-  const pointText = n => (n > 0 ? `도토리 ${n}개 얻음` : n < 0 ? `도토리 ${-n}개 잃음` : '도토리는 그대로');
+  const pointText = n => (n > 0 ? `조약돌 ${n}개 얻음` : n < 0 ? `조약돌 ${-n}개 잃음` : '조약돌은 그대로');
 
   const say = str => { if (!Online.watching) statusEl.textContent = str; };
 
@@ -2471,7 +2713,7 @@ const Game = (() => {
   function coachText() {
     if (layer.querySelector('.doomed')) return tipText('knock', '화살표가 뜬 주사위를 누르면 상대 주사위를 없앨 수 있어요. 안 눌러도 돼요.') || '내 차례! 화살표가 뜬 주사위를 누르면 알까기해요.';
     if (!holdBtn.disabled) { const t = tipText('hold', '홀드가 켜졌어요! 누르면 지금 판 그대로 이기고 끝나요.'); if (t) return t; }
-    if (bet === 'open') { const t = tipText('predict', '이길 것 같으면 승리 예측을 눌러 보세요. 도토리를 더 걸 수 있어요.'); if (t) return t; }
+    if (bet === 'open') { const t = tipText('predict', '이길 것 같으면 승리 예측을 눌러 보세요. 조약돌을 더 걸 수 있어요.'); if (t) return t; }
     if (state.next === 'first') return tipText('first', '첫 주사위예요. 노란 칸을 눌러 내 판에 놓아 보세요.');
     if (state.next === 'shield') return tipText('bonus', '알까기 상으로 받은 주사위예요. 파란 칸을 누르면 상대 판에도 놓아서 칸을 막을 수 있어요.');
     return tipText('place', '노란 칸을 누르면 주사위가 놓여요.') || tipText('reroll', '눈이 마음에 안 들면 ‘다시 굴리기’를 눌러 보세요. 꼭 다른 눈이 나오고, 한 판에 한 번 쓸 수 있어요.');
@@ -2587,7 +2829,7 @@ const Game = (() => {
     const now = stake();
     if (now === potShown) return;
     const more = now > STAKE.base;
-    $('#potArt').innerHTML = (more ? acornAt(43, 9, .95, 6) : '') + acornAt(32, 24, .95, -8) + acornAt(54, 22, .95, 10) + acornAt(22, 44, 1, -18) + acornAt(64, 44, 1, 16) + acornAt(43, 48, 1.1, 0);
+    $('#potArt').innerHTML = (more ? pebbleAt(43, 14, .9, 4, 3) : '') + pebbleAt(31, 28, .95, -10, 1) + pebbleAt(55, 27, .95, 12, 2) + pebbleAt(21, 45, 1, -14, 2) + pebbleAt(65, 45, 1, 14, 1) + pebbleAt(43, 48, 1.12, 0, 0);
     set($('#potCap'), `판돈 ${now}`);
     if (potShown && !calm) $('#pot').animate([{ transform: 'scale(1.25)' }, { transform: 'none' }], { duration: 300, easing: 'ease-out' });
     potShown = now;
@@ -2883,7 +3125,7 @@ const Game = (() => {
     }
   }
 
-  /* 끝난 뒤 결과판 : 결과 문구, 얻은 도토리와 연승, 레벨과 전체 도토리, 다음 레벨까지, 10연승 도전 길 */
+  /* 끝난 뒤 결과판 : 결과 문구, 얻은 조약돌 · 도토리와 연승, 레벨과 전체 조약돌, 다음 레벨까지, 10연승 도전 길 */
   let countToken = 0;
   const josa = (w, a, b) => { const c = w.charCodeAt(w.length - 1) - 0xAC00; return w + (c >= 0 && c < 11172 && c % 28 ? a : b); };
   const won = n => n.toLocaleString('ko-KR');
@@ -2929,9 +3171,11 @@ const Game = (() => {
       : cleared ? '10연승 도전에 성공했어요!'
       : k === 'win' ? `${josa(fname, '을', '를')} 이겼어요!` : k === 'lose' ? `${fname}에게 졌어요.` : `${josa(fname, '과', '와')} 비겼어요.`;
     const bonus = k === 'win' && delta > 0 ? streakBonus(s) : 0;
-    const pills = [`<span class="pill acorn${delta < 0 ? ' minus' : ''}">${ACORN}${delta ? `${delta > 0 ? '+' : ''}${won(delta)}개` : '그대로'}</span>`];
+    const pills = [`<span class="pill stone${delta < 0 ? ' minus' : ''}">${PEBBLE}${delta ? `${delta > 0 ? '+' : ''}${won(delta)}개` : '그대로'}</span>`];
+    if (info.nut) pills.push(`<span class="pill acorn nut">${ACORN}도토리 +${won(info.nut)}</span>`);
     if (info.up) pills.push('<span class="pill hot">레벨 업!</span>');
     if (cleared && r.c === 1 && info.prev?.c !== 1) pills.push('<span class="pill gold duel">칭호 듀얼리스트 얻음!</span>');
+    $('#duelSave').hidden = !(cleared && r.c > 0);
     $('#resultGain').innerHTML = pills.join('');
     $('#resultNote').textContent = '';
     /* 연승 메달 : 이기면 숫자가 하나 올라가고, 지면 회색으로 식는다. */
@@ -2958,8 +3202,8 @@ const Game = (() => {
       }).catch(() => {});
     };
     const lv = levelOf(r.pts), left = toNext(r.pts);
-    $('#resultLv').innerHTML = `<span class="lv-badge${info.up ? ' up' : ''}"><small>Lv.</small>${lv}</span><span class="total">${ACORN}<b class="n-total">${won(prev.pts)}</b><small>개</small></span>`;
-    $('#resultLevel').textContent = left ? `다음 레벨까지 ${won(left)}개 남았어요.` : '최고 레벨이에요.';
+    $('#resultLv').innerHTML = `<span class="lv-badge${info.up ? ' up' : ''}"><small>Lv.</small>${lv}</span><span class="total">${PEBBLE}<b class="n-total">${won(prev.pts)}</b><small>개</small></span>`;
+    $('#resultLevel').textContent = left ? `다음 레벨까지 조약돌 ${won(left)}개 남았어요.` : '최고 레벨이에요.';
     if (solo) paintQuest();
     const quest = $('#resultQuest');
     quest.hidden = !solo;
@@ -3161,9 +3405,9 @@ const Game = (() => {
     set(unpeekBtn, '결산 보기');
     set($('#rulesClose'), '닫기');
     set($('#rulesTitle'), '규칙');
-    predictBtn.title = '이길 것 같을 때 누르면 걸린 도토리가 150개가 돼요';
+    predictBtn.title = '이길 것 같을 때 누르면 걸린 조약돌이 150개가 돼요';
     holdBtn.title = '못 뒤집힐 때 켜져요. 누르면 지금 판 그대로 이겨요';
-    forfeitBtn.title = '걸린 도토리의 절반만 잃고 끝내요';
+    forfeitBtn.title = '걸린 조약돌의 절반만 잃고 끝내요';
     rerollBtn.title = '한 판에 한 번 다시 굴려요';
     const die = (v, same, ward) => `<img src="${dieSprite(v, same, ward).src}" alt="">`;
     const row = (art, head, sub) => `<li><span class="g-art">${art}</span><div><b>${head}</b><small>${sub}</small></div></li>`;
