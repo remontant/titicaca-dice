@@ -84,6 +84,13 @@ body[data-turn="com"] .cap.foe .tag{background:#FFE6F0}
 body[data-short] .invite{bottom:0}
 .cap.away svg.pt{filter:grayscale(1);opacity:.7}
 .room-text{margin:0;font-weight:500;color:var(--ink-soft)}
+/* 보낸 뒤 : 초록 체크 알약 + 제목 뒤 점 셋이 하나씩 늘어남 */
+.room-sent{display:flex;align-items:center;gap:calc(var(--u)*2.4);justify-self:start;margin:calc(var(--u)*-2) 0 0;padding:calc(var(--u)*1.8) calc(var(--u)*4.6) calc(var(--u)*1.8) calc(var(--u)*2);border-radius:99px;background:#E1F6E6;box-shadow:inset 0 0 0 calc(var(--u)*.6) #A6DDB0;color:#1E7A3C;font:400 1.08em/1.2 var(--display)}
+.room-sent::before{content:'';flex:none;width:1.35em;height:1.35em;border-radius:50%;background:#2FB565 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 12.5l4 4 8-9' fill='none' stroke='%23fff' stroke-width='3.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/78% no-repeat;animation:sent-pop .55s cubic-bezier(.3,1.7,.5,1) both}
+#room.wait #roomTitle::after{content:'';display:inline-block;width:1.05em;height:.32em;margin-left:.12em;vertical-align:.08em;background:radial-gradient(circle,currentColor 40%,transparent 46%) 0 50%/.35em .32em repeat-x;animation:wait-dots 1.6s steps(4,jump-none) infinite}
+@keyframes sent-pop{0%{transform:scale(0) rotate(-40deg)}100%{transform:none}}
+@keyframes wait-dots{0%{width:0}100%{width:1.05em}}
+@media (prefers-reduced-motion:reduce){.room-sent::before,#room.wait #roomTitle::after{animation:none}}
 .room-field{display:grid;gap:calc(var(--u)*1.5);font-weight:800}
 .room-field input{width:100%;min-height:calc(var(--u)*20);padding:0 calc(var(--u)*4);border:calc(var(--u)*.8) solid #A6DDB0;border-radius:calc(var(--u)*4);background:#F6FFF8;color:var(--ink);font:700 max(16px,calc(var(--u)*7))/1.2 var(--ui)}
 .rules .room-btns{justify-content:flex-end;flex-wrap:wrap}
@@ -553,6 +560,7 @@ body[data-tip="place"] .gain{animation:tile-pulse .8s ease-in-out infinite}
 <dialog id="room">
   <div class="rules">
     <h2 id="roomTitle" tabindex="-1" autofocus></h2>
+    <p class="room-sent" id="roomSent" hidden></p>
     <p class="room-text" id="roomText"></p>
     <label class="room-field" id="roomNameWrap" hidden>내 이름<input id="roomName" maxlength="8" autocomplete="off" enterkeyhint="done"></label>
     <label class="room-field" id="roomLinkWrap" hidden>초대 링크<input id="roomLink" readonly></label>
@@ -1102,9 +1110,11 @@ const Game = (() => {
     const goSolo = () => { location.href = location.pathname; };
 
     /* 초대 창 */
-    function show({ head, body = '', name = false, link = '', go = '', cancel = '닫기' }, goFn = null, cancelFn = null) {
+    function show({ head, body = '', name = false, link = '', go = '', cancel = '닫기', note = '' }, goFn = null, cancelFn = null) {
       $('#roomTitle').textContent = head;
       $('#roomText').textContent = body;
+      $('#roomSent').hidden = !note; $('#roomSent').textContent = note;
+      dlg.classList.toggle('wait', !!note);
       $('#roomNameWrap').hidden = !name;
       if (name && !nameIn.value) nameIn.value = store.get('titicaca-name') || '';
       $('#roomLinkWrap').hidden = !link;
@@ -1125,11 +1135,12 @@ const Game = (() => {
     const noLine = () => show({ head: '연결하지 못했어요', body: '인터넷 연결을 확인하고 다시 시도해 주세요.', go: '혼자 하기', cancel: '' }, goSolo);
     goBtn.addEventListener('click', () => onGo && onGo());
     cancelBtn.addEventListener('click', () => { const f = onCancel; onCancel = null; dlg.close(); if (f) f(); });
-    dlg.addEventListener('close', () => { const f = onCancel; onCancel = null; if (f) f(); });
+    dlg.addEventListener('close', () => { if (dlg.open) return; const f = onCancel; onCancel = null; if (f) f(); });
     nameIn.addEventListener('keydown', e => { if (e.key === 'Enter') goBtn.click(); });
-    shareBtn.addEventListener('click', () => navigator.share({ title: '티티카카', text: '주사위 한 판 붙자!', url: linkIn.value }).catch(() => {}));
+    shareBtn.addEventListener('click', () => navigator.share({ title: '티티카카', text: '주사위 한 판 붙자!', url: linkIn.value }).then(() => markSent('share'), () => {}));
     async function copyLink() {
       try { await navigator.clipboard.writeText(linkIn.value); } catch { linkIn.select(); document.execCommand('copy'); }
+      markSent('copy');
       goBtn.textContent = '복사했어요';
       setTimeout(() => { if (onGo === copyLink) goBtn.textContent = '링크 복사'; }, 1500);
     }
@@ -1203,8 +1214,33 @@ const Game = (() => {
       roomRef.child('again').on('value', s => onAgain(s.val() || {}));
       roomRef.child(`players/${other(seat)}`).on('value', s => onFoe(s.val()));
     }
+    /* 링크를 보내기 전 = 초대 만들기, 보낸(복사한) 뒤 = 기다리는 중. 보낸 표시는 기억해 둬서 메신저에 다녀와 새로 열려도 그대로. */
+    let sent = '';
+    const SENT = { share: '링크를 보냈어요', copy: '링크를 복사했어요' };
     function waiting() {
-      show({ head: '친구를 기다리는 중이에요', body: '이 링크를 친구에게 보내 주세요.', link: linkFor(roomId), go: '링크 복사', cancel: '취소' }, copyLink, () => { store.del(saveKey()); const f = goSolo; db.ref('.info/connected').off(); roomRef.child(`players/${seat}/online`).onDisconnect().cancel().then(() => roomRef.remove()).then(f, f); });
+      if (!sent) sent = store.get(saveKey())?.sent || '';
+      const note = SENT[sent] || '';
+      show(note
+        ? { head: '친구를 기다리는 중이에요', note, body: '친구가 링크를 열면 바로 시작해요. 이 화면을 연 채로 기다려 주세요.', link: linkFor(roomId), go: '링크 복사', cancel: '초대 취소' }
+        : { head: '친구를 초대해요', body: '아래 링크를 친구에게 보내 주세요. 친구가 링크를 열면 바로 시작해요.', link: linkFor(roomId), go: '링크 복사', cancel: '취소' },
+      copyLink, note ? askCancel : dropRoom);
+    }
+    function markSent(how) {
+      if (on || !roomId || sent === how) return;
+      sent = how;
+      store.set(saveKey(), { seat, token, sent });
+      waiting();
+    }
+    function askCancel() {
+      show({ head: '초대를 취소할까요?', body: '보낸 링크로는 더 이상 들어올 수 없어요.', go: '초대 취소', cancel: '계속 기다리기' }, dropRoom, waiting);
+    }
+    /* 방을 지운다. '끊기면 online=false' 예약을 먼저 거둬야 지운 자리에 찌꺼기가 안 생김 */
+    function dropRoom() {
+      hide();
+      store.del(saveKey());
+      const f = goSolo;
+      db.ref('.info/connected').off();
+      roomRef.child(`players/${seat}/online`).onDisconnect().cancel().then(() => roomRef.remove()).then(f, f);
     }
     function paintAway() {
       if (!on) return;
