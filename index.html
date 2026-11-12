@@ -256,6 +256,17 @@ body[data-turn="com"] .pick:not(.old){filter:drop-shadow(0 0 calc(var(--u)*3.4) 
 /* 결과판 */
 .result{position:absolute;z-index:8;inset:0;overflow-y:auto;display:grid;place-content:center;place-content:safe center;justify-items:center;gap:calc(var(--u)*5);background:rgba(40,90,55,.4)}
 .result.peek{visibility:hidden;background:none}
+/* 친구의 한 판 더 신청 : 슬라임이 말풍선과 함께 튀어나와 통통, 버튼은 분홍으로 반짝 */
+.again-ask{display:flex;align-items:center;gap:calc(var(--u)*3);margin:calc(var(--u)*-3) 0 calc(var(--u)*-1);animation:ask-pop .6s cubic-bezier(.3,1.6,.5,1) both}
+.again-ask svg{flex:none;width:calc(var(--u)*26);height:calc(var(--u)*26);overflow:visible;transform-origin:50% 100%;animation:ask-hop .8s ease-in-out infinite}
+.again-ask p{position:relative;margin:0;padding:calc(var(--u)*2.4) calc(var(--u)*5.4) calc(var(--u)*3);border-radius:calc(var(--u)*6);background:#fff;box-shadow:inset 0 0 0 calc(var(--u)*.9) #F2709F,0 calc(var(--u)*1.4) 0 #C2457A,0 calc(var(--u)*3) calc(var(--u)*5) rgba(120,30,70,.25);color:#C2335F;font:400 max(17px,calc(var(--u)*8.4))/1.1 var(--display);white-space:nowrap}
+.again-ask p::before{content:"";position:absolute;left:calc(var(--u)*-2.3);top:50%;width:calc(var(--u)*4.6);height:calc(var(--u)*4.6);translate:0 -50%;rotate:45deg;background:#fff;box-shadow:inset calc(var(--u)*.9) calc(var(--u)*-.9) 0 #F2709F}
+.again-ask small{display:block;margin-bottom:calc(var(--u)*.6);font:800 max(11px,calc(var(--u)*4.4))/1.2 var(--ui);color:var(--ink-soft)}
+#again.ask,#unpeekBtn.ask{--top:#FFB3CF;--bot:#F2709F;--edge:#C2457A;color:#fff;animation:ask-glow 1.1s ease-in-out infinite}
+@keyframes ask-pop{0%{opacity:0;transform:translateY(calc(var(--u)*8)) scale(.4)}100%{opacity:1;transform:none}}
+@keyframes ask-hop{0%,100%{transform:translateY(0) scale(1.06,.94)}45%{transform:translateY(calc(var(--u)*-5)) scale(.95,1.06)}}
+@keyframes ask-glow{0%,100%{box-shadow:inset 0 0 0 calc(var(--u)*.9) rgba(255,255,255,.65),0 calc(var(--u)*2) 0 var(--edge),0 calc(var(--u)*3.4) calc(var(--u)*4.6) rgba(40,90,50,.26)}50%{box-shadow:inset 0 0 0 calc(var(--u)*.9) rgba(255,255,255,.9),0 calc(var(--u)*2) 0 var(--edge),0 0 calc(var(--u)*8) calc(var(--u)*2.4) rgba(255,110,165,.95)}}
+@media (prefers-reduced-motion:reduce){.again-ask,.again-ask svg,#again.ask,#unpeekBtn.ask{animation:none}}
 .printer{position:relative;overflow:hidden;padding:calc(var(--u)*2) calc(var(--u)*2) calc(var(--u)*3)}
 .paper{filter:drop-shadow(0 calc(var(--u)*2) calc(var(--u)*3) rgba(30,80,45,.35))}
 .board{position:relative;overflow:hidden;display:grid;justify-items:center;gap:calc(var(--u)*2.4);width:calc(var(--u)*150);padding:calc(var(--u)*4) calc(var(--u)*7) calc(var(--u)*6);border-radius:calc(var(--u)*7);background:linear-gradient(#FFFFFF,#F4FFF6);color:var(--ink);box-shadow:inset 0 0 0 calc(var(--u)*1.2) var(--mint),0 calc(var(--u)*1.6) 0 #5BC4A8}
@@ -530,6 +541,7 @@ body[data-tip="place"] .gain{animation:tile-pulse .8s ease-in-out infinite}
             <div class="quest-card" id="resultQuest"></div>
           </div>
         </div></div></div>
+        <div class="again-ask" id="againAsk" hidden><svg class="pt npc" id="againArt" data-face="laugh" viewBox="0 0 100 100" aria-hidden="true"></svg><p><small id="againWho"></small>한 판 더 하자!</p></div>
         <div class="b-btns">
           <button class="bet" id="again" type="button"></button>
           <button class="bet" id="peekBtn" type="button"></button>
@@ -1258,13 +1270,27 @@ const Game = (() => {
       inviteBtn.textContent = '방 나가기';
       startGame();
     }
+    /* 친구가 한 판 더를 신청하면 : 친구 슬라임 말풍선 + 분홍으로 반짝이는 버튼 + 소리(판마다 한 번) */
+    let askedAt = 0;
+    function foeAsks(yes) {
+      $('#againAsk').hidden = !yes;
+      again.classList.toggle('ask', yes);
+      unpeekBtn.classList.toggle('ask', yes);
+      set(unpeekBtn, yes ? '한 판 더 신청 왔어요!' : '결산 보기');
+      if (!yes) return;
+      $('#againArt').innerHTML = npc.innerHTML;
+      set($('#againWho'), foeName);
+      set(again, '좋아, 한 판 더!');
+      if (askedAt !== n) { askedAt = n; sfx('boing'); sfx('bet', 180); }
+    }
     function onAgain(all) {
       const cur = all[n];
       if (!on || !cur) return;
-      if (cur.a && cur.b) { n++; again.disabled = false; set(again, '한 판 더'); startGame(); return; }
-      if (cur[other(seat)] && !cur[seat]) set(again, '한 판 더 받기');
+      if (cur.a && cur.b) { n++; foeAsks(false); again.disabled = false; set(again, '한 판 더'); startGame(); return; }
+      if (cur[other(seat)] && !cur[seat]) foeAsks(true);
     }
     function askAgain() {
+      again.classList.remove('ask'); unpeekBtn.classList.remove('ask'); set(unpeekBtn, '결산 보기');
       again.disabled = true;
       set(again, '친구 기다리는 중');
       roomRef.child(`again/${n}/${seat}`).set(true);
