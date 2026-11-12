@@ -1084,7 +1084,7 @@ const Game = (() => {
     return `${s + 1}번째 판, ${foe.name} 등장!`;
   }
   /* 친구 대결 : Firebase 실시간 DB 에 행동 기록을 쌓고 두 화면이 같은 기록을 따라 둔다. 새로고침하면 기록을 빠르게 다시 돌려 이어서 한다. */
-  const DB_URL = '';
+  const DB_URL = 'https://titicaca-dice-default-rtdb.asia-southeast1.firebasedatabase.app';
   const FRIEND = { id: 'fr', body: ['#FFF6EC', '#FFC98A', '#F0913A'], rim: '#C46A1E', hat: 'leaf', eyes: 'two', mouth: 'smile', brows: 'soft', stars: 0, hi: '', win: '', lose: '' };
   const Online = (() => {
     const SDK = 'https://www.gstatic.com/firebasejs/10.14.1/';
