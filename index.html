@@ -308,6 +308,10 @@ body[data-layout="side"] .board{grid-template-columns:calc(var(--u)*86) calc(var
 .b-info{display:grid;justify-items:center;gap:calc(var(--u)*2.4);width:100%;min-width:0}
 .r-msg{margin:0;font:400 max(15px,calc(var(--u)*7.4))/1.2 var(--display);color:var(--leaf-deep);text-align:center;text-wrap:balance}
 .board[data-k="lose"] .r-msg{color:var(--pink-deep)}.board[data-k="draw"] .r-msg{color:var(--ink-soft)}.board[data-k="gold"] .r-msg{color:#C2700A}
+/* 구경 중 : 판 · 손 · 걸기 버튼을 누를 수 없고 걸기 줄은 숨긴다 */
+body[data-watch] #table,body[data-watch] #hand,body[data-watch] #bets{pointer-events:none}
+body[data-watch] #bets,body[data-watch] #pot,body[data-watch] #rerollBtn{visibility:hidden}
+body[data-watch] #lvMe{color:#C2335F}
 /* 이 방 상대 전적 : VS 아래 작은 판, 결과판 알약. 바뀌면 숫자가 톡 튄다 */
 .h2h{grid-auto-flow:column;align-items:baseline;gap:calc(var(--u)*1.6);padding-block:calc(var(--u)*1.2) calc(var(--u)*1.5)}
 body:not([data-short]) #h2h:not([hidden]) ~ .invite{translate:-50% calc(var(--u)*8)}
@@ -827,6 +831,8 @@ const Game = (() => {
     '같은 별 슬라임은 다섯 명씩이고, 다섯 명을 다 만나기 전에는 같은 슬라임이 또 나오지 않아요.',
     '판을 많이 할수록 가끔 별 하나 더 센 슬라임이 나와요. 20판부터 조금, 50판부터는 더 자주 나와요.',
     '주사위 눈 1은 빨간 버섯으로 그려져 있어요.',
+    '친구 대결 방에는 7명까지 들어올 수 있어요. 이긴 사람이 자리에 남고 진 사람은 줄 맨 뒤로 가요. 비기면 자리를 지키던 사람이 남아요.',
+    '줄을 선 동안에는 지금 판을 구경해요. 차례가 오면 10초 안에 준비를 눌러야 하고, 못 누르면 줄 맨 뒤로 가요.',
     '키보드로는 1, 2, 3으로 내 줄, 4, 5, 6으로 상대 줄이나 알까기, R로 다시 굴리기, H로 홀드해요.',
   ];
 
@@ -1133,30 +1139,49 @@ const Game = (() => {
     if (bumped) return `${s + 1}번째 판, 센 상대 등장! 별 ${foe.stars}개 ${foe.name}!`;
     return `${s + 1}번째 판, ${foe.name} 등장!`;
   }
-  /* 친구 대결 : Firebase 실시간 DB 에 행동 기록을 쌓고 두 화면이 같은 기록을 따라 둔다. 새로고침하면 기록을 빠르게 다시 돌려 이어서 한다. */
+  /* 친구 대결 : Firebase 실시간 DB 에 행동 기록을 쌓고 화면들이 같은 기록을 따라 둔다. 새로고침하면 기록을 빠르게 다시 돌려 이어서 한다.
+     방 하나에 대결 2명 + 줄 5명. 이긴 사람이 남고 진 사람은 줄 맨 뒤로, 줄 맨 앞 사람이 10초 안에 준비를 누르면 다음 판.
+     줄 선 사람은 기록을 따라 읽으며 지금 판을 구경한다. 줄이 비어 있으면 둘이 '한 판 더 / 다음에'.
+     DB : rooms/id = { host, people/pid = {name, online, left}, table = {n, a, b, line[], first, champ, streak, call{at, who}, away{}, fresh}, games/n, again/n, score/n = {a, b, w} } */
   const DB_URL = 'https://titicaca-dice-default-rtdb.asia-southeast1.firebasedatabase.app';
   const FRIEND = { id: 'fr', body: ['#FFF6EC', '#FFC98A', '#F0913A'], rim: '#C46A1E', hat: 'leaf', eyes: 'two', mouth: 'smile', brows: 'soft', stars: 0, hi: '', win: '', lose: '' };
   const Online = (() => {
     const SDK = 'https://www.gstatic.com/firebasejs/10.14.1/';
+    const MAX_LINE = 5, CALL_MS = 10000;
     const other = s => (s === 'a' ? 'b' : 'a');
     const clean = s => String(s || '').replace(/[<>&"'`]/g, '').trim().slice(0, 8);
     const makeId = () => Array.from(crypto.getRandomValues(new Uint8Array(10)), b => 'abcdefghijklmnopqrstuvwxyz0123456789'[b % 36]).join('');
     const store = { get: k => { try { return JSON.parse(localStorage.getItem(k)); } catch { return null; } }, set: (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} }, del: k => { try { localStorage.removeItem(k); } catch {} } };
-    const dlg = $('#room'), inviteBtn = $('#inviteBtn'), nameIn = $('#roomName'), linkIn = $('#roomLink'), goBtn = $('#roomGo'), shareBtn = $('#roomShare'), cancelBtn = $('#roomCancel');
-    let on = false, db = null, roomRef = null, logRef = null, roomId = '', seat = '', token = '', first = 'a', n = 1, foeName = '친구', foeHere = true;
+    const jong = s => { const c = s.charCodeAt(s.length - 1) - 0xAC00; return c >= 0 && c < 11172 && c % 28 !== 0; };
+    const ga = s => s + (jong(s) ? '이' : '가'), wa = s => s + (jong(s) ? '과' : '와');
+    const dlg = $('#room'), inviteBtn = $('#inviteBtn'), nameIn = $('#roomName'), linkIn = $('#roomLink'), goBtn = $('#roomGo'), shareBtn = $('#roomShare'), cancelBtn = $('#roomCancel'), noBtn = $('#noAgain');
+    let on = false, db = null, roomRef = null, logRef = null, roomId = '', me = '', seat = '', watching = false, n = 0, running = 0, foeName = '친구', foeHere = true;
+    let table = null, match = { a: '', b: '' }, people = {}, scores = {}, timeOffset = 0, ticker = 0, awayShown = '', calledFor = 0;
     let replay = [], inbox = [], waiter = null, known = new Set(), feeding = false, guideNext = null, onGo = null, onCancel = null;
     const saveKey = () => `titicaca-room-${roomId}`;
     /* 링크엔 6자리만 보이고, DB 엔 규칙(10자리)에 맞게 뒤에 'room' 을 붙여 둔다. 옛 10자리 방은 ?room= 그대로. */
     const keyOf = code => `${code}room`;
     const linkFor = id => `${location.origin}${location.pathname}${id.endsWith('room') ? `#${id.slice(0, 6)}` : `?room=${id}`}`;
     const goSolo = () => { location.href = location.pathname; };
+    const now = () => Date.now() + timeOffset;
+    const gone = id => !id || !people[id] || !!people[id].left;
+    const nameOf = id => (id === me ? '나' : clean(people[id]?.name) || '친구');
+    const realName = id => clean(people[id]?.name) || '친구';
+    /* DB 의 table 을 늘 같은 모양으로 (빈 배열 · 빈 값은 Firebase 가 지운다) */
+    const T = raw => {
+      const t = { n: 1, a: '', b: '', first: 'a', champ: '', streak: 0, call: null, away: {}, fresh: false, ...(raw || {}) };
+      t.line = raw?.line ? Object.values(raw.line).filter(Boolean) : [];
+      t.away = { ...(raw?.away || {}) };
+      return t;
+    };
 
     /* 초대 창 */
-    function show({ head, body = '', name = false, link = '', go = '', cancel = '닫기', note = '' }, goFn = null, cancelFn = null) {
+    function show({ head, body = '', name = false, link = '', go = '', cancel = '닫기', note = '', kind = '' }, goFn = null, cancelFn = null) {
       $('#roomTitle').textContent = head;
       $('#roomText').textContent = body;
       $('#roomSent').hidden = !note; $('#roomSent').textContent = note;
       dlg.classList.toggle('wait', !!note);
+      dlg.dataset.kind = kind;
       $('#roomNameWrap').hidden = !name;
       if (name && !nameIn.value) nameIn.value = store.get('titicaca-name') || '';
       $('#roomLinkWrap').hidden = !link;
@@ -1167,7 +1192,7 @@ const Game = (() => {
       onGo = goFn; onCancel = cancelFn;
       if (!dlg.open) dlg.showModal();
     }
-    const hide = () => { onCancel = null; if (dlg.open) dlg.close(); };
+    const hide = () => { onCancel = null; if (dlg.open) dlg.close(); dlg.dataset.kind = ''; };
     function readName() {
       const v = clean(nameIn.value);
       if (!v) { nameIn.focus(); return ''; }
@@ -1175,6 +1200,7 @@ const Game = (() => {
       return v;
     }
     const noLine = () => show({ head: '연결하지 못했어요', body: '인터넷 연결을 확인하고 다시 시도해 주세요.', go: '혼자 하기', cancel: '' }, goSolo);
+    const ended = () => show({ head: '이 초대는 끝났어요', body: '친구에게 새 링크를 받아 주세요.', go: '혼자 하기', cancel: '' }, goSolo);
     goBtn.addEventListener('click', () => onGo && onGo());
     cancelBtn.addEventListener('click', () => { const f = onCancel; onCancel = null; dlg.close(); if (f) f(); });
     dlg.addEventListener('close', () => { if (dlg.open) return; const f = onCancel; onCancel = null; if (f) f(); });
@@ -1195,15 +1221,16 @@ const Game = (() => {
       firebase.initializeApp({ databaseURL: DB_URL });
       db = firebase.database();
     }
-    function remember() { store.set(saveKey(), { seat, token }); }
+    let sent = '';
+    function remember() { store.set(saveKey(), { me, sent }); }
     async function createRoom() {
       const name = readName();
       if (!name) return;
       goBtn.disabled = true;
       try {
         await connect();
-        seat = 'a'; token = makeId().slice(0, 12); first = Math.random() < .5 ? 'a' : 'b';
-        const data = { createdAt: Date.now(), first, players: { a: { name, token, online: true } } };
+        me = makeId().slice(0, 12);
+        const data = { createdAt: Date.now(), host: me, people: { [me]: { name, online: true } }, table: { n: 1, a: me, first: Math.random() < .5 ? 'a' : 'b', champ: me, streak: 0, fresh: true } };
         for (let i = 0; ; i++) {
           roomId = keyOf(makeId().slice(0, 6));
           roomRef = db.ref(`rooms/${roomId}`);
@@ -1222,25 +1249,37 @@ const Game = (() => {
         roomId = id;
         roomRef = db.ref(`rooms/${id}`);
         const room = (await roomRef.once('value')).val();
-        if (!room || !room.players) return show({ head: '이 초대는 끝났어요', body: '친구에게 새 링크를 받아 주세요.', go: '혼자 하기', cancel: '' }, goSolo);
-        first = room.first === 'b' ? 'b' : 'a';
+        if (!room || !room.table || !room.people) return ended();
         const saved = store.get(saveKey());
-        if (saved) { seat = saved.seat; token = saved.token; return await attach(); }
-        if (room.players.b) return show({ head: '이미 두 명이 들어와 있어요', body: '친구에게 새 링크를 받아 주세요.', go: '혼자 하기', cancel: '' }, goSolo);
-        const host = clean(room.players.a?.name) || '친구';
-        show({ head: `${host}의 초대`, body: '이름을 적고 들어오세요.', name: true, go: '입장', cancel: '혼자 하기' }, join, goSolo);
+        if (saved?.me && room.people[saved.me] && !room.people[saved.me].left) { me = saved.me; sent = saved.sent || ''; return await attach(); }
+        const t = T(room.table), count = [t.a, t.b, ...t.line].filter(Boolean).length;
+        if (count >= 2 + MAX_LINE) return full();
+        const host = clean(room.people[room.host]?.name) || '친구';
+        show({ head: `${host}의 초대`, body: t.b ? `지금 ${count}명이 있어요. 들어오면 줄을 서고, 차례가 올 때까지 지금 판을 구경해요.` : '이름을 적고 들어오세요.', name: true, go: '입장', cancel: '혼자 하기' }, join, goSolo);
       } catch { noLine(); }
     }
+    const full = () => show({ head: '방이 꽉 찼어요', body: `대결하는 2명에 줄 ${MAX_LINE}명까지 들어올 수 있어요.`, go: '혼자 하기', cancel: '' }, goSolo);
     function join() {
       const name = readName();
       if (!name) return;
       const go = async () => {
         show({ head: '들어가는 중이에요', cancel: '' });
         try {
-          const id = makeId().slice(0, 12);
-          const r = await roomRef.child('players/b').transaction(cur => (cur ? undefined : { name, token: id, online: true }));
-          if (!r.committed) return show({ head: '이미 두 명이 들어와 있어요', body: '친구에게 새 링크를 받아 주세요.', go: '혼자 하기', cancel: '' }, goSolo);
-          seat = 'b'; token = id;
+          const pid = makeId().slice(0, 12);
+          await roomRef.child(`people/${pid}`).set({ name, online: true });
+          let isFull = false;
+          const r = await roomRef.child('table').transaction(cur => {
+            if (!cur) return cur;
+            const t = T(cur);
+            isFull = false;
+            if (!t.a) { t.a = pid; t.champ = pid; t.streak = 0; }
+            else if (!t.b) { t.b = pid; if (!t.fresh) { t.n += 1; t.first = Math.random() < .5 ? 'a' : 'b'; } t.fresh = false; t.call = null; }
+            else if (t.line.length < MAX_LINE) t.line.push(pid);
+            else { isFull = true; return; }
+            return t;
+          });
+          if (!r.committed) { await roomRef.child(`people/${pid}`).remove(); return isFull ? full() : noLine(); }
+          me = pid;
           remember();
           await attach();
         } catch { noLine(); }
@@ -1248,30 +1287,64 @@ const Game = (() => {
       if (store.get('titicaca-guide') === 1) go(); else { hide(); guideNext = go; guide.showModal(); }
     }
     async function attach() {
-      const agreed = (await roomRef.child('again').once('value')).val() || {};
-      n = 1;
-      while (agreed[n]?.a && agreed[n]?.b) n++;
-      const me = roomRef.child(`players/${seat}/online`);
-      db.ref('.info/connected').on('value', s => { if (s.val() === true) { me.onDisconnect().set(false); me.set(true); } });
+      const mine = roomRef.child(`people/${me}/online`);
+      db.ref('.info/connected').on('value', s => { if (s.val() === true) { mine.onDisconnect().set(false); mine.set(true); } });
+      db.ref('.info/serverTimeOffset').on('value', s => { timeOffset = Number(s.val()) || 0; });
+      roomRef.child('people').on('value', s => { people = s.val() || {}; onPeople(); });
+      roomRef.child('score').on('value', s => { scores = s.val() || {}; paintTally(); maybeAdvance(); });
       roomRef.child('again').on('value', s => onAgain(s.val() || {}));
-      roomRef.child(`players/${other(seat)}`).on('value', s => onFoe(s.val()));
-      roomRef.child('score').on('value', s => paintTally(s.val()));
+      roomRef.child('table').on('value', s => onTable(s.val()));
     }
-    /* 링크를 보내기 전 = 초대 만들기, 보낸(복사한) 뒤 = 기다리는 중. 보낸 표시는 기억해 둬서 메신저에 다녀와 새로 열려도 그대로. */
-    let sent = '';
+
+    /* 방 상태가 바뀔 때마다 : 상대 기다림 / 다음 사람 부르는 중 / 판 진행 */
+    const mySeatIn = t => (t.a === me ? 'a' : t.b === me ? 'b' : '');
+    function onTable(raw) {
+      if (!raw) { if (me) { session++; ended(); } return; }
+      table = T(raw);
+      const t = table, mine = mySeatIn(t);
+      paintTally();
+      if (!t.b) { stopCall(); if (mine === 'a') { waiting(); maybeCallNext(); } else paintWatch(); return; }
+      if (t.call) { showCall(); return; }
+      stopCall();
+      if (running !== t.n || seat !== (mine || 'a') || watching !== !mine) {
+        seat = mine || 'a'; watching = !mine; n = t.n; running = t.n;
+        if (!on) { on = true; inviteBtn.textContent = '방 나가기'; }
+        hide();
+        startGame();
+      }
+      paintWatch();
+      maybeAdvance();
+    }
+    function onPeople() {
+      paintTally();
+      if (!table || !on) return;
+      const t = table, mine = mySeatIn(t);
+      if (mine) {
+        const foePid = mine === 'a' ? t.b : t.a;
+        foeHere = people[foePid]?.online !== false;
+        paintAway();
+        /* 상대가 나갔는데 줄이 비어 있으면 그 자리를 비워 새 친구를 기다린다 */
+        if (foePid && gone(foePid) && !t.line.some(id => !gone(id))) vacate(foePid);
+      }
+      paintWatch();
+    }
+
+    /* 상대를 기다리는 창(처음 초대 · 상대가 나간 뒤) */
     const SENT = { share: '링크를 보냈어요', copy: '링크를 복사했어요' };
     function waiting() {
-      if (!sent) sent = store.get(saveKey())?.sent || '';
+      const t = table, played = !t.fresh;
+      const others = Object.keys(people).filter(id => id !== me && !gone(id));
       const note = SENT[sent] || '';
+      if (played) return show({ head: others.length ? '다음 상대를 기다리는 중이에요' : '친구가 방을 나갔어요', body: '링크를 보내면 새 친구가 들어와 바로 대결해요.', link: linkFor(roomId), go: '링크 복사', cancel: '나가기' }, copyLink, () => leave());
       show(note
-        ? { head: '친구를 기다리는 중이에요', note, body: '친구가 링크를 열면 바로 시작해요. 이 화면을 연 채로 기다려 주세요.', link: linkFor(roomId), go: '링크 복사', cancel: '초대 취소' }
-        : { head: '친구를 초대해요', body: '아래 링크를 친구에게 보내 주세요. 친구가 링크를 열면 바로 시작해요.', link: linkFor(roomId), go: '링크 복사', cancel: '취소' },
+        ? { head: '친구를 기다리는 중이에요', note, body: '친구가 링크를 열면 바로 시작해요. 이 화면을 연 채로 기다려 주세요. 여럿이 들어오면 줄을 서서 이긴 사람과 차례로 붙어요.', link: linkFor(roomId), go: '링크 복사', cancel: '초대 취소' }
+        : { head: '친구를 초대해요', body: '아래 링크를 친구에게 보내 주세요. 친구가 링크를 열면 바로 시작해요. 최대 7명까지 들어와 이긴 사람과 차례로 붙어요.', link: linkFor(roomId), go: '링크 복사', cancel: '취소' },
       copyLink, note ? askCancel : dropRoom);
     }
     function markSent(how) {
       if (on || !roomId || sent === how) return;
       sent = how;
-      store.set(saveKey(), { seat, token, sent });
+      remember();
       waiting();
     }
     function askCancel() {
@@ -1283,27 +1356,181 @@ const Game = (() => {
       store.del(saveKey());
       const f = goSolo;
       db.ref('.info/connected').off();
-      roomRef.child(`players/${seat}/online`).onDisconnect().cancel().then(() => roomRef.remove()).then(f, f);
+      roomRef.child(`people/${me}/online`).onDisconnect().cancel().then(() => roomRef.remove()).then(f, f);
     }
-    function paintAway() {
-      if (!on) return;
-      set($('#nameCom'), foeHere ? foeName : '연결 끊김');
-      $('#capFoe').classList.toggle('away', !foeHere);
+
+    /* 다음 사람 부르기 : 10초 안에 준비를 누르면 시작, 아니면 자리 비움으로 줄 맨 뒤 */
+    const freeInLine = t => t.line.filter(id => !gone(id) && !t.away[id] && people[id]?.online !== false);
+    function callInto(t, pid, newMatch) {
+      t.line = t.line.filter(id => id !== pid);
+      t.b = pid;
+      if (newMatch) { t.n += 1; t.first = 'b'; }
+      t.fresh = false;
+      t.call = { at: now(), who: pid };
+      return t;
     }
-    function onFoe(v) {
-      if (!v) { if (!on) waiting(); return; }
-      if (v.left) { session++; store.del(saveKey()); show({ head: '친구가 방을 나갔어요', go: '혼자 하기', cancel: '' }, goSolo); return; }
-      foeName = clean(v.name) || '친구';
-      paintTally(tallyAll);
-      foeHere = v.online !== false;
-      if (on) { paintAway(); return; }
-      on = true;
-      hide();
-      inviteBtn.textContent = '방 나가기';
-      startGame();
+    function maybeCallNext() {
+      const t = table;
+      if (!t || t.a !== me || t.b || !freeInLine(t).length) return;
+      roomRef.child('table').transaction(cur => {
+        if (!cur) return cur;
+        const x = T(cur);
+        if (x.a !== me || x.b) return;
+        const next = freeInLine(x)[0];
+        if (!next) return;
+        return callInto(x, next, true);
+      });
     }
+    function showCall() {
+      const t = table, c = t.call;
+      if (calledFor !== c.at) {
+        calledFor = c.at;
+        if (c.who === me) { sfx('boing'); sfx('bet', 180); }
+      }
+      const paint = () => {
+        const left = Math.max(0, Math.ceil((c.at + CALL_MS - now()) / 1000));
+        if (c.who === me) show({ head: '내 차례예요!', body: `${wa(realName(t.a))} 대결해요. ${left}초 안에 준비를 눌러 주세요.`, go: `준비! ${left}`, cancel: '', kind: 'call' }, ready);
+        else if (t.a === me) show({ head: '다음 상대를 부르는 중이에요', body: `${ga(realName(c.who))} 준비를 누르면 바로 시작해요. ${left}초`, cancel: '', kind: 'call' });
+        else if (dlg.dataset.kind === 'call' || dlg.dataset.kind === 'over' || !dlg.open) {
+          if (dlg.dataset.kind !== 'closed') show({ head: `다음 판 : ${realName(t.a)} vs ${realName(c.who)}`, body: `${ga(realName(c.who))} 준비하는 중이에요. ${left}초 · ${lineText()}`, cancel: '닫기', kind: 'call' }, null, () => { dlg.dataset.kind = 'closed'; });
+        }
+        if (now() >= c.at + CALL_MS + 400) expire(c.at);
+      };
+      clearInterval(ticker);
+      paint();
+      ticker = setInterval(paint, 250);
+      paintWatch();
+    }
+    function stopCall() {
+      clearInterval(ticker); ticker = 0;
+      if (dlg.dataset.kind === 'call' || dlg.dataset.kind === 'closed') hide();
+    }
+    function ready() {
+      goBtn.disabled = true;
+      roomRef.child('table').transaction(cur => {
+        if (!cur) return cur;
+        const t = T(cur);
+        if (!t.call || t.call.who !== me) return;
+        t.call = null;
+        return t;
+      });
+    }
+    let expiring = 0;
+    function expire(at) {
+      if (expiring === at) return;
+      expiring = at;
+      roomRef.child('table').transaction(cur => {
+        if (!cur) return cur;
+        const t = T(cur);
+        if (!t.call || t.call.at !== at) return;
+        const who = t.call.who;
+        t.away[who] = true;
+        t.b = '';
+        t.call = null;
+        if (!gone(who)) t.line.push(who);
+        const next = freeInLine(t)[0];
+        return next ? callInto(t, next, false) : t;
+      });
+    }
+    /* 자리 비움에서 돌아오기 */
+    function rejoin() {
+      awayShown = '';
+      roomRef.child('table').transaction(cur => {
+        if (!cur) return cur;
+        const t = T(cur);
+        delete t.away[me];
+        if (t.a && !t.b && t.line.includes(me)) return callInto(t, me, true);
+        return t;
+      });
+    }
+
+    /* 판이 끝나면 : 줄이 있으면 이긴 사람(비기면 자리를 지키던 사람)이 남고 진 사람은 줄 맨 뒤, 줄 맨 앞 사람을 부른다 */
+    function advance(gameN, w) {
+      roomRef.child('table').transaction(cur => {
+        if (!cur) return cur;
+        const t = T(cur);
+        if (t.n !== gameN || t.call || !t.a || !t.b) return;
+        const next = freeInLine(t)[0];
+        if (!next) return;
+        const winner = w === 'd' ? (t.champ === t.b ? t.b : t.a) : t[w];
+        const loser = winner === t.a ? t.b : t.a;
+        t.streak = w === 'd' ? t.streak : winner === t.champ ? t.streak + 1 : 1;
+        t.champ = winner;
+        t.a = winner;
+        if (!gone(loser)) t.line.push(loser);
+        return callInto(t, next, true);
+      });
+    }
+    function maybeAdvance() {
+      const t = table, s = scores?.[n];
+      if (!t || watching || !s || typeof s !== 'object' || t.n !== n || t.call) return;
+      if (freeInLine(t).length) advance(n, s.w);
+    }
+    /* 나간 상대 자리 비우기(줄이 빈 때) */
+    function vacate(pid) {
+      roomRef.child('table').transaction(cur => {
+        if (!cur) return cur;
+        const t = T(cur);
+        if (t.a !== pid && t.b !== pid) return;
+        if (t.a === pid) { t.a = t.b; }
+        t.b = '';
+        t.champ = t.a; t.streak = 0; t.call = null;
+        return t;
+      });
+    }
+    async function leave() {
+      store.del(saveKey());
+      try {
+        const t = table, mine = t ? mySeatIn(t) : '';
+        if (mine && running === t.n && !scores?.[t.n] && logRef) await logRef.push({ t: 'forfeit', s: mine });
+        db.ref('.info/connected').off();
+        await roomRef.child(`people/${me}/online`).onDisconnect().cancel();
+        await roomRef.child(`people/${me}`).update({ left: true, online: false });
+        await roomRef.child('table').transaction(cur => {
+          if (!cur) return cur;
+          const x = T(cur);
+          x.line = x.line.filter(id => id !== me);
+          delete x.away[me];
+          const s = mySeatIn(x);
+          if (s && !(x.n === running && mine && !scores?.[x.n])) {
+            if (s === 'a') x.a = x.b;
+            x.b = '';
+            x.champ = x.a; x.streak = 0; x.call = null;
+          }
+          return x;
+        });
+      } catch {}
+      goSolo();
+    }
+
+    /* 줄 · 구경 표시 */
+    function lineText() {
+      const t = table;
+      if (!t) return '';
+      if (t.away[me]) return '자리 비움';
+      const i = t.line.indexOf(me);
+      if (i < 0) return '';
+      return i === 0 ? '다음이 내 차례예요' : `내 차례까지 ${i}명`;
+    }
+    function paintWatch() {
+      const t = table;
+      document.body.toggleAttribute('data-watch', on && watching);
+      if (!t) return;
+      if (on && watching) statusEl.textContent = `구경 중 · ${realName(t.a)} vs ${realName(t.b)}${lineText() ? ` · ${lineText()}` : ''}`;
+      if (t.away[me] && awayShown !== String(t.call?.at || 'x')) {
+        awayShown = String(t.call?.at || 'x');
+        show({ head: '자리를 비워서 줄 맨 뒤로 갔어요', body: '10초 안에 준비를 누르지 않았어요. 다시 줄을 서면 차례가 오면 불러 줘요.', go: '다시 줄 서기', cancel: '구경만 할래요', kind: 'away' }, () => { hide(); rejoin(); });
+      }
+    }
+    /* 판 끝(구경하는 사람) */
+    function watchEnd(out, quitter) {
+      const t = table;
+      const w = quitter ? other(quitter) : out.winner === 'me' ? 'a' : out.winner === 'com' ? 'b' : 'd';
+      const head = w === 'd' ? '비겼어요!' : `${ga(realName(t[w]))} 이겼어요!`;
+      show({ head, body: `${quitter ? `${ga(realName(t[quitter]))} 기권했어요. ` : ''}${lineText() || '다음 판을 기다려요.'}`, cancel: '닫기', kind: 'over' });
+    }
+
     /* 친구 말풍선 : 'ask' = 한 판 더 신청(분홍 반짝 버튼 + '다음에' 버튼 + 소리), 'no' = 내 신청을 거절, '' = 없음 */
-    const noBtn = $('#noAgain');
     let said = '';
     function foeSays(kind) {
       const asking = kind === 'ask', box = $('#againAsk'), art = $('#againArt');
@@ -1326,8 +1553,19 @@ const Game = (() => {
     function againReady() { again.disabled = false; set(again, '한 판 더'); }
     function onAgain(all) {
       const cur = all[n];
-      if (!on || !cur) return;
-      if (cur.a === true && cur.b === true) { n++; foeSays(''); againReady(); startGame(); return; }
+      if (!on || watching || !cur) return;
+      if (cur.a === true && cur.b === true) {
+        foeSays('');
+        const gameN = n;  /* 다시 시도될 때 n 이 이미 바뀌어 있을 수 있으니 지금 판 번호로 고정 */
+        roomRef.child('table').transaction(c => {
+          if (!c) return c;
+          const t = T(c);
+          if (t.n !== gameN || t.call) return;
+          t.n += 1; t.first = other(t.first);
+          return t;
+        });
+        return;
+      }
       if (cur[other(seat)] === true && cur[seat] !== true) return foeSays('ask');
       if (cur.no === other(seat)) { againReady(); return foeSays('no'); }
       if (cur.no === seat) { againReady(); return foeSays(''); }
@@ -1346,31 +1584,57 @@ const Game = (() => {
       againReady();
       roomRef.child(`again/${n}`).set({ no: seat });
     }
-    /* 이 방 전적 */
-    let tallyAll = null, tallyText = '';
+
+    /* 전적 : 둘만 있으면 상대와 n승 n패, 줄이 있으면 줄 수 · 연승과 방 순위 */
     function score(k) {
-      if (!on || !roomRef) return;
-      roomRef.child(`score/${n}`).set(k === 'win' ? seat : k === 'lose' ? other(seat) : 'd');
+      if (!on || watching || !roomRef || !table) return;
+      const w = k === 'win' ? seat : k === 'lose' ? other(seat) : 'd';
+      roomRef.child(`score/${n}`).set({ a: match.a, b: match.b, w });
+      const queue = freeInLine(table).length > 0;
+      again.hidden = queue;
+      if (queue) { noBtn.hidden = true; $('#againAsk').hidden = true; }
+      advance(n, w);
     }
-    function paintTally(all) {
-      tallyAll = all;
-      const v = Object.values(all || {}).filter(Boolean);
-      const w = v.filter(x => x === seat).length, l = v.filter(x => x === other(seat)).length, d = v.filter(x => x === 'd').length;
-      const text = v.length ? `${w}승 ${l}패${d ? ` ${d}무` : ''}` : '';
-      const bump = tallyText && text && text !== tallyText;
-      tallyText = text;
-      for (const el of [$('#h2h'), $('#resultH2H')]) {
-        el.hidden = !text;
-        if (!text) continue;
-        const who = document.createElement('small'), b = document.createElement('b');
-        who.textContent = el.id === 'h2h' ? '전적' : `vs ${foeName}`; b.textContent = text;
-        el.replaceChildren(who, b);
-        if (bump) { el.classList.remove('pop'); void el.offsetWidth; el.classList.add('pop'); }
+    function put(el, v) {
+      el.hidden = !v;
+      if (!v) { el.dataset.v = ''; return; }
+      const key = v.join('|');
+      if (el.dataset.v === key) return;
+      const bump = !!el.dataset.v;
+      el.dataset.v = key;
+      const a = document.createElement('small'), b = document.createElement('b');
+      a.textContent = v[0]; b.textContent = v[1];
+      el.replaceChildren(a, b);
+      if (bump) { el.classList.remove('pop'); void el.offsetWidth; el.classList.add('pop'); }
+    }
+    function paintTally() {
+      const t = table;
+      if (!t || !on) return;
+      const list = Object.values(scores || {}).filter(x => x && typeof x === 'object' && x.a && x.b);
+      const crowd = t.line.length > 0 || Object.keys(people).filter(id => !gone(id)).length > 2;
+      let pill = null, row = null;
+      if (crowd) {
+        const wins = {};
+        for (const x of list) if (x.w === 'a' || x.w === 'b') wins[x[x.w]] = (wins[x[x.w]] || 0) + 1;
+        const top = Object.entries(wins).sort((p, q) => q[1] - p[1]).slice(0, 3);
+        pill = [`줄 ${t.line.length}명`, t.streak > 0 && t.champ ? `${realName(t.champ)} ${t.streak}연승` : '이긴 사람이 남아요'];
+        row = top.length ? ['순위', top.map(([id, w], i) => `${i + 1}. ${nameOf(id)} ${w}승`).join('  ')] : null;
+      } else if (!watching) {
+        const foePid = seat === 'a' ? t.b : t.a;
+        const pair = list.filter(x => (x.a === me && x.b === foePid) || (x.b === me && x.a === foePid));
+        if (pair.length) {
+          const w = pair.filter(x => x.w !== 'd' && x[x.w] === me).length, d = pair.filter(x => x.w === 'd').length, l = pair.length - w - d;
+          const text = `${w}승 ${l}패${d ? ` ${d}무` : ''}`;
+          pill = ['전적', text];
+          row = [`vs ${realName(foePid)}`, text];
+        }
       }
+      put($('#h2h'), pill);
+      put($('#resultH2H'), row);
     }
     function clickInvite() {
-      if (on) return show({ head: '방에서 나갈까요?', body: '지금 판은 끝나고 혼자 하기로 돌아가요.', go: '나가기', cancel: '계속하기' }, () => { store.del(saveKey()); roomRef.child(`players/${seat}/left`).set(true).then(goSolo, goSolo); });
-      show({ head: '친구와 대결', body: '방을 만들고 초대 링크를 보내면 친구가 바로 들어올 수 있어요.', name: true, go: '방 만들기' }, createRoom);
+      if (on || table) return show({ head: '방에서 나갈까요?', body: watching ? '줄에서 빠지고 혼자 하기로 돌아가요.' : '지금 판은 기권으로 끝나고 혼자 하기로 돌아가요.', go: '나가기', cancel: '계속하기' }, () => leave());
+      show({ head: '친구와 대결', body: '방을 만들고 초대 링크를 보내면 친구가 바로 들어올 수 있어요. 최대 7명까지 들어와 이긴 사람과 차례로 붙어요.', name: true, go: '방 만들기' }, createRoom);
     }
 
     /* 한 판 진행 */
@@ -1384,27 +1648,37 @@ const Game = (() => {
     async function startGame() {
       if (logRef) logRef.off();
       replay = []; inbox = []; waiter = null; known = new Set();
+      foeSays(''); againReady(); again.hidden = false;
+      match = { a: table.a, b: table.b };  /* 이 판을 두는 두 사람 : 판이 끝난 뒤 자리가 먼저 넘어가도 기록은 이 둘로 */
       logRef = roomRef.child(`games/${n}`);
+      const gameN = n;
       const snap = await logRef.once('value');
+      if (gameN !== n) return;
       snap.forEach(c => { known.add(c.key); const e = valid(c.val()); if (e) replay.push(e); });
       logRef.on('child_added', c => {
         if (known.has(c.key)) return;
         known.add(c.key);
         const e = valid(c.val());
-        if (!e || e.s === seat) return;
+        if (!e || (!watching && e.s === seat)) return;
         if (waiter) { const w = waiter; waiter = null; w(e); } else inbox.push(e);
       });
       run();
     }
     function next() {
-      if (replay.length && replay[0].s !== seat) return Promise.resolve(replay.shift());
+      if (replay.length && (watching || replay[0].s !== seat)) return Promise.resolve(replay.shift());
       if (inbox.length) return Promise.resolve(inbox.shift());
       return new Promise(r => { waiter = r; });
     }
-    const bail = () => { session++; show({ head: '대결을 이어 갈 수 없어요', body: '두 화면의 기록이 달라졌어요.', go: '혼자 하기', cancel: '' }, goSolo); };
-    function send(e) { if (on && !feeding) logRef.push({ ...e, s: seat }); }
+    const bail = () => { session++; show({ head: '대결을 이어 갈 수 없어요', body: '화면들의 기록이 달라졌어요.', go: '혼자 하기', cancel: '' }, goSolo); };
+    function send(e) { if (on && !watching && !feeding) logRef.push({ ...e, s: seat }); }
     async function rollFor(p, g) {
       if (!on) return rollValue();
+      if (watching) {
+        const e = await next();
+        if (g !== session) return null;
+        if (e.t !== 'roll' || e.s !== (p === 'me' ? 'a' : 'b')) { bail(); return null; }
+        return e.v;
+      }
       if (p === 'me') {
         if (replay[0]?.s === seat && replay[0].t === 'roll') return replay.shift().v;
         const v = rollValue();
@@ -1452,9 +1726,40 @@ const Game = (() => {
         } else { bail(); return null; }
       }
     }
+    /* 구경 : 두 사람 행동을 모두 기록에서 읽는다. 왼쪽(me) = a 자리, 오른쪽(com) = b 자리 */
+    async function watchTurn(v, g, p) {
+      const s = p === 'me' ? 'a' : 'b';
+      for (;;) {
+        const e = await next();
+        if (g !== session) return null;
+        if (e.s !== s) { bail(); return null; }
+        if (e.t === 'reroll') {
+          state = Game.useReroll(state);
+          paintRerolls();
+          if (p === 'com') react('think', null, 1000);
+          await rollCube(e.v);
+          if (g !== session) return null;
+        } else if (e.t === 'place') {
+          const side = (e.side === 'self') === (p === 'me') ? 'me' : 'com';
+          if (!Game.moves(state, e.v).some(m => m.side === side && m.row === e.row && m.knock === e.knock)) { bail(); return null; }
+          setFace(e.v);
+          return { v: e.v, side, row: e.row, knock: e.knock, from: tray };
+        } else if (e.t === 'hold') {
+          if (!Game.canHold(state, p)) { bail(); return null; }
+          const g2 = ++session;
+          finish(g2, true);
+          return null;
+        } else if (e.t === 'forfeit') {
+          session++;
+          endRound();
+          watchEnd(null, s);
+          return null;
+        } else { bail(); return null; }
+      }
+    }
     /* 새로고침으로 다시 돌릴 때 기록된 내 행동을 그대로 한다. */
     async function feedMine() {
-      while (on && replay[0]?.s === seat) {
+      while (on && !watching && replay[0]?.s === seat) {
         const e = replay.shift();
         if (e.t === 'reroll') { await doReroll(e.v); continue; }
         feeding = true;
@@ -1467,18 +1772,30 @@ const Game = (() => {
         return;
       }
     }
+    function paintAway() {
+      if (!on || watching) return;
+      set($('#nameCom'), foeHere ? foeName : '연결 끊김');
+      $('#capFoe').classList.toggle('away', !foeHere);
+    }
     function dressFoe() {
+      const t = table;
+      const foePid = watching ? t.b : seat === 'a' ? t.b : t.a;
+      foeName = realName(foePid);
+      foeHere = people[foePid]?.online !== false;
       foe = { ...FRIEND, name: foeName };
       npc.innerHTML = rivalArt(foe);
       set($('#nameCom'), foeName);
+      if (watching) { set($('#nameMe'), realName(t.a)); set($('#lvMe'), ''); } else paintRecord();
       const st = $('#foeStars');
       st.innerHTML = '';
       st.removeAttribute('aria-label');
       paintAway();
+      paintTally();
+      paintWatch();
     }
-    const firstSide = () => ((n % 2 ? first : other(first)) === seat ? 'me' : 'com');
+    const firstSide = () => (table.first === seat ? 'me' : 'com');
     function alreadyPaid() {
-      if (!on) return false;
+      if (!on || watching) return true;
       const k = `titicaca-paid-${roomId}-${n}`;
       if (store.get(k)) return true;
       store.set(k, 1);
@@ -1498,7 +1815,7 @@ const Game = (() => {
       enter(id);
       return true;
     }
-    return { get on() { return on; }, fast: () => replay.length > 0, send, rollFor, foeTurn, feedMine, firstSide, dressFoe, alreadyPaid, askAgain, afterGuide, boot, score };
+    return { get on() { return on; }, get watching() { return on && watching; }, fast: () => replay.length > 0, send, rollFor, foeTurn, watchTurn, watchEnd, feedMine, firstSide, dressFoe, alreadyPaid, askAgain, afterGuide, boot, score };
   })();
   /* 소리 : 파일 없이 Web Audio 로 그때그때 만든다. 스피커 버튼은 소리 전체, 음표 버튼은 배경음악만 끄고 켜며, 끈 것은 기억한다. 첫 터치 뒤에만 소리가 난다. */
   const Sfx = (() => {
@@ -1823,7 +2140,7 @@ const Game = (() => {
   const streakBonus = s => (s >= 2 ? 20 * Math.min(s, 10) : 0);
   const pointText = n => (n > 0 ? `도토리 ${n}개 얻음` : n < 0 ? `도토리 ${-n}개 잃음` : '도토리는 그대로');
 
-  const say = str => { statusEl.textContent = str; };
+  const say = str => { if (!Online.watching) statusEl.textContent = str; };
 
   /* 첫 판 안내 : 상황이 처음 생겼을 때 한 번만 알려 준다. */
   const tips = (() => { try { return JSON.parse(localStorage.getItem('titicaca-tips')) || {}; } catch { return {}; } })();
@@ -2368,6 +2685,7 @@ const Game = (() => {
     }
     await wait(700);
     if (g !== session) return;
+    if (Online.watching) { endRound(); Online.watchEnd(out); return; }
     const delta = out.winner === 'me' ? stake() + streakBonus(Record.read().s + 1) : out.winner === 'com' ? -stake() : 0;
     const info = settle(out.winner === 'me' ? 'w' : out.winner === 'com' ? 'l' : 'd', delta);
     endRound();
@@ -2380,7 +2698,7 @@ const Game = (() => {
   }
 
   const decide = {
-    me: v => new Promise(res => {
+    me: (v, g) => Online.watching ? Online.watchTurn(v, g, 'me') : new Promise(res => {
       inHand = { now: v, old: null, picked: 'now' };
       paintPick();
       showHints();
@@ -2399,7 +2717,7 @@ const Game = (() => {
       Online.feedMine();
     }),
     com: async (v, g) => {
-      if (Online.on) return Online.foeTurn(v, g);
+      if (Online.on) return Online.watching ? Online.watchTurn(v, g, 'com') : Online.foeTurn(v, g);
       await wait(700);
       if (g !== session) return null;
       let held = v;
