@@ -304,6 +304,11 @@ body[data-turn="com"] .pick:not(.old){filter:drop-shadow(0 0 calc(var(--u)*3.4) 
 @media (prefers-reduced-motion:reduce){.again-ask,.again-ask svg,.again-ask[data-k="no"] svg,#again.ask,#unpeekBtn.ask{animation:none}}
 .printer{position:relative;overflow:hidden;padding:calc(var(--u)*2) calc(var(--u)*2) calc(var(--u)*3)}
 .paper{filter:drop-shadow(0 calc(var(--u)*2) calc(var(--u)*3) rgba(30,80,45,.35))}
+/* 결과판이 결과 칸보다 높을 때(넓은 화면) : 잘라 내지 않고 fitResult 가 --rz 로 통째로 줄인다 */
+.result{grid-auto-rows:max-content}
+.result > *{zoom:var(--rz,1)}
+/* 낮은 가로 화면 : 무대 아래로 내려온 연승 띠 · 대기 줄이 결과판 첫 줄을 가리지 않게 결과판이 떠 있는 동안 숨김 */
+body[data-short]:has(#result:not([hidden]):not(.peek)) :is(#quest,#lineup){visibility:hidden}
 .board{position:relative;overflow:hidden;display:grid;justify-items:center;gap:calc(var(--u)*2.4);width:calc(var(--u)*150);padding:calc(var(--u)*4) calc(var(--u)*7) calc(var(--u)*6);border-radius:calc(var(--u)*7);background:linear-gradient(#FFFFFF,#F4FFF6);color:var(--ink);box-shadow:inset 0 0 0 calc(var(--u)*1.2) var(--mint),0 calc(var(--u)*1.6) 0 #5BC4A8}
 .board[data-k="gold"]{background:linear-gradient(#FFFDF0,#FFF6D6);box-shadow:inset 0 0 0 calc(var(--u)*1.2) #FFC531,0 calc(var(--u)*1.6) 0 #E09A12}
 body[data-layout="side"] .board{grid-template-columns:calc(var(--u)*86) calc(var(--u)*128);width:auto;column-gap:calc(var(--u)*6);align-items:center}
@@ -1605,6 +1610,7 @@ const Game = (() => {
       if (asking) set(again, '좋아, 한 판 더!');
       if (kind && kind !== said) { sfx('boing'); if (asking) sfx('bet', 180); }
       said = kind;
+      fitResult();
     }
     function againReady() { again.disabled = false; set(again, '한 판 더'); }
     function onAgain(all) {
@@ -1650,7 +1656,7 @@ const Game = (() => {
       if (Record.read().c > 0 && !people[me]?.duel) roomRef.child(`people/${me}/duel`).set(true);
       const queue = freeInLine(table).length > 0;
       again.hidden = queue;
-      if (queue) { noBtn.hidden = true; $('#againAsk').hidden = true; }
+      if (queue) { noBtn.hidden = true; $('#againAsk').hidden = true; fitResult(); }
       advance(n, w);
     }
     function put(el, v) {
@@ -1688,6 +1694,7 @@ const Game = (() => {
       }
       put($('#h2h'), pill);
       put($('#resultH2H'), row);
+      fitResult();
     }
     /* 방에 있는 동안 친구 더 부르기 */
     function inviteMore() {
@@ -2291,6 +2298,7 @@ const Game = (() => {
     document.body.dataset.layout = side ? 'side' : 'tall';
     if (short) document.body.dataset.short = '1'; else delete document.body.dataset.short;
     paintScene();
+    fitResult();
   }
 
   const BLANK = { w: 0, l: 0, d: 0, pts: 1000, s: 0, b: 0, c: 0 };
@@ -2762,6 +2770,23 @@ const Game = (() => {
     return `<div class="q-path" style="--at:${at}"><i class="q-start"></i>${stones}${tiers}<span class="q-me"><svg class="pt npc" data-face="idle" viewBox="0 0 100 100">${rivalArt(ME)}</svg></span></div>`;
   }
   const nextText = (s, k) => (s >= GOAL ? '다음 상대도 별 5개예요.' : s === GOAL - 1 ? '다음이 마지막 10번째 판이에요!' : k === 'win' && s > 0 && tierFor(s) > tierFor(s - 1) ? `다음부터 별 ${tierFor(s)}개 슬라임이 나와요.` : `다음 상대는 별 ${tierFor(s)}개예요.`);
+  /* 결과판이 결과 칸보다 높으면 통째로 줄여 다 보이게(넓은 화면은 판 칸이 낮다). 0.6 아래로는 줄이지 않고 스크롤 */
+  function fitResult() {
+    const box = document.getElementById('result');
+    if (!box || box.hidden) return;
+    box.style.setProperty('--rz', 1);
+    /* 결과 칸 위로 겹쳐 내려온 방 버튼 · 대기 줄만큼 위를 비운다 */
+    const boxTop = box.getBoundingClientRect().top;
+    const over = ['roomActs', 'lineup'].map(id => document.getElementById(id)).filter(e => e && !e.hidden && e.offsetHeight).reduce((m, e) => Math.max(m, e.getBoundingClientRect().bottom - boxTop), 0);
+    box.style.paddingTop = over > 0 ? `${Math.ceil(over) + 4}px` : '';
+    const kids = [...box.children].filter(e => !e.hidden);
+    if (!kids.length) return;
+    const u = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--u')) || 2;
+    const gaps = (kids.length - 1) * 5 * u, room = 4 * u;
+    const need = kids[kids.length - 1].getBoundingClientRect().bottom - kids[0].getBoundingClientRect().top - gaps;
+    const have = box.clientHeight - (parseFloat(box.style.paddingTop) || 0) - gaps - room;
+    if (need > have) box.style.setProperty('--rz', Math.max(.6, Math.floor(have / need * 100) / 100));
+  }
   function showResult(out, delta, mode, info) {
     const r = info.r, prev = info.prev || { s: r.s, pts: r.pts - delta };
     const k = mode === 'forfeit' ? 'lose' : mode === 'foeForfeit' ? 'win' : out.winner === 'me' ? 'win' : out.winner === 'com' ? 'lose' : 'draw';
@@ -2821,6 +2846,8 @@ const Game = (() => {
     result.hidden = false;
     result.classList.remove('peek');
     unpeekBtn.hidden = true;
+    fitResult();
+    requestAnimationFrame(fitResult);
     const total = result.querySelector('.n-total');
     const path = quest.querySelector('.q-path'), me = quest.querySelector('.q-me'), meArt = me && me.querySelector('svg');
     /* 도전 길을 결과에 맞게 바꾼다 : 이기면 한 칸 폴짝, 지면 출발점으로 미끄러진다. */
